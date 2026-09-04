@@ -233,30 +233,8 @@
             transition: 0.15s;
         }
         .service-card .btn-add:active { opacity: 0.6; }
-
-        .contact-block {
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border-radius: var(--radius);
-            padding: 16px;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 12px;
-        }
-        .contact-block .label { font-size: 12px; color: var(--text-secondary); }
-        .contact-block .value { font-size: 15px; font-weight: 450; margin-top: 2px; }
-        .contact-block .value a { color: var(--text); text-decoration: none; }
-        .crypto-address {
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            padding: 10px 14px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            font-family: monospace;
-            font-size: 13px;
-            word-break: break-all;
-            margin-top: 4px;
-        }
+    </style>
+</head>
         /* ===== СТРАНИЦА ЧАТОВ ===== */
         .chat-menu-item {
             background: var(--glass-bg);
@@ -728,6 +706,47 @@
         .auth-btn:active {
             transform: scale(0.97);
         }
+
+        /* ===== ПОИСК В АДМИНКЕ ===== */
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: var(--radius);
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .search-result-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .search-result-item .name {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .search-result-item .info {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .search-result-item .btn-chat {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 6px 16px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -752,6 +771,7 @@
                     <button class="active" onclick="switchAdminTab('support', this)">Поддержка <span id="supportNotif" class="admin-chat-notification" style="display:none;">0</span></button>
                     <button onclick="switchAdminTab('specialist', this)">OSINT-специалист <span id="specialistNotif" class="admin-chat-notification" style="display:none;">0</span></button>
                     <button onclick="switchAdminTab('users', this)">Пользователи</button>
+                    <button onclick="switchAdminTab('search', this)">🔍 Поиск</button>
                     <button onclick="switchAdminTab('payments', this)">Оплаты</button>
                     <button onclick="switchAdminTab('services', this)">Услуги</button>
                     <button onclick="switchAdminTab('orders', this)">Заказы</button>
@@ -768,6 +788,11 @@
                 <div id="adminUsers" class="admin-tab">
                     <h3>Пользователи</h3>
                     <div id="adminUsersList"><p style="color:var(--text-secondary);">Загрузка...</p></div>
+                </div>
+                <div id="adminSearch" class="admin-tab">
+                    <h3>🔍 Поиск пользователя</h3>
+                    <input class="search-input" type="text" id="searchInput" placeholder="Введите никнейм..." oninput="searchUser()">
+                    <div id="searchResults"><p style="color:var(--text-secondary);">Начните вводить никнейм</p></div>
                 </div>
                 <div id="adminPayments" class="admin-tab">
                     <h3>Подтверждения оплаты</h3>
@@ -829,6 +854,7 @@
     <div class="case"><h3>AliExpress — внутренние процессы</h3><p>Собрал данные по юр. структуре и тех. части. Выявил уязвимости.</p><span class="tag">OSINT</span></div>
     <div class="case"><h3>Мегафон — уязвимости</h3><p>Провёл аудит технической части, обнаружил несколько уязвимостей.</p><span class="tag">OSINT</span></div>
 </div>
+
 <!-- ===== УСЛУГИ ===== -->
 <div id="services" class="page">
     <h2>Услуги</h2>
@@ -842,6 +868,7 @@
     <div class="cart-total" id="cartTotal">0 USDT</div>
     <button class="btn-checkout" onclick="checkout()">Оформить заказ</button>
 </div>
+
 <!-- ===== СТРАНИЦА ЧАТОВ ===== -->
 <div id="chatMenuPage" class="page">
     <h2>Чаты</h2>
@@ -867,7 +894,6 @@
     </div>
     <div style="margin-top:20px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:13px;color:var(--text-secondary);text-align:center;">Выберите чат для общения</div>
 </div>
-
 <!-- ===== ЧАТ С ПОДДЕРЖКОЙ ===== -->
 <div id="chatSupport" class="chat-page">
     <div class="chat-header">
@@ -884,6 +910,7 @@
         <button onclick="sendSupportMessage()">➤</button>
     </div>
 </div>
+
 <!-- ===== ЧАТ С OSINT-СПЕЦИАЛИСТОМ ===== -->
 <div id="chatSpecialist" class="chat-page">
     <div class="chat-header">
@@ -956,107 +983,330 @@
 </div>
 <script>
     // ============================================================
-    // 1. ЗВЁЗДЫ
+    // 0. НАСТРОЙКИ GITHUB (токен из config.js)
     // ============================================================
-    const canvas = document.getElementById('starsCanvas');
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-    let starCount = 120;
-    let starColor = '#ffffff';
+    // Токен загружен из config.js
+    const GITHUB_USERNAME = 'sprintdrop';
+    const GITHUB_REPO = 'sprintsite';
+    const GITHUB_FILE = 'data.json';
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    function initStars() {
-        stars = [];
-        for (let i = 0; i < starCount; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 1.8 + 0.4,
-                speed: Math.random() * 0.4 + 0.1,
-                angle: Math.random() * Math.PI * 2
+    // ===== ЗАГРУЗКА С GITHUB =====
+    async function loadFromGitHub() {
+        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+        try {
+            const response = await fetch(url, {
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
             });
+            if (response.ok) {
+                const fileData = await response.json();
+                const content = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+                return content;
+            }
+        } catch (e) {
+            console.log('Ошибка загрузки с GitHub:', e);
         }
+        return null;
     }
-    initStars();
 
-    function drawStars(color) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = color;
-        stars.forEach(s => {
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fill();
-            s.x += Math.sin(s.angle) * s.speed * 0.2;
-            s.y += Math.cos(s.angle) * s.speed * 0.2;
-            if (s.x < 0) s.x = canvas.width;
-            if (s.x > canvas.width) s.x = 0;
-            if (s.y < 0) s.y = canvas.height;
-            if (s.y > canvas.height) s.y = 0;
+    // ===== СОХРАНЕНИЕ НА GITHUB =====
+    async function saveToGitHub(data) {
+        const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+        let sha = '';
+        try {
+            const response = await fetch(url, {
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+            });
+            if (response.ok) {
+                const fileData = await response.json();
+                sha = fileData.sha;
+            }
+        } catch (e) {}
+        
+        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+        const body = {
+            message: 'Обновление данных',
+            content: content,
+            sha: sha || undefined
+        };
+        
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         });
-        requestAnimationFrame(() => drawStars(starColor));
+        return response.ok;
     }
 
-    function updateStarColor(color) { starColor = color; }
+    // ===== ИНИЦИАЛИЗАЦИЯ ДАННЫХ =====
+    let appData = {
+        users: [],
+        unansweredSupport: [],
+        unansweredSpecialist: [],
+        paymentConfirmations: [],
+        orders: []
+    };
 
-    // ============================================================
-    // 2. ТЁМНАЯ ТЕМА
-    // ============================================================
-    let currentTheme = 'dark';
-    const themeToggle = document.getElementById('themeToggle');
-
-    function toggleTheme() {
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            themeToggle.textContent = '☀️';
-            currentTheme = 'light';
-            updateStarColor('#000000');
+    async function initData() {
+        const data = await loadFromGitHub();
+        if (data) {
+            appData = data;
         } else {
-            document.documentElement.removeAttribute('data-theme');
-            themeToggle.textContent = '🌙';
-            currentTheme = 'dark';
-            updateStarColor('#ffffff');
+            await saveToGitHub(appData);
         }
-    }
-    updateStarColor('#ffffff');
-    drawStars('#ffffff');
-
-    // ============================================================
-    // 3. НАВИГАЦИЯ
-    // ============================================================
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById('cartOverlay').classList.remove('show');
-        if (id === 'cabinet') {
-            updateCabinetUI();
-        }
+        applyData();
     }
 
-    // ============================================================
-    // 4. УПРАВЛЕНИЕ ЧАТАМИ
-    // ============================================================
-    function openChat(type) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-        if (type === 'support') {
-            document.getElementById('chatSupport').classList.add('active');
-        } else if (type === 'specialist') {
-            document.getElementById('chatSpecialist').classList.add('active');
-        }
+    function applyData() {
+        users = appData.users || [];
+        unansweredSupport = appData.unansweredSupport || [];
+        unansweredSpecialist = appData.unansweredSpecialist || [];
+        paymentConfirmations = appData.paymentConfirmations || [];
+        orders = appData.orders || [];
+        
+        updateCabinetUI();
+        updateAdminNotification('support');
+        updateAdminNotification('specialist');
+        renderAdminUsers();
+        renderAdminPayments();
+        renderAdminSupport();
+        renderAdminSpecialist();
     }
 
-    function closeChat(type) {
-        document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById('chatMenuPage').classList.add('active');
+    async function syncData() {
+        appData.users = users;
+        appData.unansweredSupport = unansweredSupport;
+        appData.unansweredSpecialist = unansweredSpecialist;
+        appData.paymentConfirmations = paymentConfirmations;
+        appData.orders = orders;
+        await saveToGitHub(appData);
     }
+
+    // ============================================================
+    // 0.1 ПОИСК ПОЛЬЗОВАТЕЛЯ В АДМИНКЕ
+    // ============================================================
+    function searchUser() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const results = document.getElementById('searchResults');
+        
+        if (query.length < 2) {
+            results.innerHTML = '<p style="color:var(--text-secondary);">Введите минимум 2 символа</p>';
+            return;
+        }
+        
+        const foundUsers = users.filter(u => u.name.toLowerCase().includes(query));
+        
+        if (foundUsers.length === 0) {
+            results.innerHTML = '<p style="color:var(--text-secondary);">Пользователь не найден</p>';
+            return;
+        }
+        
+        let html = '';
+        foundUsers.forEach(user => {
+            const supportMsgs = unansweredSupport.filter(m => m.userName === user.name && !m.answered);
+            const specialistMsgs = unansweredSpecialist.filter(m => m.userName === user.name && !m.answered);
+            const totalMsgs = supportMsgs.length + specialistMsgs.length;
+            
+            html += `
+                <div class="search-result-item">
+                    <div class="name">👤 ${user.name}</div>
+                    <div class="info">Сообщений: ${totalMsgs}</div>
+                    <button class="btn-chat" onclick="openChatWithUser('${user.name}')">✉️ Написать</button>
+                </div>
+            `;
+        });
+        results.innerHTML = html;
+    }
+
+    function openChatWithUser(userName) {
+        const user = users.find(u => u.name === userName);
+        if (!user) {
+            alert('Пользователь не найден');
+            return;
+        }
+        
+        const chatHTML = `
+            <div class="admin-chat-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">
+                <div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;max-width:500px;width:100%;max-height:90vh;display:flex;flex-direction:column;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                        <h3>💬 Чат с ${userName}</h3>
+                        <button onclick="this.closest('.admin-chat-modal').remove()" style="background:none;border:none;font-size:24px;color:var(--text-secondary);cursor:pointer;">✕</button>
+                    </div>
+                    <div id="adminChatMessages" style="flex:1;overflow-y:auto;padding:12px;background:var(--glass-bg);border-radius:var(--radius);max-height:300px;min-height:200px;">
+                        ${renderUserMessages(userName)}
+                    </div>
+                    <div style="display:flex;gap:10px;margin-top:12px;">
+                        <input type="text" id="adminChatInput" placeholder="Введите сообщение..." style="flex:1;padding:10px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);">
+                        <button onclick="sendAdminMessage('${userName}')" style="background:var(--accent);color:var(--bg);border:none;padding:10px 20px;border-radius:var(--radius);cursor:pointer;font-weight:600;">Отправить</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', chatHTML);
+        document.getElementById('adminChatInput').focus();
+        const container = document.getElementById('adminChatMessages');
+        if (container) container.scrollTop = container.scrollHeight;
+    }
+
+    function renderUserMessages(userName) {
+        const allSupport = unansweredSupport.filter(m => m.userName === userName);
+        const allSpecialist = unansweredSpecialist.filter(m => m.userName === userName);
+        const allMessages = [...allSupport, ...allSpecialist].sort((a,b) => a.id - b.id);
+        
+        if (allMessages.length === 0) {
+            return '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет сообщений. Напишите первым 👆</p>';
+        }
+        
+        return allMessages.map(m => {
+            const type = m.type === 'support' ? 'Поддержка' : 'Специалист';
+            return `
+                <div style="padding:8px 0;border-bottom:1px solid var(--glass-border);">
+                    <div style="font-size:12px;color:var(--text-secondary);">[${type}] ${m.timestamp}</div>
+                    <div style="font-size:14px;">${m.question}</div>
+                    ${m.answer ? `<div style="font-size:13px;color:#4caf50;margin-top:4px;">→ ${m.answer}</div>` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function sendAdminMessage(userName) {
+        const input = document.getElementById('adminChatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        
+        const id = Date.now();
+        unansweredSupport.push({
+            id: id,
+            question: text,
+            userName: userName,
+            answer: '',
+            answered: false,
+            type: 'support',
+            timestamp: new Date().toLocaleString(),
+            isAdmin: true
+        });
+        
+        syncData();
+        input.value = '';
+        
+        const messagesContainer = document.getElementById('adminChatMessages');
+        if (messagesContainer) {
+            messagesContainer.innerHTML = renderUserMessages(userName);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        renderAdminSupport();
+        renderAdminSpecialist();
+        updateAdminNotification('support');
+        
+        // Отправляем сообщение в чат поддержки пользователя (как ответ от поддержки)
+        addSupportMessage(text, 'support', 'Поддержка');
+    }
+// ============================================================
+// 1. ЗВЁЗДЫ
+// ============================================================
+const canvas = document.getElementById('starsCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+let starCount = 120;
+let starColor = '#ffffff';
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function initStars() {
+    stars = [];
+    for (let i = 0; i < starCount; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.8 + 0.4,
+            speed: Math.random() * 0.4 + 0.1,
+            angle: Math.random() * Math.PI * 2
+        });
+    }
+}
+initStars();
+
+function drawStars(color) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = color;
+    stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+        s.x += Math.sin(s.angle) * s.speed * 0.2;
+        s.y += Math.cos(s.angle) * s.speed * 0.2;
+        if (s.x < 0) s.x = canvas.width;
+        if (s.x > canvas.width) s.x = 0;
+        if (s.y < 0) s.y = canvas.height;
+        if (s.y > canvas.height) s.y = 0;
+    });
+    requestAnimationFrame(() => drawStars(starColor));
+}
+
+function updateStarColor(color) { starColor = color; }
+
+// ============================================================
+// 2. ТЁМНАЯ ТЕМА
+// ============================================================
+let currentTheme = 'dark';
+const themeToggle = document.getElementById('themeToggle');
+
+function toggleTheme() {
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggle.textContent = '☀️';
+        currentTheme = 'light';
+        updateStarColor('#000000');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggle.textContent = '🌙';
+        currentTheme = 'dark';
+        updateStarColor('#ffffff');
+    }
+}
+updateStarColor('#ffffff');
+drawStars('#ffffff');
+
+// ============================================================
+// 3. НАВИГАЦИЯ
+// ============================================================
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('cartOverlay').classList.remove('show');
+    if (id === 'cabinet') {
+        updateCabinetUI();
+    }
+}
+
+// ============================================================
+// 4. УПРАВЛЕНИЕ ЧАТАМИ
+// ============================================================
+function openChat(type) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
+    if (type === 'support') {
+        document.getElementById('chatSupport').classList.add('active');
+    } else if (type === 'specialist') {
+        document.getElementById('chatSpecialist').classList.add('active');
+    }
+}
+
+function closeChat(type) {
+    document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('chatMenuPage').classList.add('active');
+}
 // ============================================================
 // 5. ЧАТ С ПОДДЕРЖКОЙ
 // ============================================================
@@ -1186,8 +1436,8 @@ specialistInput.addEventListener('keydown', function(e) {
 // ============================================================
 // 7. НЕПОНЯТЫЕ ВОПРОСЫ (для админки)
 // ============================================================
-let unansweredSupport = JSON.parse(localStorage.getItem('unansweredSupport') || '[]');
-let unansweredSpecialist = JSON.parse(localStorage.getItem('unansweredSpecialist') || '[]');
+let unansweredSupport = [];
+let unansweredSpecialist = [];
 
 function saveUnansweredSupport(text) {
     const id = Date.now();
@@ -1198,10 +1448,12 @@ function saveUnansweredSupport(text) {
         userName: userName,
         answer: '', 
         answered: false, 
+        type: 'support',
         timestamp: new Date().toLocaleString() 
     });
-    localStorage.setItem('unansweredSupport', JSON.stringify(unansweredSupport));
+    syncData();
     updateAdminNotification('support');
+    renderAdminSupport();
 }
 
 function saveUnansweredSpecialist(text) {
@@ -1213,10 +1465,12 @@ function saveUnansweredSpecialist(text) {
         userName: userName,
         answer: '', 
         answered: false, 
+        type: 'specialist',
         timestamp: new Date().toLocaleString() 
     });
-    localStorage.setItem('unansweredSpecialist', JSON.stringify(unansweredSpecialist));
+    syncData();
     updateAdminNotification('specialist');
+    renderAdminSpecialist();
 }
 
 function updateAdminNotification(type) {
@@ -1316,10 +1570,10 @@ function answerSupportQuestion(id) {
     if (q) {
         q.answer = answer;
         q.answered = true;
-        localStorage.setItem('unansweredSupport', JSON.stringify(unansweredSupport));
         addSupportMessage(answer, 'support', 'Поддержка');
         renderAdminSupport();
         updateAdminNotification('support');
+        syncData();
     }
 }
 
@@ -1349,16 +1603,15 @@ function answerSpecialistQuestion(id) {
     if (q) {
         q.answer = answer;
         q.answered = true;
-        localStorage.setItem('unansweredSpecialist', JSON.stringify(unansweredSpecialist));
         addSpecialistMessage(answer, 'specialist', 'Осинтер (специалист)');
         renderAdminSpecialist();
         updateAdminNotification('specialist');
+        syncData();
     }
 }
 
 function renderAdminUsers() {
     const list = document.getElementById('adminUsersList');
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
     if (users.length === 0) {
         list.innerHTML = '<p style="color:var(--text-secondary);">Нет зарегистрированных пользователей.</p>';
     } else {
@@ -1374,7 +1627,7 @@ function renderAdminUsers() {
 
 function renderAdminPayments() {
     const list = document.getElementById('adminPaymentsList');
-    const payments = JSON.parse(localStorage.getItem('paymentConfirmations') || '[]');
+    const payments = paymentConfirmations;
     if (payments.length === 0) {
         list.innerHTML = '<p style="color:var(--text-secondary);">Нет подтверждений оплаты.</p>';
     } else {
@@ -1392,20 +1645,18 @@ function renderAdminPayments() {
 }
 
 function confirmPayment(id) {
-    let payments = JSON.parse(localStorage.getItem('paymentConfirmations') || '[]');
-    const payment = payments.find(p => p.id === id);
+    const payment = paymentConfirmations.find(p => p.id === id);
     if (payment) {
         payment.status = 'подтверждена ✅';
-        localStorage.setItem('paymentConfirmations', JSON.stringify(payments));
+        syncData();
         renderAdminPayments();
         alert('Оплата подтверждена! Заказ передан в работу.');
     }
 }
 
 function cancelPayment(id) {
-    let payments = JSON.parse(localStorage.getItem('paymentConfirmations') || '[]');
-    payments = payments.filter(p => p.id !== id);
-    localStorage.setItem('paymentConfirmations', JSON.stringify(payments));
+    paymentConfirmations = paymentConfirmations.filter(p => p.id !== id);
+    syncData();
     renderAdminPayments();
     alert('Оплата отклонена.');
 }
@@ -1417,257 +1668,256 @@ function renderAdminServices() {
 function renderAdminOrders() {
     document.getElementById('adminOrdersList').innerHTML = '<p style="color:var(--text-secondary);">Заказы отображаются здесь.</p>';
 }
-        // ============================================================
-        // 9. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
-        // ============================================================
-        let registrationData = { name: '', password: '' };
-        let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-        let users = JSON.parse(localStorage.getItem('users') || '[]');
+// ============================================================
+// 9. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
+// ============================================================
+let registrationData = { name: '', password: '' };
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+let users = [];
+let paymentConfirmations = [];
+let orders = [];
 
-        function checkUsername() {
-            const name = document.getElementById('regName').value.trim();
-            const status = document.getElementById('usernameStatus');
-            const btn = document.getElementById('regNextBtn');
-            
-            if (name.length < 2) {
-                status.textContent = 'Минимум 2 символа';
-                status.style.color = 'var(--text-secondary)';
-                btn.disabled = true;
-                return;
-            }
-            
-            const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
-            if (exists) {
-                status.textContent = '❌ Этот никнейм уже занят';
-                status.style.color = '#ff4444';
-                btn.disabled = true;
-            } else {
-                status.textContent = '✅ Никнейм свободен!';
-                status.style.color = '#4caf50';
-                btn.disabled = false;
-            }
+function checkUsername() {
+    const name = document.getElementById('regName').value.trim();
+    const status = document.getElementById('usernameStatus');
+    const btn = document.getElementById('regNextBtn');
+    
+    if (name.length < 2) {
+        status.textContent = 'Минимум 2 символа';
+        status.style.color = 'var(--text-secondary)';
+        btn.disabled = true;
+        return;
+    }
+    
+    const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
+    if (exists) {
+        status.textContent = '❌ Этот никнейм уже занят';
+        status.style.color = '#ff4444';
+        btn.disabled = true;
+    } else {
+        status.textContent = '✅ Никнейм свободен!';
+        status.style.color = '#4caf50';
+        btn.disabled = false;
+    }
+}
+
+function generatePassword() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    let password = '';
+    for (let i = 0; i < 12; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('regPassword').value = password;
+}
+
+function showRegStep(step) {
+    document.querySelectorAll('.reg-step').forEach(el => el.classList.remove('active'));
+    document.getElementById('regStep' + step).classList.add('active');
+}
+
+function regStep1Next() {
+    const name = document.getElementById('regName').value.trim();
+    if (name.length < 2) return;
+    const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
+    if (exists) {
+        alert('Этот никнейм уже занят');
+        return;
+    }
+    registrationData.name = name;
+    showRegStep(2);
+}
+
+function regStep2Next() {
+    const password = document.getElementById('regPassword').value.trim();
+    if (password.length < 6) {
+        alert('Пароль должен содержать минимум 6 символов');
+        return;
+    }
+    
+    const newUser = {
+        id: Date.now(),
+        name: registrationData.name,
+        password: password,
+        orders: [],
+        registered: new Date().toISOString()
+    };
+    
+    users.push(newUser);
+    localStorage.setItem('currentUser', JSON.stringify(newUser));
+    currentUser = newUser;
+    
+    alert('Добро пожаловать, ' + newUser.name + '!');
+    syncData();
+    showPage('cabinet');
+    updateCabinetUI();
+    
+    document.getElementById('regName').value = '';
+    document.getElementById('regPassword').value = '';
+    document.getElementById('usernameStatus').textContent = '';
+    document.getElementById('regNextBtn').disabled = true;
+    showRegStep(1);
+}
+
+function loginUser() {
+    const name = document.getElementById('loginName').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+    
+    const user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.password === password);
+    if (user) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        currentUser = user;
+        showPage('cabinet');
+        updateCabinetUI();
+    } else {
+        alert('Неверный никнейм или пароль');
+    }
+}
+
+function logoutUser() {
+    localStorage.removeItem('currentUser');
+    currentUser = null;
+    showPage('cabinet');
+    updateCabinetUI();
+}
+
+function updateCabinetUI() {
+    if (currentUser) {
+        document.getElementById('cabinetName').textContent = currentUser.name;
+        const ordersList = document.getElementById('cabinetOrders');
+        if (currentUser.orders && currentUser.orders.length > 0) {
+            ordersList.innerHTML = currentUser.orders.map(o => `<div class="case">${o}</div>`).join('');
+        } else {
+            ordersList.innerHTML = '<p style="color:var(--text-secondary);">У вас пока нет заказов.</p>';
         }
+        document.getElementById('cabinetContent').style.display = 'block';
+        document.getElementById('authButtons').style.display = 'none';
+    } else {
+        document.getElementById('cabinetContent').style.display = 'none';
+        document.getElementById('authButtons').style.display = 'flex';
+    }
+}
 
-        function generatePassword() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-            let password = '';
-            for (let i = 0; i < 12; i++) {
-                password += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById('regPassword').value = password;
-        }
+// ============================================================
+// 10. КОРЗИНА + ОПЛАТА КРИПТОЙ
+// ============================================================
+let cart = [];
 
-        function showRegStep(step) {
-            document.querySelectorAll('.reg-step').forEach(el => el.classList.remove('active'));
-            document.getElementById('regStep' + step).classList.add('active');
-        }
+function addToCart(id) {
+    const card = document.querySelector(`.service-card[data-id="${id}"]`);
+    if (!card) return;
+    const name = card.dataset.name;
+    const price = parseFloat(card.dataset.price);
+    const existing = cart.find(item => item.id === id);
+    existing ? existing.qty++ : cart.push({ id, name, price, qty: 1 });
+    updateCartUI();
+    if (navigator.vibrate) navigator.vibrate(10);
+}
 
-        function regStep1Next() {
-            const name = document.getElementById('regName').value.trim();
-            if (name.length < 2) return;
-            const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
-            if (exists) {
-                alert('Этот никнейм уже занят');
-                return;
-            }
-            registrationData.name = name;
-            showRegStep(2);
-        }
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    updateCartUI();
+}
 
-        function regStep2Next() {
-            const password = document.getElementById('regPassword').value.trim();
-            if (password.length < 6) {
-                alert('Пароль должен содержать минимум 6 символов');
-                return;
-            }
-            
-            const newUser = {
-                id: Date.now(),
-                name: registrationData.name,
-                password: password,
-                orders: [],
-                registered: new Date().toISOString()
-            };
-            
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('currentUser', JSON.stringify(newUser));
-            currentUser = newUser;
-            
-            alert('Добро пожаловать, ' + newUser.name + '!');
-            showPage('cabinet');
-            updateCabinetUI();
-            
-            document.getElementById('regName').value = '';
-            document.getElementById('regPassword').value = '';
-            document.getElementById('usernameStatus').textContent = '';
-            document.getElementById('regNextBtn').disabled = true;
-            showRegStep(1);
-        }
+function updateCartUI() {
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    document.getElementById('cartCounter').textContent = count;
+    const list = document.getElementById('cartList');
+    if (!cart.length) {
+        list.innerHTML = '<p style="color:var(--text-secondary);padding:12px 0;">Пусто</p>';
+    } else {
+        list.innerHTML = cart.map(item =>
+            `<div class="cart-item"><span>${item.name} × ${item.qty} — ${(item.price * item.qty).toFixed(1)} USDT</span><button class="remove" onclick="removeFromCart(${item.id})">✕</button></div>`
+        ).join('');
+    }
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById('cartTotal').textContent = total.toFixed(1) + ' USDT';
+}
 
-        function loginUser() {
-            const name = document.getElementById('loginName').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            
-            const user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.password === password);
-            if (user) {
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                currentUser = user;
-                showPage('cabinet');
-                updateCabinetUI();
-            } else {
-                alert('Неверный никнейм или пароль');
-            }
-        }
+function toggleCart() {
+    document.getElementById('cartOverlay').classList.toggle('show');
+}
 
-        function logoutUser() {
-            localStorage.removeItem('currentUser');
-            currentUser = null;
-            showPage('cabinet');
-            updateCabinetUI();
-        }
-
-        function updateCabinetUI() {
-            if (currentUser) {
-                document.getElementById('cabinetName').textContent = currentUser.name;
-                const ordersList = document.getElementById('cabinetOrders');
-                if (currentUser.orders && currentUser.orders.length > 0) {
-                    ordersList.innerHTML = currentUser.orders.map(o => `<div class="case">${o}</div>`).join('');
-                } else {
-                    ordersList.innerHTML = '<p style="color:var(--text-secondary);">У вас пока нет заказов.</p>';
-                }
-                document.getElementById('cabinetContent').style.display = 'block';
-                document.getElementById('authButtons').style.display = 'none';
-            } else {
-                document.getElementById('cabinetContent').style.display = 'none';
-                document.getElementById('authButtons').style.display = 'flex';
-            }
-        }
-
-        // ============================================================
-        // 10. КОРЗИНА + ОПЛАТА КРИПТОЙ
-        // ============================================================
-        let cart = [];
-
-        function addToCart(id) {
-            const card = document.querySelector(`.service-card[data-id="${id}"]`);
-            if (!card) return;
-            const name = card.dataset.name;
-            const price = parseFloat(card.dataset.price);
-            const existing = cart.find(item => item.id === id);
-            existing ? existing.qty++ : cart.push({ id, name, price, qty: 1 });
-            updateCartUI();
-            if (navigator.vibrate) navigator.vibrate(10);
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            const count = cart.reduce((s, i) => s + i.qty, 0);
-            document.getElementById('cartCounter').textContent = count;
-            const list = document.getElementById('cartList');
-            if (!cart.length) {
-                list.innerHTML = '<p style="color:var(--text-secondary);padding:12px 0;">Пусто</p>';
-            } else {
-                list.innerHTML = cart.map(item =>
-                    `<div class="cart-item"><span>${item.name} × ${item.qty} — ${(item.price * item.qty).toFixed(1)} USDT</span><button class="remove" onclick="removeFromCart(${item.id})">✕</button></div>`
-                ).join('');
-            }
-            const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-            document.getElementById('cartTotal').textContent = total.toFixed(1) + ' USDT';
-        }
-
-        function toggleCart() {
-            document.getElementById('cartOverlay').classList.toggle('show');
-        }
-
-        function checkout() {
-            if (!cart.length) { alert('Корзина пуста'); return; }
-            if (!currentUser) {
-                alert('Для оформления заказа необходимо войти в аккаунт.');
-                return;
-            }
-            
-            const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-            const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
-            const cryptoAddress = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
-            
-            const paymentHTML = `
-                <div class="payment-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">
-                    <div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;">
-                        <h3 style="margin-bottom:12px;">💳 Оплата криптой</h3>
-                        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;">Переведите указанную сумму на кошелёк USDT (сеть BEP20 или ERC20)</p>
-                        <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;">
-                            <div style="font-size:12px;color:var(--text-secondary);">Сумма к оплате</div>
-                            <div style="font-size:24px;font-weight:700;color:var(--accent);">${total.toFixed(1)} USDT</div>
-                        </div>
-                        <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;word-break:break-all;">
-                            <div style="font-size:12px;color:var(--text-secondary);">Кошелёк USDT</div>
-                            <div style="font-size:14px;font-family:monospace;color:var(--accent);">${cryptoAddress}</div>
-                            <button onclick="copyAddress()" style="margin-top:6px;background:var(--accent);color:var(--bg);border:none;padding:6px 16px;border-radius:var(--radius);cursor:pointer;font-weight:500;">Скопировать адрес</button>
-                        </div>
-                        <div style="background:var(--glass-bg);padding:8px 12px;border-radius:var(--radius);margin-bottom:12px;border-left:3px solid #ff9800;">
-                            <div style="font-size:12px;color:var(--text-secondary);">Ваш заказ</div>
-                            <div style="font-size:13px;color:var(--text);">${services}</div>
-                        </div>
-                        <button onclick="confirmPaymentClick()" style="width:100%;padding:12px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);font-weight:600;cursor:pointer;margin-bottom:8px;">✅ Я оплатил</button>
-                        <button onclick="closePayment()" style="width:100%;padding:10px;background:transparent;color:var(--text-secondary);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;">Отмена</button>
-                    </div>
+function checkout() {
+    if (!cart.length) { alert('Корзина пуста'); return; }
+    if (!currentUser) {
+        alert('Для оформления заказа необходимо войти в аккаунт.');
+        return;
+    }
+    
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
+    const cryptoAddress = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
+    
+    const paymentHTML = `
+        <div class="payment-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">
+            <div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;">
+                <h3 style="margin-bottom:12px;">💳 Оплата криптой</h3>
+                <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;">Переведите указанную сумму на кошелёк USDT (сеть BEP20 или ERC20)</p>
+                <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;">
+                    <div style="font-size:12px;color:var(--text-secondary);">Сумма к оплате</div>
+                    <div style="font-size:24px;font-weight:700;color:var(--accent);">${total.toFixed(1)} USDT</div>
                 </div>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', paymentHTML);
-        }
+                <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;word-break:break-all;">
+                    <div style="font-size:12px;color:var(--text-secondary);">Кошелёк USDT</div>
+                    <div style="font-size:14px;font-family:monospace;color:var(--accent);">${cryptoAddress}</div>
+                    <button onclick="copyAddress()" style="margin-top:6px;background:var(--accent);color:var(--bg);border:none;padding:6px 16px;border-radius:var(--radius);cursor:pointer;font-weight:500;">Скопировать адрес</button>
+                </div>
+                <div style="background:var(--glass-bg);padding:8px 12px;border-radius:var(--radius);margin-bottom:12px;border-left:3px solid #ff9800;">
+                    <div style="font-size:12px;color:var(--text-secondary);">Ваш заказ</div>
+                    <div style="font-size:13px;color:var(--text);">${services}</div>
+                </div>
+                <button onclick="confirmPaymentClick()" style="width:100%;padding:12px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);font-weight:600;cursor:pointer;margin-bottom:8px;">✅ Я оплатил</button>
+                <button onclick="closePayment()" style="width:100%;padding:10px;background:transparent;color:var(--text-secondary);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;">Отмена</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', paymentHTML);
+}
 
-        function closePayment() {
-            const modal = document.querySelector('.payment-modal');
-            if (modal) modal.remove();
-        }
+function closePayment() {
+    const modal = document.querySelector('.payment-modal');
+    if (modal) modal.remove();
+}
 
-        function copyAddress() {
-            const address = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(address).then(() => {
-                    alert('✅ Адрес скопирован!');
-                }).catch(() => {
-                    alert('Адрес: ' + address);
-                });
-            } else {
-                alert('Адрес: ' + address);
-            }
-        }
+function copyAddress() {
+    const address = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(address).then(() => {
+            alert('✅ Адрес скопирован!');
+        }).catch(() => {
+            alert('Адрес: ' + address);
+        });
+    } else {
+        alert('Адрес: ' + address);
+    }
+}
 
-        function confirmPaymentClick() {
-            const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-            const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
-            
-            const payments = JSON.parse(localStorage.getItem('paymentConfirmations') || '[]');
-            payments.push({
-                id: Date.now(),
-                userName: currentUser.name,
-                services: services,
-                amount: total.toFixed(1),
-                timestamp: new Date().toLocaleString(),
-                status: 'ожидает проверки'
-            });
-            localStorage.setItem('paymentConfirmations', JSON.stringify(payments));
-            
-            const orderSummary = `${services} — ${total.toFixed(1)} USDT`;
-            currentUser.orders.push(orderSummary);
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            alert('✅ Спасибо! Ваш заказ принят. Ожидайте подтверждения оплаты.');
-            
-            cart = [];
-            updateCartUI();
-            toggleCart();
-            closePayment();
-        }
-
+function confirmPaymentClick() {
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
+    
+    paymentConfirmations.push({
+        id: Date.now(),
+        userName: currentUser.name,
+        services: services,
+        amount: total.toFixed(1),
+        timestamp: new Date().toLocaleString(),
+        status: 'ожидает проверки'
+    });
+    
+    const orderSummary = `${services} — ${total.toFixed(1)} USDT`;
+    currentUser.orders.push(orderSummary);
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    syncData();
+    alert('✅ Спасибо! Ваш заказ принят. Ожидайте подтверждения оплаты.');
+    
+    cart = [];
+    updateCartUI();
+    toggleCart();
+    closePayment();
+}
         // ============================================================
         // 11. ИНИЦИАЛИЗАЦИЯ
         // ============================================================
@@ -1704,10 +1954,19 @@ function renderAdminOrders() {
             </div>
         `;
 
-        // Инициализация
-        updateAdminNotification('support');
-        updateAdminNotification('specialist');
-        updateCabinetUI();
+        // ЗАГРУЗКА ДАННЫХ ПРИ СТАРТЕ
+        async function startApp() {
+            await initData();
+            updateCabinetUI();
+            renderAdminUsers();
+            renderAdminPayments();
+            renderAdminSupport();
+            renderAdminSpecialist();
+            updateAdminNotification('support');
+            updateAdminNotification('specialist');
+        }
+
+        startApp();
     </script>
 
 </body>
