@@ -1,0 +1,24 @@
+name: Деплой сайта
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Скачать код
+        uses: actions/checkout@v3
+      
+      - name: Создать config.js с токеном
+        run: |
+          echo "window.GITHUB_TOKEN = '${{ secrets.MY_TOKEN }}';" > config.js
+          echo "console.log('✅ Токен установлен!');" >> config.js
+      
+      - name: Деплой на GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.MY_TOKEN }}
+          publish_dir: ./
