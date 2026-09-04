@@ -101,389 +101,385 @@
         }
         .theme-toggle:active { transform: scale(0.9); }
         .cart-badge { font-size: 14px; color: var(--text-secondary); }
-
-        .nav {
-            display: flex;
-            gap: 8px;
-            margin: 16px 0;
-            flex-wrap: wrap;
-        }
-        .nav button {
-            flex: 1;
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            color: var(--text-secondary);
-            border: 1px solid var(--glass-border);
-            padding: 12px 0;
-            border-radius: var(--radius);
-            font-size: 14px;
-            font-weight: 450;
-            cursor: pointer;
-            transition: 0.2s;
-            min-width: 60px;
-        }
-        .nav button:active {
-            background: var(--accent);
-            color: var(--bg);
-            border-color: var(--accent);
-        }
-
-        .page {
-            display: none;
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 24px 20px;
-            box-shadow: var(--glass-shadow), inset 0 0 60px var(--glow);
-            min-height: 320px;
-            margin-top: 10px;
-            transition: all 0.3s;
-        }
-        .page.active { display: block; }
-        .page h2 {
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 16px;
-            letter-spacing: -0.3px;
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 14px;
-            cursor: pointer;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 0;
-        }
-        .back-btn:active { color: var(--text); }
-
-        .hero-tag {
-            display: inline-block;
-            background: var(--accent);
-            color: var(--bg);
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-        .utp-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-top: 16px;
-        }
-        .utp-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border-radius: var(--radius);
-            padding: 12px 6px;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-            font-size: 13px;
-        }
-        .utp-item .icon { font-size: 22px; display: block; margin-bottom: 4px; }
-
-        .case {
-            padding: 14px 0;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .case:last-child { border-bottom: none; }
-        .case h3 { font-size: 16px; font-weight: 500; }
-        .case p { font-size: 14px; color: var(--text-secondary); margin: 4px 0 8px; }
-        .case .tag {
-            display: inline-block;
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            border: 1px solid var(--glass-border);
-        }
-
-        .service-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .service-card:last-child { border-bottom: none; }
-        .service-card .info h3 { font-size: 15px; font-weight: 500; }
-        .service-card .info p { font-size: 13px; color: var(--text-secondary); }
-        .service-card .price { font-weight: 600; }
-        .service-card .btn-add {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.15s;
-        }
-        .service-card .btn-add:active { opacity: 0.6; }
     </style>
 </head>
-        /* ===== СТРАНИЦА ЧАТОВ ===== */
-        .chat-menu-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .chat-menu-item:active {
-            background: var(--accent);
-            color: var(--bg);
-            border-color: var(--accent);
-        }
-        .chat-menu-item .chat-icon { font-size: 28px; }
-        .chat-menu-item .chat-label { font-weight: 500; font-size: 16px; }
-        .chat-menu-item .chat-desc { font-size: 13px; color: var(--text-secondary); }
+.nav {
+    display: flex;
+    gap: 8px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+}
+.nav button {
+    flex: 1;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+    padding: 12px 0;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 450;
+    cursor: pointer;
+    transition: 0.2s;
+    min-width: 60px;
+}
+.nav button:active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
 
-        /* ===== ЧАТЫ (СТРАНИЦЫ) ===== */
-        .chat-page {
-            display: none;
-            flex-direction: column;
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            box-shadow: var(--glass-shadow);
-            padding: 0;
-            min-height: 400px;
-        }
-        .chat-page.active { display: flex; }
+.page {
+    display: none;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--glass-shadow), inset 0 0 60px var(--glow);
+    min-height: 320px;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+.page.active { display: block; }
+.page h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: -0.3px;
+}
 
-        .chat-header {
-            padding: 14px 18px;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .chat-header h4 { font-size: 16px; font-weight: 500; }
-        .chat-header .close-chat {
-            background: none;
-            border: none;
-            font-size: 22px;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        .chat-header .chat-type-badge {
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-            background: var(--accent);
-            color: var(--bg);
-        }
-        .chat-header .chat-type-badge.support { background: #4caf50; }
-        .chat-header .chat-type-badge.specialist { background: #ff9800; }
+.back-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0;
+}
+.back-btn:active { color: var(--text); }
 
-        .chat-messages {
-            flex: 1;
-            padding: 12px 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-height: 200px;
-            max-height: 400px;
-        }
-        .chat-messages .msg {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 14px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            animation: fadeIn 0.3s ease;
-        }
-        .chat-messages .msg.bot {
-            background: var(--chat-bot);
-            border: 1px solid var(--glass-border);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-        .chat-messages .msg.user {
-            background: var(--chat-user);
-            border: 1px solid var(--glass-border);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-        .chat-messages .msg.support {
-            background: var(--chat-support);
-            border: 1px solid #4caf50;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            border-left: 3px solid #4caf50;
-        }
-        .chat-messages .msg.specialist {
-            background: var(--chat-specialist);
-            border: 1px solid #ff9800;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            border-left: 3px solid #ff9800;
-        }
-        .chat-messages .msg .sender-name {
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 2px;
-            display: block;
-        }
-        .chat-messages .msg .sender-name.support { color: #4caf50; }
-        .chat-messages .msg .sender-name.specialist { color: #ff9800; }
-        .chat-messages .msg .time {
-            font-size: 10px;
-            opacity: 0.5;
-            margin-top: 4px;
-            display: block;
-        }
-        .chat-messages .typing {
-            align-self: flex-start;
-            padding: 8px 14px;
-            background: var(--chat-bot);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            border-bottom-left-radius: 4px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            display: none;
-        }
-        .chat-messages .typing.active { display: block; }
-        .chat-messages .typing span {
-            animation: dots 1.4s infinite;
-            display: inline-block;
-        }
-        .chat-messages .typing span:nth-child(2) { animation-delay: 0.2s; }
-        .chat-messages .typing span:nth-child(3) { animation-delay: 0.4s; }
+.hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+.utp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+}
+.utp-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: var(--radius);
+    padding: 12px 6px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    font-size: 13px;
+}
+.utp-item .icon { font-size: 22px; display: block; margin-bottom: 4px; }
 
-        @keyframes dots {
-            0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-            30% { opacity: 1; transform: translateY(-4px); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.case {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+.case:last-child { border-bottom: none; }
+.case h3 { font-size: 16px; font-weight: 500; }
+.case p { font-size: 14px; color: var(--text-secondary); margin: 4px 0 8px; }
+.case .tag {
+    display: inline-block;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+}
 
-        .chat-input {
-            padding: 12px 16px;
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-        .chat-input input {
-            flex: 1;
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 10px 16px;
-            font-size: 14px;
-            color: var(--text);
-            outline: none;
-            transition: 0.2s;
-        }
-        .chat-input input::placeholder { color: var(--text-secondary); }
-        .chat-input input:focus { border-color: var(--accent); }
-        .chat-input button {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: 0.2s;
-            flex-shrink: 0;
-        }
-        .chat-input button:active { transform: scale(0.9); }
-        .chat-input button:disabled { opacity: 0.4; }
+.service-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+.service-card:last-child { border-bottom: none; }
+.service-card .info h3 { font-size: 15px; font-weight: 500; }
+.service-card .info p { font-size: 13px; color: var(--text-secondary); }
+.service-card .price { font-weight: 600; }
+.service-card .btn-add {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.service-card .btn-add:active { opacity: 0.6; }
+/* ===== СТРАНИЦА ЧАТОВ ===== */
+.chat-menu-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.chat-menu-item:active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+.chat-menu-item .chat-icon { font-size: 28px; }
+.chat-menu-item .chat-label { font-weight: 500; font-size: 16px; }
+.chat-menu-item .chat-desc { font-size: 13px; color: var(--text-secondary); }
 
-        .cart-overlay {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid var(--glass-border);
-            padding: 20px;
-            border-radius: var(--radius) var(--radius) 0 0;
-            display: none;
-            z-index: 999;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        .cart-overlay.show { display: block; }
-        .cart-overlay .close {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-        .cart-overlay h3 { margin-bottom: 12px; font-weight: 500; }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--glass-border);
-            font-size: 14px;
-        }
-        .cart-item .remove {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .cart-total {
-            font-size: 18px;
-            font-weight: 500;
-            margin: 16px 0 12px;
-        }
-        .btn-checkout {
-            width: 100%;
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 14px;
-            border-radius: var(--radius);
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .btn-checkout:active { opacity: 0.7; }
+.chat-page {
+    display: none;
+    flex-direction: column;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--glass-shadow);
+    padding: 0;
+    min-height: 400px;
+}
+.chat-page.active { display: flex; }
 
-        @media (max-width: 480px) {
-            body { padding: 12px; }
-            .page { padding: 18px 14px; }
-            .header { padding: 12px 14px; }
-            .chat-messages { max-height: 300px; }
-        }
+.chat-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+.chat-header h4 { font-size: 16px; font-weight: 500; }
+.chat-header .close-chat {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.chat-header .chat-type-badge {
+    font-size: 10px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    background: var(--accent);
+    color: var(--bg);
+}
+.chat-header .chat-type-badge.support { background: #4caf50; }
+.chat-header .chat-type-badge.specialist { background: #ff9800; }
 
+.chat-messages {
+    flex: 1;
+    padding: 12px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 200px;
+    max-height: 400px;
+}
+.chat-messages .msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    animation: fadeIn 0.3s ease;
+}
+.chat-messages .msg.bot {
+    background: var(--chat-bot);
+    border: 1px solid var(--glass-border);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.chat-messages .msg.user {
+    background: var(--chat-user);
+    border: 1px solid var(--glass-border);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.chat-messages .msg.support {
+    background: var(--chat-support);
+    border: 1px solid #4caf50;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border-left: 3px solid #4caf50;
+}
+.chat-messages .msg.specialist {
+    background: var(--chat-specialist);
+    border: 1px solid #ff9800;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border-left: 3px solid #ff9800;
+}
+.chat-messages .msg .sender-name {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    display: block;
+}
+.chat-messages .msg .sender-name.support { color: #4caf50; }
+.chat-messages .msg .sender-name.specialist { color: #ff9800; }
+.chat-messages .msg .time {
+    font-size: 10px;
+    opacity: 0.5;
+    margin-top: 4px;
+    display: block;
+}
+.chat-messages .typing {
+    align-self: flex-start;
+    padding: 8px 14px;
+    background: var(--chat-bot);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: none;
+}
+.chat-messages .typing.active { display: block; }
+.chat-messages .typing span {
+    animation: dots 1.4s infinite;
+    display: inline-block;
+}
+.chat-messages .typing span:nth-child(2) { animation-delay: 0.2s; }
+.chat-messages .typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dots {
+    0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-4px); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-input {
+    padding: 12px 16px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.chat-input input {
+    flex: 1;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: 0.2s;
+}
+.chat-input input::placeholder { color: var(--text-secondary); }
+.chat-input input:focus { border-color: var(--accent); }
+.chat-input button {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+    flex-shrink: 0;
+}
+.chat-input button:active { transform: scale(0.9); }
+.chat-input button:disabled { opacity: 0.4; }
+.cart-overlay {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--glass-border);
+    padding: 20px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    display: none;
+    z-index: 999;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+.cart-overlay.show { display: block; }
+.cart-overlay .close {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+.cart-overlay h3 { margin-bottom: 12px; font-weight: 500; }
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--glass-border);
+    font-size: 14px;
+}
+.cart-item .remove {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+}
+.cart-total {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 16px 0 12px;
+}
+.btn-checkout {
+    width: 100%;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.btn-checkout:active { opacity: 0.7; }
+
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .page { padding: 18px 14px; }
+    .header { padding: 12px 14px; }
+    .chat-messages { max-height: 300px; }
+}
         /* ===== АДМИН-ПАНЕЛЬ ===== */
         .admin-overlay {
             position: fixed;
@@ -511,242 +507,47 @@
             overflow-y: auto;
             box-shadow: var(--glass-shadow);
         }
-        .admin-panel h2 {
-            font-size: 22px;
-            margin-bottom: 16px;
-            color: var(--text);
-        }
-        .admin-panel .close-admin {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 28px;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        .admin-panel .admin-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        .admin-panel .admin-tabs button {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-        .admin-panel .admin-tabs button.active {
-            background: var(--accent);
-            color: var(--bg);
-            border-color: var(--accent);
-        }
-        .admin-panel .admin-tab {
-            display: none;
-        }
+        .admin-panel h2 { font-size: 22px; margin-bottom: 16px; color: var(--text); }
+        .admin-panel .close-admin { float: right; background: none; border: none; font-size: 28px; color: var(--text-secondary); cursor: pointer; }
+        .admin-panel .admin-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .admin-panel .admin-tabs button { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-secondary); padding: 8px 16px; border-radius: var(--radius); cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .admin-panel .admin-tabs button.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+        .admin-panel .admin-tab { display: none; }
         .admin-panel .admin-tab.active { display: block; }
-        .admin-panel .admin-chat-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-        .admin-panel .admin-chat-item .question {
-            font-weight: 500;
-            color: var(--text);
-        }
-        .admin-panel .admin-chat-item .answer {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-        .admin-panel .admin-chat-item .answer-input {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 14px;
-            margin-top: 8px;
-        }
-        .admin-panel .admin-chat-item .answer-btn {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 6px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 6px;
-        }
-        .admin-panel .admin-chat-item .status {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .admin-panel .admin-chat-item .status.answered {
-            color: #4caf50;
-        }
-        .admin-panel .admin-chat-item .status.pending {
-            color: #ff9800;
-        }
-        .admin-login {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-        .admin-login input {
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 16px;
-        }
-        .admin-login button {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 12px;
-            border-radius: var(--radius);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .admin-login .error {
-            color: #ff6b6b;
-            font-size: 14px;
-            text-align: center;
-        }
-        .admin-chat-notification {
-            background: #ff4444;
-            color: #fff;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-left: 6px;
-        }
+        .admin-panel .admin-chat-item { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 12px; margin-bottom: 10px; }
+        .admin-panel .admin-chat-item .question { font-weight: 500; color: var(--text); }
+        .admin-panel .admin-chat-item .answer { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
+        .admin-panel .admin-chat-item .answer-input { width: 100%; padding: 8px 12px; border-radius: var(--radius); border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text); font-size: 14px; margin-top: 8px; }
+        .admin-panel .admin-chat-item .answer-btn { background: var(--accent); color: var(--bg); border: none; padding: 6px 16px; border-radius: var(--radius); cursor: pointer; font-weight: 500; margin-top: 6px; }
+        .admin-panel .admin-chat-item .status { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .admin-panel .admin-chat-item .status.answered { color: #4caf50; }
+        .admin-panel .admin-chat-item .status.pending { color: #ff9800; }
+        .admin-login { display: flex; flex-direction: column; gap: 12px; max-width: 300px; margin: 0 auto; }
+        .admin-login input { padding: 12px 16px; border-radius: var(--radius); border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text); font-size: 16px; }
+        .admin-login button { background: var(--accent); color: var(--bg); border: none; padding: 12px; border-radius: var(--radius); font-size: 16px; font-weight: 600; cursor: pointer; }
+        .admin-login .error { color: #ff6b6b; font-size: 14px; text-align: center; }
+        .admin-chat-notification { background: #ff4444; color: #fff; border-radius: 50%; padding: 2px 8px; font-size: 12px; font-weight: 700; margin-left: 6px; }
 
-        /* ===== ЛИЧНЫЙ КАБИНЕТ ===== */
-        .cabinet-info {
-            margin-top: 16px;
-            padding: 16px;
-            background: var(--glass-bg);
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-        }
-        .cabinet-info .label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        .cabinet-info .value {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        .reg-step {
-            display: none;
-        }
-        .reg-step.active {
-            display: block;
-        }
-        .reg-step input {
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        .reg-step input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        .reg-step .generate-link {
-            color: #ff4444;
-            font-size: 13px;
-            cursor: pointer;
-            display: block;
-            text-align: right;
-            margin-top: -8px;
-            margin-bottom: 12px;
-        }
-        .reg-step .generate-link:active {
-            opacity: 0.7;
-        }
-        .auth-btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: 0.2s;
-        }
-        .auth-btn.primary {
-            background: var(--accent);
-            color: var(--bg);
-        }
-        .auth-btn.secondary {
-            background: var(--glass-bg);
-            color: var(--text);
-            border: 1px solid var(--glass-border);
-        }
-        .auth-btn:active {
-            transform: scale(0.97);
-        }
+        .cabinet-info { margin-top: 16px; padding: 16px; background: var(--glass-bg); border-radius: var(--radius); border: 1px solid var(--glass-border); }
+        .cabinet-info .label { font-size: 12px; color: var(--text-secondary); }
+        .cabinet-info .value { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+        .reg-step { display: none; }
+        .reg-step.active { display: block; }
+        .reg-step input { width: 100%; padding: 12px; border-radius: var(--radius); border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text); font-size: 16px; margin-bottom: 12px; }
+        .reg-step input:focus { outline: none; border-color: var(--accent); }
+        .reg-step .generate-link { color: #ff4444; font-size: 13px; cursor: pointer; display: block; text-align: right; margin-top: -8px; margin-bottom: 12px; }
+        .reg-step .generate-link:active { opacity: 0.7; }
+        .auth-btn { width: 100%; padding: 14px; border-radius: var(--radius); font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+        .auth-btn.primary { background: var(--accent); color: var(--bg); }
+        .auth-btn.secondary { background: var(--glass-bg); color: var(--text); border: 1px solid var(--glass-border); }
+        .auth-btn:active { transform: scale(0.97); }
 
-        /* ===== ПОИСК В АДМИНКЕ ===== */
-        .search-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-        .search-result-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-        .search-result-item .name {
-            font-weight: 500;
-            color: var(--text);
-        }
-        .search-result-item .info {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        .search-result-item .btn-chat {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 6px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 6px;
-        }
+        .search-input { width: 100%; padding: 12px; border-radius: var(--radius); border: 1px solid var(--glass-border); background: var(--glass-bg); color: var(--text); font-size: 16px; margin-bottom: 12px; }
+        .search-input:focus { outline: none; border-color: var(--accent); }
+        .search-result-item { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius); padding: 12px; margin-bottom: 10px; }
+        .search-result-item .name { font-weight: 500; color: var(--text); }
+        .search-result-item .info { font-size: 12px; color: var(--text-secondary); }
+        .search-result-item .btn-chat { background: var(--accent); color: var(--bg); border: none; padding: 6px 16px; border-radius: var(--radius); cursor: pointer; font-weight: 500; margin-top: 6px; }
     </style>
 </head>
 <body>
@@ -771,7 +572,7 @@
                     <button class="active" onclick="switchAdminTab('support', this)">Поддержка <span id="supportNotif" class="admin-chat-notification" style="display:none;">0</span></button>
                     <button onclick="switchAdminTab('specialist', this)">OSINT-специалист <span id="specialistNotif" class="admin-chat-notification" style="display:none;">0</span></button>
                     <button onclick="switchAdminTab('users', this)">Пользователи</button>
-                    <button onclick="switchAdminTab('search', this)">🔍 Поиск</button>
+                    <button onclick="switchAdminTab('search', this)">Поиск</button>
                     <button onclick="switchAdminTab('payments', this)">Оплаты</button>
                     <button onclick="switchAdminTab('services', this)">Услуги</button>
                     <button onclick="switchAdminTab('orders', this)">Заказы</button>
@@ -790,7 +591,7 @@
                     <div id="adminUsersList"><p style="color:var(--text-secondary);">Загрузка...</p></div>
                 </div>
                 <div id="adminSearch" class="admin-tab">
-                    <h3>🔍 Поиск пользователя</h3>
+                    <h3>Поиск пользователя</h3>
                     <input class="search-input" type="text" id="searchInput" placeholder="Введите никнейм..." oninput="searchUser()">
                     <div id="searchResults"><p style="color:var(--text-secondary);">Начните вводить никнейм</p></div>
                 </div>
@@ -854,7 +655,6 @@
     <div class="case"><h3>AliExpress — внутренние процессы</h3><p>Собрал данные по юр. структуре и тех. части. Выявил уязвимости.</p><span class="tag">OSINT</span></div>
     <div class="case"><h3>Мегафон — уязвимости</h3><p>Провёл аудит технической части, обнаружил несколько уязвимостей.</p><span class="tag">OSINT</span></div>
 </div>
-
 <!-- ===== УСЛУГИ ===== -->
 <div id="services" class="page">
     <h2>Услуги</h2>
@@ -910,7 +710,6 @@
         <button onclick="sendSupportMessage()">➤</button>
     </div>
 </div>
-
 <!-- ===== ЧАТ С OSINT-СПЕЦИАЛИСТОМ ===== -->
 <div id="chatSpecialist" class="chat-page">
     <div class="chat-header">
@@ -931,66 +730,51 @@
         <button onclick="sendSpecialistMessage()">➤</button>
     </div>
 </div>
-    <!-- ===== ЛИЧНЫЙ КАБИНЕТ ===== -->
-    <div id="cabinet" class="page">
-        <h2>Личный кабинет</h2>
-        <div id="cabinetContent" style="display:none;">
-            <div class="cabinet-info">
-                <div class="label">Nickname</div>
-                <div class="value" id="cabinetName"></div>
-            </div>
-            <div style="margin-top:16px;">
-                <h4>История заказов</h4>
-                <div id="cabinetOrders"></div>
-            </div>
-            <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px;">Выйти</button>
+<!-- ===== ЛИЧНЫЙ КАБИНЕТ ===== -->
+<div id="cabinet" class="page">
+    <h2>Личный кабинет</h2>
+    <div id="cabinetContent" style="display:none;">
+        <div class="cabinet-info">
+            <div class="label">Nickname</div>
+            <div class="value" id="cabinetName"></div>
         </div>
-        <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
-            <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
-            <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
+        <div style="margin-top:16px;">
+            <h4>История заказов</h4>
+            <div id="cabinetOrders"></div>
         </div>
+        <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px;">Выйти</button>
     </div>
-
-    <!-- ===== РЕГИСТРАЦИЯ ===== -->
-    <div id="register" class="page">
-        <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-        <h2>Регистрация</h2>
-        <div id="regStep1" class="reg-step active">
-            <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Введите ваш Nickname</label>
-            <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
-            <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary);"></div>
-            <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
-        </div>
-        <div id="regStep2" class="reg-step">
-            <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Придумайте пароль</label>
-            <input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте">
-            <span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span>
-            <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
-        </div>
+    <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
+        <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
+        <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
     </div>
+</div>
 
-    <!-- ===== ВХОД ===== -->
-    <div id="login" class="page">
-        <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-        <h2>Вход</h2>
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Ваш Nickname</label>
-        <input type="text" id="loginName" placeholder="Введите никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px;">
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Пароль</label>
-        <input type="password" id="loginPassword" placeholder="Введите пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px;">
-        <button class="auth-btn primary" onclick="loginUser()">Войти</button>
+<!-- ===== РЕГИСТРАЦИЯ ===== -->
+<div id="register" class="page">
+    <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
+    <h2>Регистрация</h2>
+    <div id="regStep1" class="reg-step active">
+        <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Введите ваш Nickname</label>
+        <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
+        <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary);"></div>
+        <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
     </div>
-
+    <div id="regStep2" class="reg-step">
+        <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Придумайте пароль</label>
+        <input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте">
+        <span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span>
+        <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
+    </div>
 </div>
 <script>
     // ============================================================
     // 0. НАСТРОЙКИ GITHUB (токен из config.js)
     // ============================================================
-    // Токен загружен из config.js
     const GITHUB_USERNAME = 'sprintdrop';
     const GITHUB_REPO = 'sprintsite';
     const GITHUB_FILE = 'data.json';
 
-    // ===== ЗАГРУЗКА С GITHUB =====
     async function loadFromGitHub() {
         const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
         try {
@@ -1002,13 +786,10 @@
                 const content = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
                 return content;
             }
-        } catch (e) {
-            console.log('Ошибка загрузки с GitHub:', e);
-        }
+        } catch (e) { console.log('Ошибка загрузки с GitHub:', e); }
         return null;
     }
 
-    // ===== СОХРАНЕНИЕ НА GITHUB =====
     async function saveToGitHub(data) {
         const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
         let sha = '';
@@ -1021,14 +802,8 @@
                 sha = fileData.sha;
             }
         } catch (e) {}
-        
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-        const body = {
-            message: 'Обновление данных',
-            content: content,
-            sha: sha || undefined
-        };
-        
+        const body = { message: 'Обновление данных', content: content, sha: sha || undefined };
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
@@ -1040,22 +815,11 @@
         return response.ok;
     }
 
-    // ===== ИНИЦИАЛИЗАЦИЯ ДАННЫХ =====
-    let appData = {
-        users: [],
-        unansweredSupport: [],
-        unansweredSpecialist: [],
-        paymentConfirmations: [],
-        orders: []
-    };
+    let appData = { users: [], unansweredSupport: [], unansweredSpecialist: [], paymentConfirmations: [], orders: [] };
 
     async function initData() {
         const data = await loadFromGitHub();
-        if (data) {
-            appData = data;
-        } else {
-            await saveToGitHub(appData);
-        }
+        if (data) { appData = data; } else { await saveToGitHub(appData); }
         applyData();
     }
 
@@ -1065,7 +829,6 @@
         unansweredSpecialist = appData.unansweredSpecialist || [];
         paymentConfirmations = appData.paymentConfirmations || [];
         orders = appData.orders || [];
-        
         updateCabinetUI();
         updateAdminNotification('support');
         updateAdminNotification('specialist');
@@ -1090,43 +853,21 @@
     function searchUser() {
         const query = document.getElementById('searchInput').value.trim().toLowerCase();
         const results = document.getElementById('searchResults');
-        
-        if (query.length < 2) {
-            results.innerHTML = '<p style="color:var(--text-secondary);">Введите минимум 2 символа</p>';
-            return;
-        }
-        
+        if (query.length < 2) { results.innerHTML = '<p style="color:var(--text-secondary);">Введите минимум 2 символа</p>'; return; }
         const foundUsers = users.filter(u => u.name.toLowerCase().includes(query));
-        
-        if (foundUsers.length === 0) {
-            results.innerHTML = '<p style="color:var(--text-secondary);">Пользователь не найден</p>';
-            return;
-        }
-        
+        if (foundUsers.length === 0) { results.innerHTML = '<p style="color:var(--text-secondary);">Пользователь не найден</p>'; return; }
         let html = '';
         foundUsers.forEach(user => {
             const supportMsgs = unansweredSupport.filter(m => m.userName === user.name && !m.answered);
             const specialistMsgs = unansweredSpecialist.filter(m => m.userName === user.name && !m.answered);
-            const totalMsgs = supportMsgs.length + specialistMsgs.length;
-            
-            html += `
-                <div class="search-result-item">
-                    <div class="name">👤 ${user.name}</div>
-                    <div class="info">Сообщений: ${totalMsgs}</div>
-                    <button class="btn-chat" onclick="openChatWithUser('${user.name}')">✉️ Написать</button>
-                </div>
-            `;
+            html += `<div class="search-result-item"><div class="name">👤 ${user.name}</div><div class="info">Сообщений: ${supportMsgs.length + specialistMsgs.length}</div><button class="btn-chat" onclick="openChatWithUser('${user.name}')">✉️ Написать</button></div>`;
         });
         results.innerHTML = html;
     }
 
     function openChatWithUser(userName) {
         const user = users.find(u => u.name === userName);
-        if (!user) {
-            alert('Пользователь не найден');
-            return;
-        }
-        
+        if (!user) { alert('Пользователь не найден'); return; }
         const chatHTML = `
             <div class="admin-chat-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">
                 <div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;max-width:500px;width:100%;max-height:90vh;display:flex;flex-direction:column;">
@@ -1134,9 +875,7 @@
                         <h3>💬 Чат с ${userName}</h3>
                         <button onclick="this.closest('.admin-chat-modal').remove()" style="background:none;border:none;font-size:24px;color:var(--text-secondary);cursor:pointer;">✕</button>
                     </div>
-                    <div id="adminChatMessages" style="flex:1;overflow-y:auto;padding:12px;background:var(--glass-bg);border-radius:var(--radius);max-height:300px;min-height:200px;">
-                        ${renderUserMessages(userName)}
-                    </div>
+                    <div id="adminChatMessages" style="flex:1;overflow-y:auto;padding:12px;background:var(--glass-bg);border-radius:var(--radius);max-height:300px;min-height:200px;">${renderUserMessages(userName)}</div>
                     <div style="display:flex;gap:10px;margin-top:12px;">
                         <input type="text" id="adminChatInput" placeholder="Введите сообщение..." style="flex:1;padding:10px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);">
                         <button onclick="sendAdminMessage('${userName}')" style="background:var(--accent);color:var(--bg);border:none;padding:10px 20px;border-radius:var(--radius);cursor:pointer;font-weight:600;">Отправить</button>
@@ -1144,31 +883,18 @@
                 </div>
             </div>
         `;
-        
         document.body.insertAdjacentHTML('beforeend', chatHTML);
         document.getElementById('adminChatInput').focus();
-        const container = document.getElementById('adminChatMessages');
-        if (container) container.scrollTop = container.scrollHeight;
     }
 
     function renderUserMessages(userName) {
         const allSupport = unansweredSupport.filter(m => m.userName === userName);
         const allSpecialist = unansweredSpecialist.filter(m => m.userName === userName);
         const allMessages = [...allSupport, ...allSpecialist].sort((a,b) => a.id - b.id);
-        
-        if (allMessages.length === 0) {
-            return '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет сообщений. Напишите первым 👆</p>';
-        }
-        
+        if (allMessages.length === 0) { return '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет сообщений. Напишите первым 👆</p>'; }
         return allMessages.map(m => {
             const type = m.type === 'support' ? 'Поддержка' : 'Специалист';
-            return `
-                <div style="padding:8px 0;border-bottom:1px solid var(--glass-border);">
-                    <div style="font-size:12px;color:var(--text-secondary);">[${type}] ${m.timestamp}</div>
-                    <div style="font-size:14px;">${m.question}</div>
-                    ${m.answer ? `<div style="font-size:13px;color:#4caf50;margin-top:4px;">→ ${m.answer}</div>` : ''}
-                </div>
-            `;
+            return `<div style="padding:8px 0;border-bottom:1px solid var(--glass-border);"><div style="font-size:12px;color:var(--text-secondary);">[${type}] ${m.timestamp}</div><div style="font-size:14px;">${m.question}</div>${m.answer ? `<div style="font-size:13px;color:#4caf50;margin-top:4px;">→ ${m.answer}</div>` : ''}</div>`;
         }).join('');
     }
 
@@ -1176,137 +902,109 @@
         const input = document.getElementById('adminChatInput');
         const text = input.value.trim();
         if (!text) return;
-        
         const id = Date.now();
-        unansweredSupport.push({
-            id: id,
-            question: text,
-            userName: userName,
-            answer: '',
-            answered: false,
-            type: 'support',
-            timestamp: new Date().toLocaleString(),
-            isAdmin: true
-        });
-        
+        unansweredSupport.push({ id, question: text, userName: userName, answer: '', answered: false, type: 'support', timestamp: new Date().toLocaleString(), isAdmin: true });
         syncData();
         input.value = '';
-        
         const messagesContainer = document.getElementById('adminChatMessages');
         if (messagesContainer) {
             messagesContainer.innerHTML = renderUserMessages(userName);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-        
         renderAdminSupport();
         renderAdminSpecialist();
         updateAdminNotification('support');
-        
-        // Отправляем сообщение в чат поддержки пользователя (как ответ от поддержки)
         addSupportMessage(text, 'support', 'Поддержка');
     }
-// ============================================================
-// 1. ЗВЁЗДЫ
-// ============================================================
-const canvas = document.getElementById('starsCanvas');
-const ctx = canvas.getContext('2d');
-let stars = [];
-let starCount = 120;
-let starColor = '#ffffff';
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+    // ============================================================
+    // 1. ЗВЁЗДЫ
+    // ============================================================
+    const canvas = document.getElementById('starsCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    let starCount = 120;
+    let starColor = '#ffffff';
 
-function initStars() {
-    stars = [];
-    for (let i = 0; i < starCount; i++) {
-        stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            r: Math.random() * 1.8 + 0.4,
-            speed: Math.random() * 0.4 + 0.1,
-            angle: Math.random() * Math.PI * 2
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function initStars() {
+        stars = [];
+        for (let i = 0; i < starCount; i++) {
+            stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 1.8 + 0.4, speed: Math.random() * 0.4 + 0.1, angle: Math.random() * Math.PI * 2 });
+        }
+    }
+    initStars();
+
+    function drawStars(color) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = color;
+        stars.forEach(s => {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fill();
+            s.x += Math.sin(s.angle) * s.speed * 0.2;
+            s.y += Math.cos(s.angle) * s.speed * 0.2;
+            if (s.x < 0) s.x = canvas.width;
+            if (s.x > canvas.width) s.x = 0;
+            if (s.y < 0) s.y = canvas.height;
+            if (s.y > canvas.height) s.y = 0;
         });
+        requestAnimationFrame(() => drawStars(starColor));
     }
-}
-initStars();
 
-function drawStars(color) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = color;
-    stars.forEach(s => {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
-        s.x += Math.sin(s.angle) * s.speed * 0.2;
-        s.y += Math.cos(s.angle) * s.speed * 0.2;
-        if (s.x < 0) s.x = canvas.width;
-        if (s.x > canvas.width) s.x = 0;
-        if (s.y < 0) s.y = canvas.height;
-        if (s.y > canvas.height) s.y = 0;
-    });
-    requestAnimationFrame(() => drawStars(starColor));
-}
+    function updateStarColor(color) { starColor = color; }
 
-function updateStarColor(color) { starColor = color; }
+    // ============================================================
+    // 2. ТЁМНАЯ ТЕМА
+    // ============================================================
+    let currentTheme = 'dark';
+    const themeToggle = document.getElementById('themeToggle');
 
-// ============================================================
-// 2. ТЁМНАЯ ТЕМА
-// ============================================================
-let currentTheme = 'dark';
-const themeToggle = document.getElementById('themeToggle');
-
-function toggleTheme() {
-    if (currentTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'light');
-        themeToggle.textContent = '☀️';
-        currentTheme = 'light';
-        updateStarColor('#000000');
-    } else {
-        document.documentElement.removeAttribute('data-theme');
-        themeToggle.textContent = '🌙';
-        currentTheme = 'dark';
-        updateStarColor('#ffffff');
+    function toggleTheme() {
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeToggle.textContent = '☀️';
+            currentTheme = 'light';
+            updateStarColor('#000000');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            themeToggle.textContent = '🌙';
+            currentTheme = 'dark';
+            updateStarColor('#ffffff');
+        }
     }
-}
-updateStarColor('#ffffff');
-drawStars('#ffffff');
+    updateStarColor('#ffffff');
+    drawStars('#ffffff');
 
-// ============================================================
-// 3. НАВИГАЦИЯ
-// ============================================================
-function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.getElementById('cartOverlay').classList.remove('show');
-    if (id === 'cabinet') {
-        updateCabinetUI();
+    // ============================================================
+    // 3. НАВИГАЦИЯ
+    // ============================================================
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('cartOverlay').classList.remove('show');
+        if (id === 'cabinet') { updateCabinetUI(); }
     }
-}
 
-// ============================================================
-// 4. УПРАВЛЕНИЕ ЧАТАМИ
-// ============================================================
-function openChat(type) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-    if (type === 'support') {
-        document.getElementById('chatSupport').classList.add('active');
-    } else if (type === 'specialist') {
-        document.getElementById('chatSpecialist').classList.add('active');
+    // ============================================================
+    // 4. УПРАВЛЕНИЕ ЧАТАМИ
+    // ============================================================
+    function openChat(type) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
+        if (type === 'support') { document.getElementById('chatSupport').classList.add('active'); }
+        else if (type === 'specialist') { document.getElementById('chatSpecialist').classList.add('active'); }
     }
-}
 
-function closeChat(type) {
-    document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('chatMenuPage').classList.add('active');
-}
+    function closeChat(type) {
+        document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('chatMenuPage').classList.add('active');
+    }
 // ============================================================
 // 5. ЧАТ С ПОДДЕРЖКОЙ
 // ============================================================
@@ -1364,7 +1062,6 @@ function sendSupportMessage() {
     supportInput.disabled = true;
     supportTyping.classList.add('active');
     supportMessages.scrollTop = supportMessages.scrollHeight;
-
     setTimeout(() => {
         supportTyping.classList.remove('active');
         const answer = getSupportAnswer(text);
@@ -1419,7 +1116,6 @@ function sendSpecialistMessage() {
     specialistInput.disabled = true;
     specialistTyping.classList.add('active');
     specialistMessages.scrollTop = specialistMessages.scrollHeight;
-
     setTimeout(() => {
         specialistTyping.classList.remove('active');
         saveUnansweredSpecialist(text);
@@ -1442,15 +1138,7 @@ let unansweredSpecialist = [];
 function saveUnansweredSupport(text) {
     const id = Date.now();
     const userName = currentUser ? currentUser.name : 'Гость';
-    unansweredSupport.push({ 
-        id, 
-        question: text, 
-        userName: userName,
-        answer: '', 
-        answered: false, 
-        type: 'support',
-        timestamp: new Date().toLocaleString() 
-    });
+    unansweredSupport.push({ id, question: text, userName: userName, answer: '', answered: false, type: 'support', timestamp: new Date().toLocaleString() });
     syncData();
     updateAdminNotification('support');
     renderAdminSupport();
@@ -1459,15 +1147,7 @@ function saveUnansweredSupport(text) {
 function saveUnansweredSpecialist(text) {
     const id = Date.now();
     const userName = currentUser ? currentUser.name : 'Гость';
-    unansweredSpecialist.push({ 
-        id, 
-        question: text, 
-        userName: userName,
-        answer: '', 
-        answered: false, 
-        type: 'specialist',
-        timestamp: new Date().toLocaleString() 
-    });
+    unansweredSpecialist.push({ id, question: text, userName: userName, answer: '', answered: false, type: 'specialist', timestamp: new Date().toLocaleString() });
     syncData();
     updateAdminNotification('specialist');
     renderAdminSpecialist();
@@ -1668,256 +1348,243 @@ function renderAdminServices() {
 function renderAdminOrders() {
     document.getElementById('adminOrdersList').innerHTML = '<p style="color:var(--text-secondary);">Заказы отображаются здесь.</p>';
 }
-// ============================================================
-// 9. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
-// ============================================================
-let registrationData = { name: '', password: '' };
-let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-let users = [];
-let paymentConfirmations = [];
-let orders = [];
+        // ============================================================
+        // 9. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
+        // ============================================================
+        let registrationData = { name: '', password: '' };
+        let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        let users = [];
+        let paymentConfirmations = [];
+        let orders = [];
 
-function checkUsername() {
-    const name = document.getElementById('regName').value.trim();
-    const status = document.getElementById('usernameStatus');
-    const btn = document.getElementById('regNextBtn');
-    
-    if (name.length < 2) {
-        status.textContent = 'Минимум 2 символа';
-        status.style.color = 'var(--text-secondary)';
-        btn.disabled = true;
-        return;
-    }
-    
-    const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
-    if (exists) {
-        status.textContent = '❌ Этот никнейм уже занят';
-        status.style.color = '#ff4444';
-        btn.disabled = true;
-    } else {
-        status.textContent = '✅ Никнейм свободен!';
-        status.style.color = '#4caf50';
-        btn.disabled = false;
-    }
-}
-
-function generatePassword() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-    let password = '';
-    for (let i = 0; i < 12; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    document.getElementById('regPassword').value = password;
-}
-
-function showRegStep(step) {
-    document.querySelectorAll('.reg-step').forEach(el => el.classList.remove('active'));
-    document.getElementById('regStep' + step).classList.add('active');
-}
-
-function regStep1Next() {
-    const name = document.getElementById('regName').value.trim();
-    if (name.length < 2) return;
-    const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
-    if (exists) {
-        alert('Этот никнейм уже занят');
-        return;
-    }
-    registrationData.name = name;
-    showRegStep(2);
-}
-
-function regStep2Next() {
-    const password = document.getElementById('regPassword').value.trim();
-    if (password.length < 6) {
-        alert('Пароль должен содержать минимум 6 символов');
-        return;
-    }
-    
-    const newUser = {
-        id: Date.now(),
-        name: registrationData.name,
-        password: password,
-        orders: [],
-        registered: new Date().toISOString()
-    };
-    
-    users.push(newUser);
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-    currentUser = newUser;
-    
-    alert('Добро пожаловать, ' + newUser.name + '!');
-    syncData();
-    showPage('cabinet');
-    updateCabinetUI();
-    
-    document.getElementById('regName').value = '';
-    document.getElementById('regPassword').value = '';
-    document.getElementById('usernameStatus').textContent = '';
-    document.getElementById('regNextBtn').disabled = true;
-    showRegStep(1);
-}
-
-function loginUser() {
-    const name = document.getElementById('loginName').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
-    
-    const user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.password === password);
-    if (user) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        currentUser = user;
-        showPage('cabinet');
-        updateCabinetUI();
-    } else {
-        alert('Неверный никнейм или пароль');
-    }
-}
-
-function logoutUser() {
-    localStorage.removeItem('currentUser');
-    currentUser = null;
-    showPage('cabinet');
-    updateCabinetUI();
-}
-
-function updateCabinetUI() {
-    if (currentUser) {
-        document.getElementById('cabinetName').textContent = currentUser.name;
-        const ordersList = document.getElementById('cabinetOrders');
-        if (currentUser.orders && currentUser.orders.length > 0) {
-            ordersList.innerHTML = currentUser.orders.map(o => `<div class="case">${o}</div>`).join('');
-        } else {
-            ordersList.innerHTML = '<p style="color:var(--text-secondary);">У вас пока нет заказов.</p>';
+        function checkUsername() {
+            const name = document.getElementById('regName').value.trim();
+            const status = document.getElementById('usernameStatus');
+            const btn = document.getElementById('regNextBtn');
+            if (name.length < 2) {
+                status.textContent = 'Минимум 2 символа';
+                status.style.color = 'var(--text-secondary)';
+                btn.disabled = true;
+                return;
+            }
+            const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
+            if (exists) {
+                status.textContent = '❌ Этот никнейм уже занят';
+                status.style.color = '#ff4444';
+                btn.disabled = true;
+            } else {
+                status.textContent = '✅ Никнейм свободен!';
+                status.style.color = '#4caf50';
+                btn.disabled = false;
+            }
         }
-        document.getElementById('cabinetContent').style.display = 'block';
-        document.getElementById('authButtons').style.display = 'none';
-    } else {
-        document.getElementById('cabinetContent').style.display = 'none';
-        document.getElementById('authButtons').style.display = 'flex';
-    }
-}
 
-// ============================================================
-// 10. КОРЗИНА + ОПЛАТА КРИПТОЙ
-// ============================================================
-let cart = [];
+        function generatePassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let password = '';
+            for (let i = 0; i < 12; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('regPassword').value = password;
+        }
 
-function addToCart(id) {
-    const card = document.querySelector(`.service-card[data-id="${id}"]`);
-    if (!card) return;
-    const name = card.dataset.name;
-    const price = parseFloat(card.dataset.price);
-    const existing = cart.find(item => item.id === id);
-    existing ? existing.qty++ : cart.push({ id, name, price, qty: 1 });
-    updateCartUI();
-    if (navigator.vibrate) navigator.vibrate(10);
-}
+        function showRegStep(step) {
+            document.querySelectorAll('.reg-step').forEach(el => el.classList.remove('active'));
+            document.getElementById('regStep' + step).classList.add('active');
+        }
 
-function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
-    updateCartUI();
-}
+        function regStep1Next() {
+            const name = document.getElementById('regName').value.trim();
+            if (name.length < 2) return;
+            const exists = users.find(u => u.name.toLowerCase() === name.toLowerCase());
+            if (exists) {
+                alert('Этот никнейм уже занят');
+                return;
+            }
+            registrationData.name = name;
+            showRegStep(2);
+        }
 
-function updateCartUI() {
-    const count = cart.reduce((s, i) => s + i.qty, 0);
-    document.getElementById('cartCounter').textContent = count;
-    const list = document.getElementById('cartList');
-    if (!cart.length) {
-        list.innerHTML = '<p style="color:var(--text-secondary);padding:12px 0;">Пусто</p>';
-    } else {
-        list.innerHTML = cart.map(item =>
-            `<div class="cart-item"><span>${item.name} × ${item.qty} — ${(item.price * item.qty).toFixed(1)} USDT</span><button class="remove" onclick="removeFromCart(${item.id})">✕</button></div>`
-        ).join('');
-    }
-    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    document.getElementById('cartTotal').textContent = total.toFixed(1) + ' USDT';
-}
+        function regStep2Next() {
+            const password = document.getElementById('regPassword').value.trim();
+            if (password.length < 6) {
+                alert('Пароль должен содержать минимум 6 символов');
+                return;
+            }
+            const newUser = {
+                id: Date.now(),
+                name: registrationData.name,
+                password: password,
+                orders: [],
+                registered: new Date().toISOString()
+            };
+            users.push(newUser);
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            currentUser = newUser;
+            alert('Добро пожаловать, ' + newUser.name + '!');
+            syncData();
+            showPage('cabinet');
+            updateCabinetUI();
+            document.getElementById('regName').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('usernameStatus').textContent = '';
+            document.getElementById('regNextBtn').disabled = true;
+            showRegStep(1);
+        }
 
-function toggleCart() {
-    document.getElementById('cartOverlay').classList.toggle('show');
-}
+        function loginUser() {
+            const name = document.getElementById('loginName').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.password === password);
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                currentUser = user;
+                showPage('cabinet');
+                updateCabinetUI();
+            } else {
+                alert('Неверный никнейм или пароль');
+            }
+        }
 
-function checkout() {
-    if (!cart.length) { alert('Корзина пуста'); return; }
-    if (!currentUser) {
-        alert('Для оформления заказа необходимо войти в аккаунт.');
-        return;
-    }
-    
-    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
-    const cryptoAddress = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
-    
-    const paymentHTML = `
-        <div class="payment-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">
-            <div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;">
-                <h3 style="margin-bottom:12px;">💳 Оплата криптой</h3>
-                <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;">Переведите указанную сумму на кошелёк USDT (сеть BEP20 или ERC20)</p>
-                <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;">
-                    <div style="font-size:12px;color:var(--text-secondary);">Сумма к оплате</div>
-                    <div style="font-size:24px;font-weight:700;color:var(--accent);">${total.toFixed(1)} USDT</div>
+        function logoutUser() {
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            showPage('cabinet');
+            updateCabinetUI();
+        }
+
+        function updateCabinetUI() {
+            if (currentUser) {
+                document.getElementById('cabinetName').textContent = currentUser.name;
+                const ordersList = document.getElementById('cabinetOrders');
+                if (currentUser.orders && currentUser.orders.length > 0) {
+                    ordersList.innerHTML = currentUser.orders.map(o => `<div class="case">${o}</div>`).join('');
+                } else {
+                    ordersList.innerHTML = '<p style="color:var(--text-secondary);">У вас пока нет заказов.</p>';
+                }
+                document.getElementById('cabinetContent').style.display = 'block';
+                document.getElementById('authButtons').style.display = 'none';
+            } else {
+                document.getElementById('cabinetContent').style.display = 'none';
+                document.getElementById('authButtons').style.display = 'flex';
+            }
+        }
+
+        // ============================================================
+        // 10. КОРЗИНА + ОПЛАТА КРИПТОЙ
+        // ============================================================
+        let cart = [];
+
+        function addToCart(id) {
+            const card = document.querySelector(`.service-card[data-id="${id}"]`);
+            if (!card) return;
+            const name = card.dataset.name;
+            const price = parseFloat(card.dataset.price);
+            const existing = cart.find(item => item.id === id);
+            existing ? existing.qty++ : cart.push({ id, name, price, qty: 1 });
+            updateCartUI();
+            if (navigator.vibrate) navigator.vibrate(10);
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((s, i) => s + i.qty, 0);
+            document.getElementById('cartCounter').textContent = count;
+            const list = document.getElementById('cartList');
+            if (!cart.length) {
+                list.innerHTML = '<p style="color:var(--text-secondary);padding:12px 0;">Пусто</p>';
+            } else {
+                list.innerHTML = cart.map(item =>
+                    `<div class="cart-item"><span>${item.name} × ${item.qty} — ${(item.price * item.qty).toFixed(1)} USDT</span><button class="remove" onclick="removeFromCart(${item.id})">✕</button></div>`
+                ).join('');
+            }
+            const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            document.getElementById('cartTotal').textContent = total.toFixed(1) + ' USDT';
+        }
+
+        function toggleCart() {
+            document.getElementById('cartOverlay').classList.toggle('show');
+        }
+
+        function checkout() {
+            if (!cart.length) { alert('Корзина пуста'); return; }
+            if (!currentUser) {
+                alert('Для оформления заказа необходимо войти в аккаунт.');
+                return;
+            }
+            const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
+            const cryptoAddress = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
+            const paymentHTML = `
+                <div class="payment-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">
+                    <div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;">
+                        <h3 style="margin-bottom:12px;">💳 Оплата криптой</h3>
+                        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;">Переведите указанную сумму на кошелёк USDT (сеть BEP20 или ERC20)</p>
+                        <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;">
+                            <div style="font-size:12px;color:var(--text-secondary);">Сумма к оплате</div>
+                            <div style="font-size:24px;font-weight:700;color:var(--accent);">${total.toFixed(1)} USDT</div>
+                        </div>
+                        <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;word-break:break-all;">
+                            <div style="font-size:12px;color:var(--text-secondary);">Кошелёк USDT</div>
+                            <div style="font-size:14px;font-family:monospace;color:var(--accent);">${cryptoAddress}</div>
+                            <button onclick="copyAddress()" style="margin-top:6px;background:var(--accent);color:var(--bg);border:none;padding:6px 16px;border-radius:var(--radius);cursor:pointer;font-weight:500;">Скопировать адрес</button>
+                        </div>
+                        <div style="background:var(--glass-bg);padding:8px 12px;border-radius:var(--radius);margin-bottom:12px;border-left:3px solid #ff9800;">
+                            <div style="font-size:12px;color:var(--text-secondary);">Ваш заказ</div>
+                            <div style="font-size:13px;color:var(--text);">${services}</div>
+                        </div>
+                        <button onclick="confirmPaymentClick()" style="width:100%;padding:12px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);font-weight:600;cursor:pointer;margin-bottom:8px;">✅ Я оплатил</button>
+                        <button onclick="closePayment()" style="width:100%;padding:10px;background:transparent;color:var(--text-secondary);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;">Отмена</button>
+                    </div>
                 </div>
-                <div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;word-break:break-all;">
-                    <div style="font-size:12px;color:var(--text-secondary);">Кошелёк USDT</div>
-                    <div style="font-size:14px;font-family:monospace;color:var(--accent);">${cryptoAddress}</div>
-                    <button onclick="copyAddress()" style="margin-top:6px;background:var(--accent);color:var(--bg);border:none;padding:6px 16px;border-radius:var(--radius);cursor:pointer;font-weight:500;">Скопировать адрес</button>
-                </div>
-                <div style="background:var(--glass-bg);padding:8px 12px;border-radius:var(--radius);margin-bottom:12px;border-left:3px solid #ff9800;">
-                    <div style="font-size:12px;color:var(--text-secondary);">Ваш заказ</div>
-                    <div style="font-size:13px;color:var(--text);">${services}</div>
-                </div>
-                <button onclick="confirmPaymentClick()" style="width:100%;padding:12px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);font-weight:600;cursor:pointer;margin-bottom:8px;">✅ Я оплатил</button>
-                <button onclick="closePayment()" style="width:100%;padding:10px;background:transparent;color:var(--text-secondary);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;">Отмена</button>
-            </div>
-        </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', paymentHTML);
-}
+            `;
+            document.body.insertAdjacentHTML('beforeend', paymentHTML);
+        }
 
-function closePayment() {
-    const modal = document.querySelector('.payment-modal');
-    if (modal) modal.remove();
-}
+        function closePayment() {
+            const modal = document.querySelector('.payment-modal');
+            if (modal) modal.remove();
+        }
 
-function copyAddress() {
-    const address = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(address).then(() => {
-            alert('✅ Адрес скопирован!');
-        }).catch(() => {
-            alert('Адрес: ' + address);
-        });
-    } else {
-        alert('Адрес: ' + address);
-    }
-}
+        function copyAddress() {
+            const address = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(address).then(() => {
+                    alert('✅ Адрес скопирован!');
+                }).catch(() => {
+                    alert('Адрес: ' + address);
+                });
+            } else {
+                alert('Адрес: ' + address);
+            }
+        }
 
-function confirmPaymentClick() {
-    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
-    
-    paymentConfirmations.push({
-        id: Date.now(),
-        userName: currentUser.name,
-        services: services,
-        amount: total.toFixed(1),
-        timestamp: new Date().toLocaleString(),
-        status: 'ожидает проверки'
-    });
-    
-    const orderSummary = `${services} — ${total.toFixed(1)} USDT`;
-    currentUser.orders.push(orderSummary);
-    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    
-    syncData();
-    alert('✅ Спасибо! Ваш заказ принят. Ожидайте подтверждения оплаты.');
-    
-    cart = [];
-    updateCartUI();
-    toggleCart();
-    closePayment();
-}
+        function confirmPaymentClick() {
+            const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const services = cart.map(item => `${item.name} × ${item.qty}`).join(', ');
+            paymentConfirmations.push({
+                id: Date.now(),
+                userName: currentUser.name,
+                services: services,
+                amount: total.toFixed(1),
+                timestamp: new Date().toLocaleString(),
+                status: 'ожидает проверки'
+            });
+            const orderSummary = `${services} — ${total.toFixed(1)} USDT`;
+            currentUser.orders.push(orderSummary);
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            syncData();
+            alert('✅ Спасибо! Ваш заказ принят. Ожидайте подтверждения оплаты.');
+            cart = [];
+            updateCartUI();
+            toggleCart();
+            closePayment();
+        }
+
         // ============================================================
         // 11. ИНИЦИАЛИЗАЦИЯ
         // ============================================================
@@ -1954,7 +1621,6 @@ function confirmPaymentClick() {
             </div>
         `;
 
-        // ЗАГРУЗКА ДАННЫХ ПРИ СТАРТЕ
         async function startApp() {
             await initData();
             updateCabinetUI();
