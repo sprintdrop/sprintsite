@@ -29,7 +29,8 @@
 .reg-step{display:none}.reg-step.active{display:block}.reg-step input{width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px}.reg-step input:focus{outline:none;border-color:var(--accent)}.reg-step .generate-link{color:#ff4444;font-size:13px;cursor:pointer;display:block;text-align:right;margin-top:-8px;margin-bottom:12px}.reg-step .generate-link:active{opacity:.7}
 .auth-btn{width:100%;padding:14px;border-radius:var(--radius);font-weight:600;cursor:pointer;border:none;transition:.2s}.auth-btn.primary{background:var(--accent);color:var(--bg)}.auth-btn.secondary{background:var(--glass-bg);color:var(--text);border:1px solid var(--glass-border)}.auth-btn:active{transform:scale(.97)}
 .search-input{width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px}.search-input:focus{outline:none;border-color:var(--accent)}.search-result-item{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:12px;margin-bottom:10px}.search-result-item .name{font-weight:500;color:var(--text)}.search-result-item .info{font-size:12px;color:var(--text-secondary)}.search-result-item .btn-chat{background:var(--accent);color:var(--bg);border:none;padding:6px 16px;border-radius:var(--radius);cursor:pointer;font-weight:500;margin-top:6px}
-</style></head><body>
+</style></head>
+<body>
 <canvas id="starsCanvas"></canvas>
 <div class="admin-overlay" id="adminOverlay"><div class="admin-panel"><button class="close-admin" onclick="closeAdmin()">✕</button><h2>Админ-панель</h2><div id="adminLogin" class="admin-login"><input type="password" id="adminPassword" placeholder="Введите пароль" onkeydown="if(event.key==='Enter') adminLogin()"><button onclick="adminLogin()">Войти</button><div class="error" id="adminError"></div></div><div id="adminContent" style="display:none"><div class="admin-tabs"><button class="active" onclick="switchAdminTab('support',this)">Поддержка <span id="supportNotif" class="admin-chat-notification" style="display:none">0</span></button><button onclick="switchAdminTab('specialist',this)">OSINT-специалист <span id="specialistNotif" class="admin-chat-notification" style="display:none">0</span></button><button onclick="switchAdminTab('users',this)">Пользователи</button><button onclick="switchAdminTab('search',this)">Поиск</button><button onclick="switchAdminTab('payments',this)">Оплаты</button><button onclick="switchAdminTab('services',this)">Услуги</button><button onclick="switchAdminTab('orders',this)">Заказы</button></div><div id="adminSupport" class="admin-tab active"><h3>Вопросы в поддержку</h3><div id="adminSupportList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div><div id="adminSpecialist" class="admin-tab"><h3>Вопросы OSINT-специалисту</h3><div id="adminSpecialistList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div><div id="adminUsers" class="admin-tab"><h3>Пользователи</h3><div id="adminUsersList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div><div id="adminSearch" class="admin-tab"><h3>Поиск пользователя</h3><input class="search-input" type="text" id="searchInput" placeholder="Введите никнейм..." oninput="searchUser()"><div id="searchResults"><p style="color:var(--text-secondary)">Начните вводить никнейм</p></div></div><div id="adminPayments" class="admin-tab"><h3>Подтверждения оплаты</h3><div id="adminPaymentsList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div><div id="adminServices" class="admin-tab"><h3>Управление услугами</h3><div id="adminServicesList"></div></div><div id="adminOrders" class="admin-tab"><h3>Заказы</h3><div id="adminOrdersList"></div></div></div></div></div>
 <div class="container"><div class="header"><span class="logo">Осинтер <span>| OSINT</span></span><div class="header-actions"><button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button><span class="cart-badge">🛒 <span id="cartCounter">0</span></span></div></div>
@@ -38,95 +39,10 @@
 <div id="cases" class="page"><h2>Кейсы</h2><div class="case"><h3>Wildberries — техническая + юридическая часть</h3><p>Нашёл техническую архитектуру и юр. структуру. Выявил уязвимости.</p><span class="tag">OSINT</span></div><div class="case"><h3>Ozon — разведка данных</h3><p>Проанализировал техническую часть платформы, нашёл слабые места.</p><span class="tag">OSINT</span></div><div class="case"><h3>AliExpress — внутренние процессы</h3><p>Собрал данные по юр. структуре и тех. части. Выявил уязвимости.</p><span class="tag">OSINT</span></div><div class="case"><h3>Мегафон — уязвимости</h3><p>Провёл аудит технической части, обнаружил несколько уязвимостей.</p><span class="tag">OSINT</span></div></div>
 <div id="services" class="page"><h2>Услуги</h2><div id="servicesList"></div></div>
 <div class="cart-overlay" id="cartOverlay"><button class="close" onclick="toggleCart()">✕</button><h3>Корзина</h3><div id="cartList"></div><div class="cart-total" id="cartTotal">0 USDT</div><button class="btn-checkout" onclick="checkout()">Оформить заказ</button></div>
-<div id="chatMenuPage" class="page"><h2>Чаты</h2><div style="display:flex;flex-direction:column;gap:12px;margin-top:16px"><div class="chat-menu-item" onclick="openChat('support')"><div 
-style="display:flex;align-items:center;gap:12px"><span class="chat-icon">🕵️</span>
-<div>
-    <div class="chat-label">Чат с OSINT-специалистом</div>
-    <div class="chat-desc">Консультация эксперта</div>
-</div>
-</div>
-</div>
-</div>
-<div style="margin-top:20px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:13px;color:var(--text-secondary);text-align:center;">Выберите чат для общения</div>
-</div>
-<div id="chatSupport" class="chat-page">
-    <div class="chat-header">
-        <button class="back-btn" onclick="closeChat('support')" style="margin:0;">← Назад</button>
-        <h4 style="flex:1;text-align:center;">Чат с поддержкой</h4>
-        <span class="chat-type-badge support">Поддержка</span>
-    </div>
-    <div class="chat-messages" id="supportMessages">
-        <div class="msg bot">Привет! Я ИИ-помощник поддержки.<br>Задай мне вопрос, и я постараюсь помочь.<span class="time">только что</span></div>
-    </div>
-    <div class="typing" id="supportTyping"><span>.</span><span>.</span><span>.</span></div>
-    <div class="chat-input">
-        <input type="text" id="supportInput" placeholder="Напиши вопрос..." onkeydown="if(event.key==='Enter') sendSupportMessage()">
-        <button onclick="sendSupportMessage()">➤</button>
-    </div>
-</div>
-<div id="chatSpecialist" class="chat-page">
-    <div class="chat-header">
-        <button class="back-btn" onclick="closeChat('specialist')" style="margin:0;">← Назад</button>
-        <h4 style="flex:1;text-align:center;">Чат с OSINT-специалистом</h4>
-        <span class="chat-type-badge specialist">Специалист</span>
-    </div>
-    <div class="chat-messages" id="specialistMessages">
-        <div class="msg specialist">
-            <span class="sender-name specialist">Осинтер (специалист)</span>
-            Здравствуйте! Я OSINT-специалист. Задайте ваш вопрос, и я отвечу в ближайшее время.
-            <span class="time">только что</span>
-        </div>
-    </div>
-    <div class="typing" id="specialistTyping"><span>.</span><span>.</span><span>.</span></div>
-    <div class="chat-input">
-        <input type="text" id="specialistInput" placeholder="Напиши вопрос специалисту..." onkeydown="if(event.key==='Enter') sendSpecialistMessage()">
-        <button onclick="sendSpecialistMessage()">➤</button>
-    </div>
-</div>
-<div id="cabinet" class="page">
-    <h2>Личный кабинет</h2>
-    <div id="cabinetContent" style="display:none;">
-        <div class="cabinet-info">
-            <div class="label">Nickname</div>
-            <div class="value" id="cabinetName"></div>
-        </div>
-        <div style="margin-top:16px;">
-            <h4>История заказов</h4>
-            <div id="cabinetOrders"></div>
-        </div>
-        <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px;">Выйти</button>
-    </div>
-    <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px;">
-        <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
-        <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
-    </div>
-</div>
-<div id="register" class="page">
-    <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-    <h2>Регистрация</h2>
-    <div id="regStep1" class="reg-step active">
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Введите ваш Nickname</label>
-        <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
-        <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary);"></div>
-        <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
-    </div>
-    <div id="regStep2" class="reg-step">
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Придумайте пароль</label>
-        <input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте">
-        <span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span>
-        <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
-    </div>
-</div>
-<div id="login" class="page">
-    <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-    <h2>Вход</h2>
-    <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Ваш Nickname</label>
-    <input type="text" id="loginName" placeholder="Введите никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px;">
-    <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Пароль</label>
-    <input type="password" id="loginPassword" placeholder="Введите пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px;">
-    <button class="auth-btn primary" onclick="loginUser()">Войти</button>
-</div>
-</div>
+<div id="chatMenuPage" class="page"><h2>Чаты</h2><div style="display:flex;flex-direction:column;gap:12px;margin-top:16px"><div class="chat-menu-item" onclick="openChat('support')"><div style="display:flex;align-items:center;gap:12px"><span class="chat-icon">💬</span><div><div class="chat-label">Чат с поддержкой</div><div class="chat-desc">Общие вопросы, ИИ-помощник</div></div></div></div><div class="chat-menu-item" onclick="openChat('specialist')"><div style="display:flex;align-items:center;gap:12px"><span class="chat-icon">🕵️</span><div><div class="chat-label">Чат с OSINT-специалистом</div><div class="chat-desc">Консультация эксперта</div></div></div></div></div><div style="margin-top:20px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:13px;color:var(--text-secondary);text-align:center">Выберите чат для общения</div></div>
+<div id="cabinet" class="page"><h2>Личный кабинет</h2><div id="cabinetContent" style="display:none"><div class="cabinet-info"><div class="label">Nickname</div><div class="value" id="cabinetName"></div></div><div style="margin-top:16px"><h4>История заказов</h4><div id="cabinetOrders"></div></div><button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button></div><div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px"><button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button><button class="auth-btn secondary" onclick="showPage('login')">Войти</button></div></div>
+<div id="register" class="page"><button class="back-btn" onclick="showPage('cabinet')">← Назад</button><h2>Регистрация</h2><div id="regStep1" class="reg-step active"><label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Введите ваш Nickname</label><input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()"><div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary)"></div><button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button></div><div id="regStep2" class="reg-step"><label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Придумайте пароль</label><input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте"><span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span><button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button></div></div>
+<div id="login" class="page"><button class="back-btn" onclick="showPage('cabinet')">← Назад</button><h2>Вход</h2><label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Ваш Nickname</label><input type="text" id="loginName" placeholder="Введите никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px"><label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Пароль</label><input type="password" id="loginPassword" placeholder="Введите пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px"><button class="auth-btn primary" onclick="loginUser()">Войти</button></div></div>
 <script>
 // ============================================================
 // 0. НАСТРОЙКИ GITHUB
@@ -356,7 +272,7 @@ function closeChat() {
 }
 
 // ============================================================
-// 4. ЧАТЫ
+// 4. ЧАТ С ПОДДЕРЖКОЙ
 // ============================================================
 const supportMessages = document.getElementById('supportMessages');
 const supportInput = document.getElementById('supportInput');
@@ -428,9 +344,8 @@ function sendSupportMessage() {
 supportInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !supportInput.disabled) sendSupportMessage();
 });
-
 // ============================================================
-// 5. ЧАТ С OSINT-СПЕЦИАЛИСТОМ
+// 5. ЧАТ С OSINT-СПЕЦИАЛИСТОМ (БЕЗ ИИ)
 // ============================================================
 const specialistMessages = document.getElementById('specialistMessages');
 const specialistInput = document.getElementById('specialistInput');
@@ -479,7 +394,7 @@ specialistInput.addEventListener('keydown', function(e) {
 });
 
 // ============================================================
-// НЕПОНЯТЫЕ ВОПРОСЫ (для админки)
+// 6. НЕПОНЯТЫЕ ВОПРОСЫ (для админки)
 // ============================================================
 let unansweredSupport = [];
 let unansweredSpecialist = [];
@@ -539,7 +454,7 @@ function updateAdminNotification(type) {
 }
 
 // ============================================================
-// АДМИН-ПАНЕЛЬ
+// 7. АДМИН-ПАНЕЛЬ
 // ============================================================
 let adminTaps = 0;
 let adminTimer = null;
@@ -712,12 +627,10 @@ function renderAdminServices() {
 function renderAdminOrders() {
     document.getElementById('adminOrdersList').innerHTML = '<p style="color:var(--text-secondary);">Заказы отображаются здесь.</p>';
 }
-
 // ============================================================
-// РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
+// 8. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
 // ============================================================
 let registrationData = { name: '', password: '' };
-let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 let users = [];
 let paymentConfirmations = [];
 let orders = [];
@@ -843,7 +756,7 @@ function updateCabinetUI() {
 }
 
 // ============================================================
-// КОРЗИНА + ОПЛАТА КРИПТОЙ
+// 9. КОРЗИНА + ОПЛАТА КРИПТОЙ
 // ============================================================
 let cart = [];
 
@@ -965,7 +878,7 @@ function confirmPaymentClick() {
 }
 
 // ============================================================
-// ИНИЦИАЛИЗАЦИЯ
+// 10. ИНИЦИАЛИЗАЦИЯ
 // ============================================================
 const servicesData = [
     { id: 1, name: 'Исследование по номеру телефона', desc: 'Анализ привязок, геолокация, утечки', price: 16.7, time: '30 мин' },
@@ -1000,7 +913,6 @@ document.getElementById('servicesList').innerHTML = servicesData.map(s => `
     </div>
 `;
 
-// ЗАГРУЗКА ДАННЫХ ПРИ СТАРТЕ
 async function startApp() {
     await initData();
     updateCabinetUI();
