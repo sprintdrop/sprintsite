@@ -4,674 +4,553 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Осинтер — OSINT & Web</title>
-<style>
-    :root {
-        --bg: #0b0b0b;
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.08);
-        --glass-shadow: 0 8px 32px rgba(0,0,0,0.5);
-        --text: #f0f0f0;
-        --text-secondary: #aaa;
-        --accent: #fff;
-        --radius: 16px;
-        --star-color: #fff;
-        --glow: rgba(255,255,255,0.02);
-        --chat-bot: rgba(255,255,255,0.08);
-        --chat-user: rgba(255,255,255,0.15);
-        --chat-support: rgba(255,255,255,0.06);
-        --chat-specialist: rgba(255,255,255,0.10);
-    }
-    [data-theme=light] {
-        --bg: #e8e8e8;
-        --glass-bg: rgba(255,255,255,0.4);
-        --glass-border: rgba(255,255,255,0.25);
-        --glass-shadow: 0 8px 32px rgba(0,0,0,0.06);
-        --text: #1a1a1a;
-        --text-secondary: #555;
-        --accent: #000;
-        --star-color: #000;
-        --glow: rgba(0,0,0,0.02);
-        --chat-bot: rgba(0,0,0,0.06);
-        --chat-user: rgba(0,0,0,0.12);
-        --chat-support: rgba(0,0,0,0.04);
-        --chat-specialist: rgba(0,0,0,0.08);
-    }
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        padding: 20px;
-        line-height: 1.5;
-        transition: background .4s, color .4s;
-        min-height: 100vh;
-        position: relative;
-        z-index: 1;
-    }
-    .container {
-        max-width: 500px;
-        margin: 0 auto;
-        position: relative;
-        z-index: 2;
-    }
-    #starsCanvas {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 0;
-        pointer-events: none;
-    }
-    .glass {
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius);
-        box-shadow: var(--glass-shadow), inset 0 0 60px var(--glow);
-        transition: all .3s;
-    }
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 14px 18px;
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius);
-        box-shadow: var(--glass-shadow);
-        margin-bottom: 16px;
-    }
-    .logo {
-        font-size: 20px;
-        font-weight: 500;
-        letter-spacing: -.5px;
-    }
-    .logo span {
-        color: var(--text-secondary);
-        font-weight: 300;
-    }
-    .header-actions {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-    }
-    .theme-toggle {
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px);
-        border: 1px solid var(--glass-border);
-        border-radius: 30px;
-        padding: 6px 12px;
-        font-size: 18px;
-        cursor: pointer;
-        color: var(--text);
-        transition: .2s;
-    }
-    .theme-toggle:active {
-        transform: scale(.9);
-    }
-    .cart-badge {
-        font-size: 14px;
-        color: var(--text-secondary);
-    }
-    .nav {
-        display: flex;
-        gap: 8px;
-        margin: 16px 0;
-        flex-wrap: wrap;
-    }
-    .nav button {
-        flex: 1;
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        color: var(--text-secondary);
-        border: 1px solid var(--glass-border);
-        padding: 12px 0;
-        border-radius: var(--radius);
-        font-size: 14px;
-        font-weight: 450;
-        cursor: pointer;
-        transition: .2s;
-        min-width: 60px;
-    }
-    .nav button:active {
-        background: var(--accent);
-        color: var(--bg);
-        border-color: var(--accent);
-    }
-    .page {
-        display: none;
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius);
-        padding: 24px 20px;
-        box-shadow: var(--glass-shadow), inset 0 0 60px var(--glow);
-        min-height: 320px;
-        margin-top: 10px;
-        transition: all .3s;
-    }
-    .page.active {
-        display: block;
-    }
-    .page h2 {
-        font-size: 20px;
-        font-weight: 500;
-        margin-bottom: 16px;
-        letter-spacing: -.3px;
-    }
-    .back-btn {
-        background: none;
-        border: none;
-        color: var(--text-secondary);
-        font-size: 14px;
-        cursor: pointer;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 0;
-    }
-    .back-btn:active {
-        color: var(--text);
-    }
-    .hero-tag {
-        display: inline-block;
-        background: var(--accent);
-        color: var(--bg);
-        padding: 4px 14px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 500;
-        margin-bottom: 12px;
-    }
-    .utp-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 8px;
-        margin-top: 16px;
-    }
-    .utp-item {
-        background: var(--glass-bg);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-        border-radius: var(--radius);
-        padding: 12px 6px;
-        text-align: center;
-        border: 1px solid var(--glass-border);
-        font-size: 13px;
-    }
-    .utp-item .icon {
-        font-size: 22px;
-        display: block;
-        margin-bottom: 4px;
-    }
-        .case {
-            padding: 14px 0;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .case:last-child {
-            border-bottom: none;
-        }
-        .case h3 {
-            font-size: 16px;
-            font-weight: 500;
-        }
-        .case p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin: 4px 0 8px;
-        }
-        .case .tag {
-            display: inline-block;
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            border: 1px solid var(--glass-border);
-        }
-        .service-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--glass-border);
-        }
-        .service-card:last-child {
-            border-bottom: none;
-        }
-        .service-card .info h3 {
-            font-size: 15px;
-            font-weight: 500;
-        }
-        .service-card .info p {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .service-card .price {
-            font-weight: 600;
-        }
-        .service-card .btn-add {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            transition: .15s;
-        }
-        .service-card .btn-add:active {
-            opacity: .6;
-        }
-        .chat-menu-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 16px;
-            cursor: pointer;
-            transition: .2s;
-        }
-        .chat-menu-item:active {
-            background: var(--accent);
-            color: var(--bg);
-            border-color: var(--accent);
-        }
-        .chat-menu-item .chat-icon {
-            font-size: 28px;
-        }
-        .chat-menu-item .chat-label {
-            font-weight: 500;
-            font-size: 16px;
-        }
-        .chat-menu-item .chat-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .chat-page {
-            display: none;
-            flex-direction: column;
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            box-shadow: var(--glass-shadow);
-            padding: 0;
-            min-height: 400px;
-        }
-        .chat-page.active {
-            display: flex;
-        }
-        .chat-header {
-            padding: 14px 18px;
-            border-bottom: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .chat-header h4 {
-            font-size: 16px;
-            font-weight: 500;
-        }
-        .chat-header .close-chat {
-            background: none;
-            border: none;
-            font-size: 22px;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        .chat-header .chat-type-badge {
-            font-size: 10px;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-            background: var(--accent);
-            color: var(--bg);
-        }
-        .chat-header .chat-type-badge.support {
-            background: #4caf50;
-        }
-        .chat-header .chat-type-badge.specialist {
-            background: #ff9800;
-        }
-        .chat-messages {
-            flex: 1;
-            padding: 12px 16px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-height: 200px;
-            max-height: 400px;
-        }
-        .chat-messages .msg {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 14px;
-            line-height: 1.4;
-            word-wrap: break-word;
-            animation: fadeIn .3s ease;
-        }
-        .chat-messages .msg.bot {
-            background: var(--chat-bot);
-            border: 1px solid var(--glass-border);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-        }
-        .chat-messages .msg.user {
-            background: var(--chat-user);
-            border: 1px solid var(--glass-border);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-        .chat-messages .msg.support {
-            background: var(--chat-support);
-            border: 1px solid #4caf50;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            border-left: 3px solid #4caf50;
-        }
-        .chat-messages .msg.specialist {
-            background: var(--chat-specialist);
-            border: 1px solid #ff9800;
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            border-left: 3px solid #ff9800;
-        }
-        .chat-messages .msg .sender-name {
-            font-size: 11px;
-            font-weight: 600;
-            margin-bottom: 2px;
-            display: block;
-        }
-        .chat-messages .msg .sender-name.support {
-            color: #4caf50;
-        }
-        .chat-messages .msg .sender-name.specialist {
-            color: #ff9800;
-        }
-        .chat-messages .msg .time {
-            font-size: 10px;
-            opacity: .5;
-            margin-top: 4px;
-            display: block;
-        }
-        .chat-messages .typing {
-            align-self: flex-start;
-            padding: 8px 14px;
-            background: var(--chat-bot);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            border-bottom-left-radius: 4px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            display: none;
-        }
-        .chat-messages .typing.active {
-            display: block;
-        }
-        .chat-messages .typing span {
-            animation: dots 1.4s infinite;
-            display: inline-block;
-        }
-        .chat-messages .typing span:nth-child(2) {
-            animation-delay: .2s;
-        }
-        .chat-messages .typing span:nth-child(3) {
-            animation-delay: .4s;
-        }
-        @keyframes dots {
-            0%, 60%, 100% { opacity: .3; transform: translateY(0); }
-            30% { opacity: 1; transform: translateY(-4px); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .chat-input {
-            padding: 12px 16px;
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-        .chat-input input {
-            flex: 1;
-            background: var(--glass-bg);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 10px 16px;
-            font-size: 14px;
-            color: var(--text);
-            outline: none;
-            transition: .2s;
-        }
-        .chat-input input::placeholder {
-            color: var(--text-secondary);
-        }
-        .chat-input input:focus {
-            border-color: var(--accent);
-        }
-        .chat-input button {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: .2s;
-            flex-shrink: 0;
-        }
-        .chat-input button:active {
-            transform: scale(.9);
-        }
-        .chat-input button:disabled {
-            opacity: .4;
-        }
-        .cart-overlay {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid var(--glass-border);
-            padding: 20px;
-            border-radius: var(--radius) var(--radius) 0 0;
-            display: none;
-            z-index: 999;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        .cart-overlay.show {
-            display: block;
-        }
-        .cart-overlay .close {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 22px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-        .cart-overlay h3 {
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--glass-border);
-            font-size: 14px;
-        }
-        .cart-item .remove {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .cart-total {
-            font-size: 18px;
-            font-weight: 500;
-            margin: 16px 0 12px;
-        }
-        .btn-checkout {
-            width: 100%;
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 14px;
-            border-radius: var(--radius);
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .btn-checkout:active {
-            opacity: .7;
-        }
-        @media (max-width: 480px) {
-            body { padding: 12px; }
-            .page { padding: 18px 14px; }
-            .header { padding: 12px 14px; }
-            .chat-messages { max-height: 300px; }
-        }
-        .admin-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .admin-overlay.show {
-            display: flex;
-        }
-        .admin-panel {
-            background: var(--bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 24px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--glass-shadow);
-        }
-        .admin-panel h2 {
-            font-size: 22px;
-            margin-bottom: 16px;
-            color: var(--text);
-        }
-        .admin-panel .close-admin {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 28px;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-        .admin-panel .admin-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-        .admin-panel .admin-tabs button {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            padding: 8px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 14px;
-            transition: .2s;
-        }
-        .admin-panel .admin-tabs button.active {
-            background: var(--accent);
-            color: var(--bg);
-            border-color: var(--accent);
-        }
-        .admin-panel .admin-tab {
-            display: none;
-        }
-        .admin-panel .admin-tab.active {
-            display: block;
-        }
-        .admin-panel .admin-chat-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-        .admin-panel .admin-chat-item .question {
-            font-weight: 500;
-            color: var(--text);
-        }
-        .admin-panel .admin-chat-item .answer {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 4px;
-        }
-        .admin-panel .admin-chat-item .answer-input {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 14px;
-            margin-top: 8px;
-        }
-        .admin-panel .admin-chat-item .answer-btn {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 6px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 6px;
-        }
-        .admin-panel .admin-chat-item .status {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-        .admin-panel .admin-chat-item .status.answered {
-            color: #4caf50;
-        }
-        .admin-panel .admin-chat-item .status.pending {
-            color: #ff9800;
-        }
+    
+    <!-- Подключаем config.js для GitHub токена -->
+    <script src="config.js"></script>
+    
+    <style>
+        :root {
+            --bg: #0b0b0b;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            --text: #f0f0f0;
+            --text-secondary: #aaa;
+            --accent: #fff;
+            --radius: 16px;
+            --star-color: #fff;
+            --glow: rgba(255,255,255,0.02);
+            --chat-bot: rgba(255,255,255,0.08);
+            --chat-user: rgba(255,255,255,0.15);
+            --chat-support: rgba(255,255,255,0.06);
+            --chat-specialist: rgba(255,255,255,0.10);
+        }
+        [data-theme=light] {
+            --bg: #e8e8e8;
+            --glass-bg: rgba(255,255,255,0.4);
+            --glass-border: rgba(255,255,255,0.25);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.06);
+            --text: #1a1a1a;
+            --text-secondary: #555;
+            --accent: #000;
+            --star-color: #000;
+            --glow: rgba(0,0,0,0.02);
+            --chat-bot: rgba(0,0,0,0.06);
+            --chat-user: rgba(0,0,0,0.12);
+            --chat-support: rgba(0,0,0,0.04);
+            --chat-specialist: rgba(0,0,0,0.08);
+        }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 20px;
+    line-height: 1.5;
+    transition: background .4s, color .4s;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+.container { max-width: 500px; margin: 0 auto; position: relative; z-index: 2; }
+#starsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+}
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--glass-shadow), inset 0 0 60px var(--glow);
+    transition: all .3s;
+}
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--glass-shadow);
+    margin-bottom: 16px;
+}
+.logo { font-size: 20px; font-weight: 500; letter-spacing: -.5px; }
+.logo span { color: var(--text-secondary); font-weight: 300; }
+.header-actions { display: flex; gap: 12px; align-items: center; }
+.theme-toggle {
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: 30px;
+    padding: 6px 12px;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text);
+    transition: .2s;
+}
+.theme-toggle:active { transform: scale(.9); }
+.cart-badge { font-size: 14px; color: var(--text-secondary); }
+.nav {
+    display: flex;
+    gap: 8px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+}
+.nav button {
+    flex: 1;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+    padding: 12px 0;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 450;
+    cursor: pointer;
+    transition: .2s;
+    min-width: 60px;
+}
+.nav button:active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+.page {
+    display: none;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--glass-shadow), inset 0 0 60px var(--glow);
+    min-height: 320px;
+    margin-top: 10px;
+    transition: all .3s;
+}
+.page.active { display: block; }
+.page h2 { font-size: 20px; font-weight: 500; margin-bottom: 16px; letter-spacing: -.3px; }
+.back-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0;
+}
+.back-btn:active { color: var(--text); }
+.hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+.utp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 16px;
+}
+.utp-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: var(--radius);
+    padding: 12px 6px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    font-size: 13px;
+}
+.utp-item .icon { font-size: 22px; display: block; margin-bottom: 4px; }
+.case { padding: 14px 0; border-bottom: 1px solid var(--glass-border); }
+.case:last-child { border-bottom: none; }
+.case h3 { font-size: 16px; font-weight: 500; }
+.case p { font-size: 14px; color: var(--text-secondary); margin: 4px 0 8px; }
+.case .tag {
+    display: inline-block;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+}
+.service-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--glass-border);
+}
+.service-card:last-child { border-bottom: none; }
+.service-card .info h3 { font-size: 15px; font-weight: 500; }
+.service-card .info p { font-size: 13px; color: var(--text-secondary); }
+.service-card .price { font-weight: 600; }
+.service-card .btn-add {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: .15s;
+}
+.service-card .btn-add:active { opacity: .6; }
+.chat-menu-item {
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: .2s;
+}
+.chat-menu-item:active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+.chat-menu-item .chat-icon { font-size: 28px; }
+.chat-menu-item .chat-label { font-weight: 500; font-size: 16px; }
+.chat-menu-item .chat-desc { font-size: 13px; color: var(--text-secondary); }
+.chat-page {
+    display: none;
+    flex-direction: column;
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--glass-shadow);
+    padding: 0;
+    min-height: 400px;
+}
+.chat-page.active { display: flex; }
+.chat-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+.chat-header h4 { font-size: 16px; font-weight: 500; }
+.chat-header .close-chat {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.chat-header .chat-type-badge {
+    font-size: 10px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    background: var(--accent);
+    color: var(--bg);
+}
+.chat-header .chat-type-badge.support { background: #4caf50; }
+.chat-header .chat-type-badge.specialist { background: #ff9800; }
+.chat-messages {
+    flex: 1;
+    padding: 12px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 200px;
+    max-height: 400px;
+}
+.chat-messages .msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    animation: fadeIn .3s ease;
+}
+.chat-messages .msg.bot {
+    background: var(--chat-bot);
+    border: 1px solid var(--glass-border);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.chat-messages .msg.user {
+    background: var(--chat-user);
+    border: 1px solid var(--glass-border);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.chat-messages .msg.support {
+    background: var(--chat-support);
+    border: 1px solid #4caf50;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border-left: 3px solid #4caf50;
+}
+.chat-messages .msg.specialist {
+    background: var(--chat-specialist);
+    border: 1px solid #ff9800;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border-left: 3px solid #ff9800;
+}
+.chat-messages .msg .sender-name {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    display: block;
+}
+.chat-messages .msg .sender-name.support { color: #4caf50; }
+.chat-messages .msg .sender-name.specialist { color: #ff9800; }
+.chat-messages .msg .time {
+    font-size: 10px;
+    opacity: .5;
+    margin-top: 4px;
+    display: block;
+}
+.chat-messages .typing {
+    align-self: flex-start;
+    padding: 8px 14px;
+    background: var(--chat-bot);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: none;
+}
+.chat-messages .typing.active { display: block; }
+.chat-messages .typing span {
+    animation: dots 1.4s infinite;
+    display: inline-block;
+}
+.chat-messages .typing span:nth-child(2) { animation-delay: .2s; }
+.chat-messages .typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes dots {
+    0%, 60%, 100% { opacity: .3; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-4px); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.chat-input {
+    padding: 12px 16px;
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+.chat-input input {
+    flex: 1;
+    background: var(--glass-bg);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: .2s;
+}
+.chat-input input::placeholder { color: var(--text-secondary); }
+.chat-input input:focus { border-color: var(--accent); }
+.chat-input button {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: .2s;
+    flex-shrink: 0;
+}
+.chat-input button:active { transform: scale(.9); }
+.chat-input button:disabled { opacity: .4; }
+.cart-overlay {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--glass-border);
+    padding: 20px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    display: none;
+    z-index: 999;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+.cart-overlay.show { display: block; }
+.cart-overlay .close {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+.cart-overlay h3 { margin-bottom: 12px; font-weight: 500; }
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--glass-border);
+    font-size: 14px;
+}
+.cart-item .remove {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+}
+.cart-total { font-size: 18px; font-weight: 500; margin: 16px 0 12px; }
+.btn-checkout {
+    width: 100%;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.btn-checkout:active { opacity: .7; }
+@media (max-width: 480px) {
+    body { padding: 12px; }
+    .page { padding: 18px 14px; }
+    .header { padding: 12px 14px; }
+    .chat-messages { max-height: 300px; }
+}
+.admin-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.admin-overlay.show { display: flex; }
+.admin-panel {
+    background: var(--bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--glass-shadow);
+}
+.admin-panel h2 { font-size: 22px; margin-bottom: 16px; color: var(--text); }
+.admin-panel .close-admin {
+    float: right;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.admin-panel .admin-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+.admin-panel .admin-tabs button {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 14px;
+    transition: .2s;
+}
+.admin-panel .admin-tabs button.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+}
+.admin-panel .admin-tab { display: none; }
+.admin-panel .admin-tab.active { display: block; }
+.admin-panel .admin-chat-item {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 12px;
+    margin-bottom: 10px;
+}
+.admin-panel .admin-chat-item .question { font-weight: 500; color: var(--text); }
+.admin-panel .admin-chat-item .answer {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 4px;
+}
+.admin-panel .admin-chat-item .answer-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text);
+    font-size: 14px;
+    margin-top: 8px;
+}
+.admin-panel .admin-chat-item .answer-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 6px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 500;
+    margin-top: 6px;
+}
+.admin-panel .admin-chat-item .status {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+.admin-panel .admin-chat-item .status.answered { color: #4caf50; }
+.admin-panel .admin-chat-item .status.pending { color: #ff9800; }
         .admin-login {
             display: flex;
             flex-direction: column;
@@ -697,11 +576,7 @@
             font-weight: 600;
             cursor: pointer;
         }
-        .admin-login .error {
-            color: #ff6b6b;
-            font-size: 14px;
-            text-align: center;
-        }
+        .admin-login .error { color: #ff6b6b; font-size: 14px; text-align: center; }
         .admin-chat-notification {
             background: #ff4444;
             color: #fff;
@@ -718,21 +593,10 @@
             border-radius: var(--radius);
             border: 1px solid var(--glass-border);
         }
-        .cabinet-info .label {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-        .cabinet-info .value {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-        .reg-step {
-            display: none;
-        }
-        .reg-step.active {
-            display: block;
-        }
+        .cabinet-info .label { font-size: 12px; color: var(--text-secondary); }
+        .cabinet-info .value { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+        .reg-step { display: none; }
+        .reg-step.active { display: block; }
         .reg-step input {
             width: 100%;
             padding: 12px;
@@ -743,10 +607,7 @@
             font-size: 16px;
             margin-bottom: 12px;
         }
-        .reg-step input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
+        .reg-step input:focus { outline: none; border-color: var(--accent); }
         .reg-step .generate-link {
             color: #ff4444;
             font-size: 13px;
@@ -756,9 +617,7 @@
             margin-top: -8px;
             margin-bottom: 12px;
         }
-        .reg-step .generate-link:active {
-            opacity: .7;
-        }
+        .reg-step .generate-link:active { opacity: .7; }
         .auth-btn {
             width: 100%;
             padding: 14px;
@@ -768,18 +627,13 @@
             border: none;
             transition: .2s;
         }
-        .auth-btn.primary {
-            background: var(--accent);
-            color: var(--bg);
-        }
+        .auth-btn.primary { background: var(--accent); color: var(--bg); }
         .auth-btn.secondary {
             background: var(--glass-bg);
             color: var(--text);
             border: 1px solid var(--glass-border);
         }
-        .auth-btn:active {
-            transform: scale(.97);
-        }
+        .auth-btn:active { transform: scale(.97); }
         .search-input {
             width: 100%;
             padding: 12px;
@@ -790,10 +644,7 @@
             font-size: 16px;
             margin-bottom: 12px;
         }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
+        .search-input:focus { outline: none; border-color: var(--accent); }
         .search-result-item {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -801,14 +652,8 @@
             padding: 12px;
             margin-bottom: 10px;
         }
-        .search-result-item .name {
-            font-weight: 500;
-            color: var(--text);
-        }
-        .search-result-item .info {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
+        .search-result-item .name { font-weight: 500; color: var(--text); }
+        .search-result-item .info { font-size: 12px; color: var(--text-secondary); }
         .search-result-item .btn-chat {
             background: var(--accent);
             color: var(--bg);
@@ -823,6 +668,8 @@
 </head>
 <body>
 <canvas id="starsCanvas"></canvas>
+
+<!-- АДМИН-ПАНЕЛЬ -->
 <div class="admin-overlay" id="adminOverlay">
     <div class="admin-panel">
         <button class="close-admin" onclick="closeAdmin()">✕</button>
@@ -852,7 +699,10 @@
         </div>
     </div>
 </div>
+
+<!-- ОСНОВНОЙ КОНТЕЙНЕР -->
 <div class="container">
+    <!-- ШАПКА -->
     <div class="header">
         <span class="logo">Осинтер <span>| OSINT</span></span>
         <div class="header-actions">
@@ -861,6 +711,7 @@
         </div>
     </div>
     
+    <!-- НАВИГАЦИЯ -->
     <div class="nav">
         <button onclick="showPage('home')">Главная</button>
         <button onclick="showPage('cases')">Кейсы</button>
@@ -869,35 +720,39 @@
         <button onclick="showPage('cabinet')">Кабинет</button>
         <button onclick="toggleCart()">Корзина</button>
     </div>
-    
-    <div id="home" class="page active">
-        <div style="text-align:center;padding:30px 10px 20px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);margin-bottom:20px">
-            <h1 style="font-size:42px;font-weight:900;letter-spacing:-1px;color:#fff;text-shadow:0 0 40px rgba(255,255,255,0.15),0 0 80px rgba(255,255,255,0.05);margin:0;line-height:1.1">EXELD<br>OSINT</h1>
-            <p style="color:var(--text-secondary);font-size:14px;margin-top:8px;letter-spacing:4px;text-transform:uppercase">Intelligence & Security</p>
-        </div>
-        <span class="hero-tag">Осинтер</span>
-        <h2 style="font-size:22px;font-weight:600;margin-bottom:6px">Привет, я Осинтер</h2>
-        <p style="color:var(--text-secondary);margin-bottom:16px;font-size:15px">Специалист по <strong style="color:var(--text)">OSINT</strong> и <strong style="color:var(--text)">веб-разработке</strong>.<br>Нахожу уязвимости там, где их не ждут.</p>
-        <div class="utp-grid">
-            <div class="utp-item"><span class="icon">⚡</span>Быстро</div>
-            <div class="utp-item"><span class="icon">💰</span>Крипта</div>
-            <div class="utp-item"><span class="icon">📉</span>Низкие цены</div>
-        </div>
-        <div style="margin-top:16px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:14px;color:var(--text-secondary);text-align:center">Работаю с юр. лицами и частными заказами. Полная конфиденциальность.</div>
+<!-- ГЛАВНАЯ -->
+<div id="home" class="page">
+    <div style="text-align:center;padding:30px 10px 20px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);margin-bottom:20px">
+        <h1 style="font-size:42px;font-weight:900;letter-spacing:-1px;color:#fff;text-shadow:0 0 40px rgba(255,255,255,0.15),0 0 80px rgba(255,255,255,0.05);margin:0;line-height:1.1">EXELD<br>OSINT</h1>
+        <p style="color:var(--text-secondary);font-size:14px;margin-top:8px;letter-spacing:4px;text-transform:uppercase">Intelligence & Security</p>
     </div>
-    
-    <div id="cases" class="page">
-        <h2>Кейсы</h2>
-        <div class="case"><h3>Wildberries — техническая + юридическая часть</h3><p>Нашёл техническую архитектуру и юр. структуру. Выявил уязвимости.</p><span class="tag">OSINT</span></div>
-        <div class="case"><h3>Ozon — разведка данных</h3><p>Проанализировал техническую часть платформы, нашёл слабые места.</p><span class="tag">OSINT</span></div>
-        <div class="case"><h3>AliExpress — внутренние процессы</h3><p>Собрал данные по юр. структуре и тех. части. Выявил уязвимости.</p><span class="tag">OSINT</span></div>
-        <div class="case"><h3>Мегафон — уязвимости</h3><p>Провёл аудит технической части, обнаружил несколько уязвимостей.</p><span class="tag">OSINT</span></div>
+    <span class="hero-tag">Осинтер</span>
+    <h2 style="font-size:22px;font-weight:600;margin-bottom:6px">Привет, я Осинтер</h2>
+    <p style="color:var(--text-secondary);margin-bottom:16px;font-size:15px">Специалист по <strong style="color:var(--text)">OSINT</strong> и <strong style="color:var(--text)">веб-разработке</strong>.<br>Нахожу уязвимости там, где их не ждут.</p>
+    <div class="utp-grid">
+        <div class="utp-item"><span class="icon">⚡</span>Быстро</div>
+        <div class="utp-item"><span class="icon">💰</span>Крипта</div>
+        <div class="utp-item"><span class="icon">📉</span>Низкие цены</div>
     </div>
-    
-    <div id="services" class="page">
-        <h2>Услуги</h2>
-        <div id="servicesList"></div>
-    </div>
+    <div style="margin-top:16px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:14px;color:var(--text-secondary);text-align:center">Работаю с юр. лицами и частными заказами. Полная конфиденциальность.</div>
+</div>
+
+<!-- КЕЙСЫ -->
+<div id="cases" class="page">
+    <h2>Кейсы</h2>
+    <div class="case"><h3>Wildberries — техническая + юридическая часть</h3><p>Нашёл техническую архитектуру и юр. структуру. Выявил уязвимости.</p><span class="tag">OSINT</span></div>
+    <div class="case"><h3>Ozon — разведка данных</h3><p>Проанализировал техническую часть платформы, нашёл слабые места.</p><span class="tag">OSINT</span></div>
+    <div class="case"><h3>AliExpress — внутренние процессы</h3><p>Собрал данные по юр. структуре и тех. части. Выявил уязвимости.</p><span class="tag">OSINT</span></div>
+    <div class="case"><h3>Мегафон — уязвимости</h3><p>Провёл аудит технической части, обнаружил несколько уязвимостей.</p><span class="tag">OSINT</span></div>
+</div>
+
+<!-- УСЛУГИ -->
+<div id="services" class="page">
+    <h2>Услуги</h2>
+    <div id="servicesList"></div>
+</div>
+
+<!-- КОРЗИНА -->
 <div class="cart-overlay" id="cartOverlay">
     <button class="close" onclick="toggleCart()">✕</button>
     <h3>Корзина</h3>
@@ -906,6 +761,7 @@
     <button class="btn-checkout" onclick="checkout()">Оформить заказ</button>
 </div>
 
+<!-- МЕНЮ ЧАТОВ -->
 <div id="chatMenuPage" class="page">
     <h2>Чаты</h2>
     <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
@@ -924,22 +780,24 @@
     </div>
     <div style="margin-top:20px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:13px;color:var(--text-secondary);text-align:center">Выберите чат для общения</div>
 </div>
-
-<div id="cabinet" class="page">
-    <h2>Личный кабинет</h2>
-    <div id="cabinetContent" style="display:none">
-        <div class="cabinet-info">
-            <div class="label">Nickname</div>
-            <div class="value" id="cabinetName"></div>
+    <!-- ЛИЧНЫЙ КАБИНЕТ -->
+    <div id="cabinet" class="page">
+        <h2>Личный кабинет</h2>
+        <div id="cabinetContent" style="display:none">
+            <div class="cabinet-info">
+                <div class="label">Nickname</div>
+                <div class="value" id="cabinetName"></div>
+            </div>
+            <div style="margin-top:16px"><h4>История заказов</h4><div id="cabinetOrders"></div></div>
+            <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button>
         </div>
-        <div style="margin-top:16px"><h4>История заказов</h4><div id="cabinetOrders"></div></div>
-        <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button>
+        <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+            <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
+            <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
+        </div>
     </div>
-    <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
-        <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
-        <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
-    </div>
-</div>
+    
+    <!-- РЕГИСТРАЦИЯ -->
     <div id="register" class="page">
         <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
         <h2>Регистрация</h2>
@@ -957,6 +815,7 @@
         </div>
     </div>
     
+    <!-- ВХОД -->
     <div id="login" class="page">
         <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
         <h2>Вход</h2>
@@ -984,10 +843,27 @@
     let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
     let cart = [];
 
+    function getGitHubToken() {
+        if (typeof window.GITHUB_TOKEN !== 'undefined' && window.GITHUB_TOKEN) {
+            return window.GITHUB_TOKEN;
+        }
+        const savedToken = localStorage.getItem('github_token');
+        if (savedToken) {
+            return savedToken;
+        }
+        console.warn('GitHub токен не найден. Используется анонимный доступ.');
+        return null;
+    }
+
     async function loadFromGitHub() {
         try {
+            const token = getGitHubToken();
+            const headers = {};
+            if (token) {
+                headers['Authorization'] = `token ${token}`;
+            }
             const r = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
-                headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+                headers: headers
             });
             if (r.ok) {
                 const d = await r.json();
@@ -998,31 +874,56 @@
     }
 
     async function saveToGitHub(data) {
+        const token = getGitHubToken();
+        if (!token) {
+            console.warn('Нет токена. Данные сохранены локально.');
+            localStorage.setItem('appData_backup', JSON.stringify(data));
+            return false;
+        }
+        
         let sha = '';
         try {
             const r = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
-                headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+                headers: { 'Authorization': `token ${token}` }
             });
             if (r.ok) {
                 const d = await r.json();
                 sha = d.sha;
             }
         } catch (e) {}
+        
         const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-        const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message: 'Обновление данных', content: content, sha: sha || undefined })
-        });
-        return response.ok;
+        try {
+            const response = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${GITHUB_FILE}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: 'Обновление данных', content: content, sha: sha || undefined })
+            });
+            return response.ok;
+        } catch (e) {
+            console.error('Ошибка сохранения на GitHub:', e);
+            return false;
+        }
     }
 
     async function initData() {
         const data = await loadFromGitHub();
-        if (data) { appData = data; } else { await saveToGitHub(appData); }
+        if (data) { 
+            appData = data; 
+        } else {
+            const backup = localStorage.getItem('appData_backup');
+            if (backup) {
+                try {
+                    appData = JSON.parse(backup);
+                    console.log('Данные восстановлены из локального бэкапа');
+                } catch (e) {}
+            } else {
+                await saveToGitHub(appData);
+            }
+        }
         applyData();
     }
 
@@ -1039,6 +940,13 @@
         renderAdminPayments();
         renderAdminSupport();
         renderAdminSpecialist();
+        
+        // Если нет пользователя — показываем регистрацию
+        if (!currentUser) {
+            showPage('register');
+        } else {
+            showPage('home');
+        }
     }
 
     async function syncData() {
@@ -1047,7 +955,11 @@
         appData.unansweredSpecialist = unansweredSpecialist;
         appData.paymentConfirmations = paymentConfirmations;
         appData.orders = orders;
-        await saveToGitHub(appData);
+        localStorage.setItem('appData_backup', JSON.stringify(appData));
+        const saved = await saveToGitHub(appData);
+        if (!saved) {
+            console.log('Данные сохранены локально');
+        }
     }
 // ============================================================
 // 1. ПОИСК ПОЛЬЗОВАТЕЛЯ
@@ -1090,7 +1002,7 @@ function openChatWithUser(name) {
 
 function renderUserMessages(name) {
     const all = [...unansweredSupport.filter(m => m.userName === name), ...unansweredSpecialist.filter(m => m.userName === name)].sort((a, b) => a.id - b.id);
-    if (!all.length) return '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет сообщений. Напишите первым 👆</p>';
+    if (!all.length) return '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет сообщений.</p>';
     return all.map(m => {
         const type = m.type === 'support' ? 'Поддержка' : 'Специалист';
         return `<div style="padding:8px 0;border-bottom:1px solid var(--glass-border);"><div style="font-size:12px;color:var(--text-secondary);">[${type}] ${m.timestamp}</div><div style="font-size:14px;">${m.question}</div>${m.answer ? `<div style="font-size:13px;color:#4caf50;margin-top:4px;">→ ${m.answer}</div>` : ''}</div>`;
@@ -1110,6 +1022,7 @@ function sendAdminMessage(name) {
     renderAdminSpecialist();
     updateAdminNotification('support');
 }
+
 // ============================================================
 // 2. ЗВЁЗДЫ И ТЕМА
 // ============================================================
@@ -1146,6 +1059,8 @@ function drawStars() {
     });
     requestAnimationFrame(drawStars);
 }
+updateStarColor('#fff');
+drawStars();
 
 function updateStarColor(color) { starColor = color; }
 
@@ -1166,14 +1081,15 @@ function toggleTheme() {
     }
 }
 updateStarColor('#fff');
-drawStars();
+
 // ============================================================
 // 3. НАВИГАЦИЯ
 // ============================================================
 function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const page = document.getElementById(id);
+    if (page) page.classList.add('active');
     document.getElementById('cartOverlay').classList.remove('show');
     if (id === 'cabinet') updateCabinetUI();
 }
@@ -1181,326 +1097,61 @@ function showPage(id) {
 function openChat(type) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
-    if (type === 'support') document.getElementById('chatSupport').classList.add('active');
-    else if (type === 'specialist') document.getElementById('chatSpecialist').classList.add('active');
+    if (type === 'support') {
+        createChatElements('support');
+        const el = document.getElementById('chatSupport');
+        if (el) el.classList.add('active');
+    } else if (type === 'specialist') {
+        createChatElements('specialist');
+        const el = document.getElementById('chatSpecialist');
+        if (el) el.classList.add('active');
+    }
 }
 
 function closeChat() {
     document.querySelectorAll('.chat-page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('chatMenuPage').classList.add('active');
+    const menu = document.getElementById('chatMenuPage');
+    if (menu) menu.classList.add('active');
 }
 
-// ============================================================
-// 4. ЧАТ С ПОДДЕРЖКОЙ
-// ============================================================
-const supportMessages = document.getElementById('supportMessages');
-const supportInput = document.getElementById('supportInput');
-const supportTyping = document.getElementById('supportTyping');
-
-const supportKnowledge = [
-    { keywords: ['привет', 'здравствуй', 'ку', 'hello', 'hi'], answer: 'Здравствуйте! Я ИИ-помощник поддержки. Чем могу помочь?' },
-    { keywords: ['цена', 'сколько', 'стоимость', 'прайс', 'рублей', '$'], answer: 'Цены в USDT: номер телефона — 16.7, фотоаналитика — 33.3, email — 11.1, досье — 55.6, профилирование — 133.3, юрлицо — 44.4, устойчивость — 66.7, контрагент — 166.7, мониторинг — 277.8, хеш — 8.9, метаданные — 5.6, домен — 33.3, полевое — 55.6. Экспресс-пакет — 72.2 USDT.' },
-    { keywords: ['срок', 'время', 'быстро', 'долго', 'скоро'], answer: 'Сроки: телефон — 30 мин, фото — 1 час, email — 20 мин, досье — 2 часа, профилирование — 1 день, юрлицо — 2 часа, устойчивость — 4 часа, контрагент — 1 день, мониторинг — 30 дней, хеш — 15 мин, домен — 1 час, полевое — за час выезда. Экспресс-пакет — 2 часа.' },
-    { keywords: ['osint', 'разведка', 'сбор данных', 'информация', 'найти'], answer: 'OSINT — сбор данных из открытых источников: соцсети, домены, утечки, юр. структуры.' },
-    { keywords: ['оплата', 'крипта', 'карта', 'usdt', 'биткоин', 'деньги', 'платить'], answer: 'Оплата только в USDT (BEP20/ERC20). Кошелёк: UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n' },
-    { keywords: ['контакты', 'связаться', 'телеграм', 'написать', 'telegram', '@'], answer: 'Связь через Telegram: @sprintdrop' },
-    { keywords: ['анонимно', 'конфиденциально', 'приватно', 'секретно', 'скрыть', 'тайно'], answer: 'Работаю полностью анонимно и конфиденциально. Оплата криптой.' },
-    { keywords: ['уязвимость', 'безопасность', 'аудит', 'защита', 'взлом'], answer: 'Провожу аудит безопасности: поиск уязвимостей, проверка на утечки данных.' }
-];
-
-function getSupportAnswer(text) {
-    const lower = text.toLowerCase();
-    for (let entry of supportKnowledge) {
-        for (let kw of entry.keywords) {
-            if (lower.includes(kw)) return entry.answer;
-        }
-    }
-    return null;
-}
-
-function addSupportMessage(text, sender, senderName) {
-    const div = document.createElement('div');
-    div.className = `msg ${sender}`;
-    if (senderName) {
-        const span = document.createElement('span');
-        span.className = `sender-name ${sender}`;
-        span.textContent = senderName;
-        div.appendChild(span);
-    }
-    div.appendChild(document.createTextNode(text));
-    const now = new Date();
-    const time = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-    const timeSpan = document.createElement('span');
-    timeSpan.className = 'time';
-    timeSpan.textContent = time;
-    div.appendChild(timeSpan);
-    supportMessages.appendChild(div);
-    supportMessages.scrollTop = supportMessages.scrollHeight;
-}
-
-function sendSupportMessage() {
-    const text = supportInput.value.trim();
-    if (!text) return;
-    addSupportMessage(text, 'user', 'Вы');
-    supportInput.value = '';
-    supportInput.disabled = true;
-    supportTyping.classList.add('active');
-    supportMessages.scrollTop = supportMessages.scrollHeight;
-    setTimeout(() => {
-        supportTyping.classList.remove('active');
-        const answer = getSupportAnswer(text);
-        if (answer) {
-            addSupportMessage(answer, 'bot', 'ИИ-помощник');
-        } else {
-            addSupportMessage('Я не совсем понял вопрос. Я передал его оператору поддержки. Он скоро ответит.', 'bot', 'ИИ-помощник');
-            saveUnansweredSupport(text);
-        }
-        supportInput.disabled = false;
-        supportInput.focus();
-    }, 500 + Math.random() * 1000);
-}
-
-supportInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !supportInput.disabled) sendSupportMessage();
-});
-// ============================================================
-// 5. ЧАТ С OSINT-СПЕЦИАЛИСТОМ (БЕЗ ИИ)
-// ============================================================
-const specialistMessages = document.getElementById('specialistMessages');
-const specialistInput = document.getElementById('specialistInput');
-const specialistTyping = document.getElementById('specialistTyping');
-
-function addSpecialistMessage(text, sender, senderName) {
-    const div = document.createElement('div');
-    div.className = `msg ${sender}`;
-    if (senderName) {
-        const nameSpan = document.createElement('span');
-        nameSpan.className = `sender-name ${sender}`;
-        nameSpan.textContent = senderName;
-        div.appendChild(nameSpan);
-    }
-    const textNode = document.createTextNode(text);
-    div.appendChild(textNode);
-    const now = new Date();
-    const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-    const timeSpan = document.createElement('span');
-    timeSpan.className = 'time';
-    timeSpan.textContent = time;
-    div.appendChild(timeSpan);
-    specialistMessages.appendChild(div);
-    specialistMessages.scrollTop = specialistMessages.scrollHeight;
-}
-
-function sendSpecialistMessage() {
-    const text = specialistInput.value.trim();
-    if (!text) return;
-    addSpecialistMessage(text, 'user', 'Вы');
-    specialistInput.value = '';
-    specialistInput.disabled = true;
-    specialistTyping.classList.add('active');
-    specialistMessages.scrollTop = specialistMessages.scrollHeight;
-    setTimeout(() => {
-        specialistTyping.classList.remove('active');
-        saveUnansweredSpecialist(text);
-        addSpecialistMessage('Здравствуйте, специалист вам ответит в скором времени.', 'bot', '');
-        specialistInput.disabled = false;
-        specialistInput.focus();
-    }, 500 + Math.random() * 800);
-}
-
-specialistInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !specialistInput.disabled) sendSpecialistMessage();
-});
-
-// ============================================================
-// 6. НЕПОНЯТЫЕ ВОПРОСЫ (для админки)
-// ============================================================
-function saveUnansweredSupport(text) {
-    const id = Date.now();
-    const userName = currentUser ? currentUser.name : 'Гость';
-    unansweredSupport.push({ 
-        id, 
-        question: text, 
-        userName: userName,
-        answer: '', 
-        answered: false, 
-        type: 'support',
-        timestamp: new Date().toLocaleString() 
-    });
-    syncData();
-    updateAdminNotification('support');
-    renderAdminSupport();
-}
-
-function saveUnansweredSpecialist(text) {
-    const id = Date.now();
-    const userName = currentUser ? currentUser.name : 'Гость';
-    unansweredSpecialist.push({ 
-        id, 
-        question: text, 
-        userName: userName,
-        answer: '', 
-        answered: false, 
-        type: 'specialist',
-        timestamp: new Date().toLocaleString() 
-    });
-    syncData();
-    updateAdminNotification('specialist');
-    renderAdminSpecialist();
-}
-
-function updateAdminNotification(type) {
-    let count = 0;
-    let notif = null;
-    if (type === 'support') {
-        count = unansweredSupport.filter(q => !q.answered).length;
-        notif = document.getElementById('supportNotif');
-    } else if (type === 'specialist') {
-        count = unansweredSpecialist.filter(q => !q.answered).length;
-        notif = document.getElementById('specialistNotif');
-    }
-    if (notif) {
-        if (count > 0) {
-            notif.style.display = 'inline';
-            notif.textContent = count;
-        } else {
-            notif.style.display = 'none';
-        }
-    }
-}
-// ============================================================
-// 7. АДМИН-ПАНЕЛЬ
-// ============================================================
-let adminTaps = 0;
-let adminTimer = null;
-
-document.addEventListener('click', function(e) {
-    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.chat-menu-item')) return;
-    adminTaps++;
-    clearTimeout(adminTimer);
-    adminTimer = setTimeout(() => { adminTaps = 0; }, 3000);
-    if (adminTaps >= 3) { adminTaps = 0; openAdmin(); }
-});
-
-function openAdmin() {
-    document.getElementById('adminOverlay').classList.add('show');
-    document.getElementById('adminPassword').value = '';
-    document.getElementById('adminError').textContent = '';
-    document.getElementById('adminLogin').style.display = 'flex';
-    document.getElementById('adminContent').style.display = 'none';
-}
-
-function closeAdmin() {
-    document.getElementById('adminOverlay').classList.remove('show');
-}
-
-function adminLogin() {
-    const pass = document.getElementById('adminPassword').value;
-    if (pass === '123') {
-        document.getElementById('adminLogin').style.display = 'none';
-        document.getElementById('adminContent').style.display = 'block';
-        renderAdminSupport();
-        renderAdminSpecialist();
-        renderAdminUsers();
-        renderAdminPayments();
-        renderAdminServices();
-        renderAdminOrders();
-        updateAdminNotification('support');
-        updateAdminNotification('specialist');
-    } else {
-        document.getElementById('adminError').textContent = 'Неверный пароль';
-    }
-}
-
-function switchAdminTab(tab, btn) {
-    document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('admin' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-}
-
-function renderAdminSupport() {
-    const list = document.getElementById('adminSupportList');
-    const unanswered = unansweredSupport.filter(q => !q.answered);
-    if (unanswered.length === 0) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Нет непонятых вопросов. ИИ справляется!</p>';
-    } else {
-        list.innerHTML = unanswered.map(q => `
-            <div class="admin-chat-item" data-id="${q.id}">
-                <div class="question">👤 ${q.userName || 'Гость'}: ${q.question}</div>
-                <div class="status pending">⏳ Ожидает ответа от поддержки</div>
-                <div style="font-size:12px;color:var(--text-secondary);">${q.timestamp}</div>
-                <input class="answer-input" type="text" placeholder="Введите ответ от имени поддержки..." id="supportAnswer_${q.id}">
-                <button class="answer-btn" onclick="answerSupportQuestion(${q.id})">Ответить</button>
+function createChatElements(type) {
+    const container = document.querySelector('.container');
+    if (type === 'support' && !document.getElementById('chatSupport')) {
+        container.insertAdjacentHTML('beforeend', `
+            <div id="chatSupport" class="chat-page">
+                <div class="chat-header">
+                    <h4>💬 Чат с поддержкой</h4>
+                    <span class="chat-type-badge support">ИИ-помощник</span>
+                    <button class="close-chat" onclick="closeChat()">✕</button>
+                </div>
+                <div class="chat-messages" id="supportMessages"></div>
+                <div class="typing" id="supportTyping"><span>.</span><span>.</span><span>.</span></div>
+                <div class="chat-input">
+                    <input type="text" id="supportInput" placeholder="Задайте вопрос..." autofocus>
+                    <button onclick="sendSupportMessage()">➤</button>
+                </div>
             </div>
-        `).join('');
+        `);
     }
-}
-
-function answerSupportQuestion(id) {
-    const input = document.getElementById('supportAnswer_' + id);
-    const answer = input.value.trim();
-    if (!answer) return;
-    const q = unansweredSupport.find(q => q.id === id);
-    if (q) {
-        q.answer = answer;
-        q.answered = true;
-        addSupportMessage(answer, 'support', 'Поддержка');
-        renderAdminSupport();
-        updateAdminNotification('support');
-        syncData();
-    }
-}
-
-function renderAdminSpecialist() {
-    const list = document.getElementById('adminSpecialistList');
-    const unanswered = unansweredSpecialist.filter(q => !q.answered);
-    if (unanswered.length === 0) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Нет вопросов для OSINT-специалиста.</p>';
-    } else {
-        list.innerHTML = unanswered.map(q => `
-            <div class="admin-chat-item" data-id="${q.id}">
-                <div class="question">👤 ${q.userName || 'Гость'}: ${q.question}</div>
-                <div class="status pending">⏳ Ожидает ответа от специалиста</div>
-                <div style="font-size:12px;color:var(--text-secondary);">${q.timestamp}</div>
-                <input class="answer-input" type="text" placeholder="Введите ответ от имени специалиста..." id="specialistAnswer_${q.id}">
-                <button class="answer-btn" onclick="answerSpecialistQuestion(${q.id})">Ответить</button>
+    if (type === 'specialist' && !document.getElementById('chatSpecialist')) {
+        container.insertAdjacentHTML('beforeend', `
+            <div id="chatSpecialist" class="chat-page">
+                <div class="chat-header">
+                    <h4>🕵️ Чат с OSINT-специалистом</h4>
+                    <span class="chat-type-badge specialist">Эксперт</span>
+                    <button class="close-chat" onclick="closeChat()">✕</button>
+                </div>
+                <div class="chat-messages" id="specialistMessages"></div>
+                <div class="typing" id="specialistTyping"><span>.</span><span>.</span><span>.</span></div>
+                <div class="chat-input">
+                    <input type="text" id="specialistInput" placeholder="Опишите задачу..." autofocus>
+                    <button onclick="sendSpecialistMessage()">➤</button>
+                </div>
             </div>
-        `).join('');
+        `);
     }
 }
-
-function answerSpecialistQuestion(id) {
-    const input = document.getElementById('specialistAnswer_' + id);
-    const answer = input.value.trim();
-    if (!answer) return;
-    const q = unansweredSpecialist.find(q => q.id === id);
-    if (q) {
-        q.answer = answer;
-        q.answered = true;
-        addSpecialistMessage(answer, 'specialist', 'Осинтер (специалист)');
-        renderAdminSpecialist();
-        updateAdminNotification('specialist');
-        syncData();
-    }
-}
-
-function renderAdminUsers() {
-    const list = document.getElementById('adminUsersList');
-    if (users.length === 0) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Нет зарегистрированных пользователей.</p>';
-    } else {
-        list.innerHTML = users.map(u => `
-            <div class="admin-chat-item">
-                <div class="question">${u.name}</div>
-                <div style="font-size:13px;color:var(--text-secondary);">Nickname: ${u.name}</div>
-                <div style="font-size:12px;color:var(--text-secondary);">Заказов: ${u.orders ? u.orders.length : 0}</div>
-            </div>
-        `).join('');
-    }
-}
-
 function renderAdminPayments() {
     const list = document.getElementById('adminPaymentsList');
     if (paymentConfirmations.length === 0) {
@@ -1516,8 +1167,36 @@ function renderAdminPayments() {
                 <button class="answer-btn" style="background:#ff4444;" onclick="cancelPayment(${p.id})">Отклонить</button>
             </div>
         `).join('');
+    }
+}
+
+function confirmPayment(id) {
+    const payment = paymentConfirmations.find(p => p.id === id);
+    if (payment) {
+        payment.status = 'подтверждена ✅';
+        syncData();
+        renderAdminPayments();
+        alert('Оплата подтверждена! Заказ передан в работу.');
+    }
+}
+
+function cancelPayment(id) {
+    paymentConfirmations = paymentConfirmations.filter(p => p.id !== id);
+    syncData();
+    renderAdminPayments();
+    alert('Оплата отклонена.');
+}
+
+function renderAdminServices() {
+    document.getElementById('adminServicesList').innerHTML = '<p style="color:var(--text-secondary);">Управление услугами здесь.</p>';
+}
+
+function renderAdminOrders() {
+    document.getElementById('adminOrdersList').innerHTML = '<p style="color:var(--text-secondary);">Заказы отображаются здесь.</p>';
+}
+
 // ============================================================
-// 8. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
+// 9. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
 // ============================================================
 let registrationData = { name: '', password: '' };
 
@@ -1643,7 +1322,7 @@ function updateCabinetUI() {
     }
 }
 // ============================================================
-// 9. КОРЗИНА + ОПЛАТА КРИПТОЙ
+// 10. КОРЗИНА + ОПЛАТА КРИПТОЙ
 // ============================================================
 function addToCart(id) {
     const card = document.querySelector(`.service-card[data-id="${id}"]`);
@@ -1770,7 +1449,7 @@ function confirmPaymentClick() {
     closePayment();
 }
         // ============================================================
-        // 10. ИНИЦИАЛИЗАЦИЯ
+        // 11. УСЛУГИ И ИНИЦИАЛИЗАЦИЯ
         // ============================================================
         const servicesData = [
             { id: 1, name: 'Исследование по номеру телефона', desc: 'Анализ привязок, геолокация, утечки', price: 16.7, time: '30 мин' },
@@ -1788,6 +1467,7 @@ function confirmPaymentClick() {
             { id: 13, name: 'Полевое исследование радиосреды', desc: 'Wi-Fi и BLE-маяки по адресу, карта устройств', price: 55.6, time: 'за час выезда' }
         ];
 
+        // Рендерим услуги
         document.getElementById('servicesList').innerHTML = servicesData.map(s => `
             <div class="service-card" data-id="${s.id}" data-name="${s.name}" data-price="${s.price}">
                 <div class="info"><h3>${s.name}</h3><p>${s.desc}</p></div>
@@ -1805,38 +1485,19 @@ function confirmPaymentClick() {
             </div>
         `;
 
-        // Создаём элементы чатов, которых не хватало в HTML
-        document.body.insertAdjacentHTML('beforeend', `
-            <div id="chatSupport" class="chat-page">
-                <div class="chat-header">
-                    <h4>💬 Чат с поддержкой</h4>
-                    <span class="chat-type-badge support">ИИ-помощник</span>
-                    <button class="close-chat" onclick="closeChat()">✕</button>
-                </div>
-                <div class="chat-messages" id="supportMessages"></div>
-                <div class="typing" id="supportTyping"><span>.</span><span>.</span><span>.</span></div>
-                <div class="chat-input">
-                    <input type="text" id="supportInput" placeholder="Задайте вопрос..." autofocus>
-                    <button onclick="sendSupportMessage()">➤</button>
-                </div>
-            </div>
-            <div id="chatSpecialist" class="chat-page">
-                <div class="chat-header">
-                    <h4>🕵️ Чат с OSINT-специалистом</h4>
-                    <span class="chat-type-badge specialist">Эксперт</span>
-                    <button class="close-chat" onclick="closeChat()">✕</button>
-                </div>
-                <div class="chat-messages" id="specialistMessages"></div>
-                <div class="typing" id="specialistTyping"><span>.</span><span>.</span><span>.</span></div>
-                <div class="chat-input">
-                    <input type="text" id="specialistInput" placeholder="Опишите задачу..." autofocus>
-                    <button onclick="sendSpecialistMessage()">➤</button>
-                </div>
-            </div>
-        `);
-
+        // ============================================================
+        // 12. ЗАПУСК ПРИЛОЖЕНИЯ
+        // ============================================================
         async function startApp() {
             await initData();
+            
+            // Если нет пользователя — показываем регистрацию
+            if (!currentUser) {
+                showPage('register');
+            } else {
+                showPage('home');
+            }
+            
             updateCabinetUI();
             renderAdminUsers();
             renderAdminPayments();
@@ -1844,9 +1505,12 @@ function confirmPaymentClick() {
             renderAdminSpecialist();
             updateAdminNotification('support');
             updateAdminNotification('specialist');
+            
+            console.log('✅ Приложение EXELD OSINT запущено!');
         }
 
-        startApp();
+        // Запускаем приложение после загрузки DOM
+        document.addEventListener('DOMContentLoaded', startApp);
     </script>
 </body>
 </html>
