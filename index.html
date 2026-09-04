@@ -1448,6 +1448,131 @@ function confirmPaymentClick() {
     toggleCart();
     closePayment();
 }
+// ============================================================
+// 5. ЧАТ С ПОДДЕРЖКОЙ
+// ============================================================
+const supportKnowledge = [
+    { keywords: ['привет', 'здравствуй', 'ку', 'hello', 'hi'], answer: 'Здравствуйте! Я ИИ-помощник поддержки. Чем могу помочь?' },
+    { keywords: ['цена', 'сколько', 'стоимость', 'прайс', 'рублей', '$'], answer: 'Цены в USDT: телефон — 16.7, фото — 33.3, email — 11.1, досье — 55.6, профилирование — 133.3, юрлицо — 44.4, устойчивость — 66.7, контрагент — 166.7, мониторинг — 277.8, хеш — 8.9, метаданные — 5.6, домен — 33.3, полевое — 55.6.' },
+    { keywords: ['срок', 'время', 'быстро', 'долго', 'скоро'], answer: 'Сроки: телефон — 30 мин, фото — 1 час, email — 20 мин, досье — 2 часа, профилирование — 1 день, юрлицо — 2 часа, устойчивость — 4 часа, контрагент — 1 день, мониторинг — 30 дней.' },
+    { keywords: ['osint', 'разведка', 'сбор данных', 'информация'], answer: 'OSINT — сбор данных из открытых источников: соцсети, домены, утечки, юр. структуры.' },
+    { keywords: ['оплата', 'крипта', 'usdt', 'биткоин'], answer: 'Оплата только в USDT (BEP20/ERC20). Кошелёк: UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n' },
+    { keywords: ['контакты', 'связаться', 'телеграм', 'telegram'], answer: 'Связь через Telegram: @sprintdrop' },
+    { keywords: ['анонимно', 'конфиденциально', 'приватно'], answer: 'Работаю полностью анонимно и конфиденциально. Оплата криптой.' },
+    { keywords: ['уязвимость', 'безопасность', 'аудит'], answer: 'Провожу аудит безопасности: поиск уязвимостей, проверка на утечки данных.' }
+];
+
+function getSupportAnswer(text) {
+    const lower = text.toLowerCase();
+    for (let entry of supportKnowledge) {
+        for (let kw of entry.keywords) {
+            if (lower.includes(kw)) return entry.answer;
+        }
+    }
+    return null;
+}
+
+function sendSupportMessage() {
+    const supportMessages = document.getElementById('supportMessages');
+    const supportInput = document.getElementById('supportInput');
+    const supportTyping = document.getElementById('supportTyping');
+    
+    if (!supportInput || !supportMessages) return;
+    
+    const text = supportInput.value.trim();
+    if (!text) return;
+    
+    addSupportMessage(text, 'user', 'Вы', supportMessages);
+    supportInput.value = '';
+    supportInput.disabled = true;
+    supportTyping.classList.add('active');
+    supportMessages.scrollTop = supportMessages.scrollHeight;
+    
+    setTimeout(() => {
+        supportTyping.classList.remove('active');
+        const answer = getSupportAnswer(text);
+        if (answer) {
+            addSupportMessage(answer, 'bot', 'ИИ-помощник', supportMessages);
+        } else {
+            addSupportMessage('Я не совсем понял вопрос. Передал оператору поддержки.', 'bot', 'ИИ-помощник', supportMessages);
+            if (typeof saveUnansweredSupport === 'function') {
+                saveUnansweredSupport(text);
+            }
+        }
+        supportInput.disabled = false;
+        supportInput.focus();
+    }, 500 + Math.random() * 1000);
+}
+
+function addSupportMessage(text, sender, senderName, container) {
+    const div = document.createElement('div');
+    div.className = `msg ${sender}`;
+    if (senderName) {
+        const span = document.createElement('span');
+        span.className = `sender-name ${sender}`;
+        span.textContent = senderName;
+        div.appendChild(span);
+    }
+    div.appendChild(document.createTextNode(text));
+    const now = new Date();
+    const time = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'time';
+    timeSpan.textContent = time;
+    div.appendChild(timeSpan);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+// ============================================================
+// 6. ЧАТ С OSINT-СПЕЦИАЛИСТОМ
+// ============================================================
+function sendSpecialistMessage() {
+    const specialistMessages = document.getElementById('specialistMessages');
+    const specialistInput = document.getElementById('specialistInput');
+    const specialistTyping = document.getElementById('specialistTyping');
+    
+    if (!specialistInput || !specialistMessages) return;
+    
+    const text = specialistInput.value.trim();
+    if (!text) return;
+    
+    addSpecialistMessage(text, 'user', 'Вы', specialistMessages);
+    specialistInput.value = '';
+    specialistInput.disabled = true;
+    specialistTyping.classList.add('active');
+    specialistMessages.scrollTop = specialistMessages.scrollHeight;
+    
+    setTimeout(() => {
+        specialistTyping.classList.remove('active');
+        if (typeof saveUnansweredSpecialist === 'function') {
+            saveUnansweredSpecialist(text);
+        }
+        addSpecialistMessage('Здравствуйте, специалист ответит в скором времени.', 'bot', '', specialistMessages);
+        specialistInput.disabled = false;
+        specialistInput.focus();
+    }, 500 + Math.random() * 800);
+}
+
+function addSpecialistMessage(text, sender, senderName, container) {
+    const div = document.createElement('div');
+    div.className = `msg ${sender}`;
+    if (senderName) {
+        const span = document.createElement('span');
+        span.className = `sender-name ${sender}`;
+        span.textContent = senderName;
+        div.appendChild(span);
+    }
+    div.appendChild(document.createTextNode(text));
+    const now = new Date();
+    const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'time';
+    timeSpan.textContent = time;
+    div.appendChild(timeSpan);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
         // ============================================================
         // 11. УСЛУГИ И ИНИЦИАЛИЗАЦИЯ
         // ============================================================
