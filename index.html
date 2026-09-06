@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EXELD DEV</title>
     
-    <!-- Подключаем config.js для GitHub токена -->
-    <script src="config.js"></script>
-    
     <style>
         :root {
             --bg: #0b0b0b;
@@ -90,7 +87,14 @@ body {
     margin-bottom: 16px;
     transition: all 0.3s;
 }
-.logo { font-size: 20px; font-weight: 500; letter-spacing: -.5px; }
+.logo { 
+    font-size: 20px; 
+    font-weight: 500; 
+    letter-spacing: -.5px; 
+    cursor: pointer;
+    user-select: none;
+}
+.logo:hover { opacity: 0.7; }
 .logo span { color: var(--text-secondary); font-weight: 300; }
 .header-actions { display: flex; gap: 12px; align-items: center; }
 .theme-toggle {
@@ -105,7 +109,7 @@ body {
     transition: .2s;
 }
 .theme-toggle:active { transform: scale(.9); }
-.cart-badge { font-size: 14px; color: var(--text-secondary); }
+.cart-badge { font-size: 14px; color: var(--text-secondary); cursor: pointer; }
 .nav {
     display: flex;
     gap: 8px;
@@ -722,19 +726,11 @@ body {
 <div class="container">
     <!-- ШАПКА (ЛИПКИЙ ХЕДЕР) -->
     <div class="header">
-        <span class="logo">EXELD <span>| DEV</span></span>
+        <span class="logo" id="adminTrigger" title="Двойной клик для входа в админку">EXELD <span>| DEV</span></span>
         <div class="header-actions">
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
             <span class="cart-badge">🛒 <span id="cartCounter">0</span></span>
         </div>
-    </div>
-    
-    <!-- СКРЫТАЯ КНОПКА ДЛЯ ОТКРЫТИЯ АДМИНКИ -->
-    <div style="text-align:center;margin:0;padding:0;height:0;overflow:visible;">
-        <button onclick="openAdmin()" 
-                style="opacity:0.05;background:transparent;border:none;padding:30px 20px;font-size:8px;color:transparent;cursor:pointer;width:100%;height:10px;display:block;position:relative;z-index:10;">
-            🔧 Админка
-        </button>
     </div>
     
     <!-- НАВИГАЦИЯ -->
@@ -765,7 +761,7 @@ body {
                     Full-Stack Developer
                 </p>
                 <p style="font-size:18px;color:var(--text-secondary);max-width:400px;margin:0 auto 30px;line-height:1.6;">
-                    Создаю решения там, где другие видят проблемы
+                    Разработка под заказ • Telegram-боты • Сайты • Mini Apps • OSINT-утилиты
                 </p>
                 <button onclick="showPage('services')" style="display:inline-block;background:var(--accent);color:var(--bg);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:600;border:2px solid var(--accent);cursor:pointer;transition:all 0.3s;margin:5px;">
                     Мои услуги →
@@ -786,25 +782,18 @@ body {
     <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:30px 24px;box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;">
         <h2 style="font-size:22px;font-weight:600;margin-bottom:12px;letter-spacing:-0.3px;">Обо мне</h2>
         <p style="color:var(--text-secondary);font-size:15px;line-height:1.8;margin-bottom:12px;">
-            Более <strong style="color:var(--text);">трёх лет</strong> профессионально занимаюсь <strong style="color:var(--text);">Full-Stack разработкой</strong>. 
-            Специализируюсь на создании Telegram-ботов, веб-сайтов, Mini Apps и OSINT-утилит. 
-            Пишу на Python, JavaScript, использую Aiogram, Flask, React, а также работаю с API и базами данных.
+            Меня зовут <strong style="color:var(--text);">Exeld</strong>. Я занимаюсь разработкой под заказ, специализируюсь на создании <strong style="color:var(--text);">Telegram-ботов</strong>, <strong style="color:var(--text);">сайтов</strong>, <strong style="color:var(--text);">мини-приложений внутри Telegram</strong> и <strong style="color:var(--text);">OSINT-утилит для терминала</strong>.
         </p>
-        <button onclick="showPage('bio')" style="display:inline-block;color:var(--accent);font-size:14px;font-weight:500;text-decoration:none;border-bottom:2px solid var(--accent);padding-bottom:2px;background:transparent;border:none;cursor:pointer;transition:all 0.3s;">
+        <p style="color:var(--text-secondary);font-size:15px;line-height:1.8;margin-bottom:12px;">
+            В коммерческой разработке я всего 2 недели, но за это время успешно сдал <strong style="color:var(--text);">4 проекта под ключ</strong> — от обсуждения технического задания до финального тестирования и передачи заказчику. Да, опыта пока немного, но я наверстываю это скоростью, ответственным подходом и желанием доводить каждую задачу до идеала. Работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.
+        </p>
+        <button onclick="showPage('bio')" style="display:inline-block;background:#ff4444;color:#fff;font-size:14px;font-weight:600;padding:10px 28px;border-radius:30px;border:none;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,68,68,0.3);">
             Подробнее →
         </button>
     </div>
     
-    <!-- БЛОК: БЫСТРЫЕ ЦИФРЫ -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px;">
-        <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:20px 12px;text-align:center;">
-            <div style="font-size:28px;font-weight:700;color:var(--accent);">50+</div>
-            <div style="font-size:12px;color:var(--text-secondary);">Проектов</div>
-        </div>
-        <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:20px 12px;text-align:center;">
-            <div style="font-size:28px;font-weight:700;color:var(--accent);">3+</div>
-            <div style="font-size:12px;color:var(--text-secondary);">Лет опыта</div>
-        </div>
+    <!-- БЛОК: ГАРАНТИЯ -->
+    <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-top:10px;max-width:200px;margin-left:auto;margin-right:auto;">
         <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:20px 12px;text-align:center;">
             <div style="font-size:28px;font-weight:700;color:var(--accent);">100%</div>
             <div style="font-size:12px;color:var(--text-secondary);">Гарантия качества</div>
@@ -819,55 +808,104 @@ body {
         
         <h2 style="font-size:28px;font-weight:700;margin-bottom:4px;letter-spacing:-0.5px;color:var(--text);">EXELD</h2>
         <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;letter-spacing:2px;text-transform:uppercase;">
-            Full-Stack Developer • Специалист по Telegram-ботам и веб-разработке
+            Full-Stack Developer • Разработка под заказ
         </p>
         
         <hr style="border:1px solid var(--glass-border);margin-bottom:20px;">
         
         <div style="color:var(--text-secondary);font-size:15px;line-height:1.9;">
+            
             <p style="margin-bottom:16px;">
-                Меня зовут <strong style="color:var(--text);">Exeld</strong>, и вот уже более <strong style="color:var(--text);">трёх лет</strong> я профессионально занимаюсь <strong style="color:var(--text);">Full-Stack разработкой</strong>. Моя специализация — создание Telegram-ботов любой сложности, веб-сайтов, Mini Apps и OSINT-утилит.
+                Меня зовут <strong style="color:var(--text);">Exeld</strong>. Я занимаюсь разработкой под заказ, специализируюсь на создании <strong style="color:var(--text);">Telegram-ботов</strong>, <strong style="color:var(--text);">сайтов</strong>, <strong style="color:var(--text);">мини-приложений внутри Telegram</strong> и <strong style="color:var(--text);">OSINT-утилит для терминала</strong>.
             </p>
             
-            <p style="margin-bottom:16px;font-weight:500;color:var(--text);">
-                Мои ключевые компетенции:
+            <p style="margin-bottom:20px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border-left:3px solid #ff4444;">
+                В коммерческой разработке я всего <strong style="color:var(--text);">2 недели</strong>, но за это время успешно сдал <strong style="color:var(--text);">4 проекта под ключ</strong> — от обсуждения технического задания до финального тестирования и передачи заказчику. Да, опыта пока немного, но я наверстываю это скоростью, ответственным подходом и желанием доводить каждую задачу до идеала. Работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.
             </p>
             
-            <ul style="list-style:none;padding:0;margin-bottom:16px;">
-                <li style="padding:8px 0 8px 28px;position:relative;border-bottom:1px solid var(--glass-border);">
-                    <span style="position:absolute;left:0;top:8px;font-size:16px;">🤖</span>
-                    <strong style="color:var(--text);">Telegram-боты:</strong>
-                    <span style="color:var(--text-secondary);">Разработка ботов на Python (Aiogram), интеграция с API, платежные системы, административные панели.</span>
-                </li>
-                <li style="padding:8px 0 8px 28px;position:relative;border-bottom:1px solid var(--glass-border);">
-                    <span style="position:absolute;left:0;top:8px;font-size:16px;">🌐</span>
-                    <strong style="color:var(--text);">Веб-сайты:</strong>
-                    <span style="color:var(--text-secondary);">Создание сайтов на Flask, Django, React. Верстка, адаптив, подключение баз данных.</span>
-                </li>
-                <li style="padding:8px 0 8px 28px;position:relative;">
-                    <span style="position:absolute;left:0;top:8px;font-size:16px;">📱</span>
-                    <strong style="color:var(--text);">Mini Apps:</strong>
-                    <span style="color:var(--text-secondary);">Разработка мини-приложений для Telegram, интеграция с TON-кошельками, WebApp API.</span>
-                </li>
-            </ul>
-            
-            <p style="margin-top:16px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border-left:3px solid var(--accent);">
-                За плечами — <strong style="color:var(--text);">десятки завершенных проектов</strong> для бизнеса и частных лиц. Я помогаю клиентам автоматизировать процессы, создавать удобные интерфейсы и решать сложные технические задачи.
+            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">
+                Что я делаю
             </p>
-        </div>
-        
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:24px;">
-            <div style="background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px 12px;text-align:center;">
-                <div style="font-size:28px;font-weight:700;color:var(--accent);">3+</div>
-                <div style="font-size:12px;color:var(--text-secondary);">Года опыта</div>
+            
+            <div style="margin-bottom:16px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);">
+                <h4 style="color:var(--text);font-size:16px;margin-bottom:6px;">🤖 Telegram-боты</h4>
+                <p style="font-size:14px;">Пишу ботов любого уровня сложности. Легкие — с базовыми командами и простой логикой. Средние — с клавиатурами, сценариями диалога, подключением к базам данных и Google Таблицам. Сложные — с многоуровневой структурой, платежами, внешними API, очередями задач и админ-панелями в самом Telegram.</p>
             </div>
-            <div style="background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px 12px;text-align:center;">
-                <div style="font-size:28px;font-weight:700;color:var(--accent);">50+</div>
-                <div style="font-size:12px;color:var(--text-secondary);">Проектов</div>
+            
+            <div style="margin-bottom:16px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);">
+                <h4 style="color:var(--text);font-size:16px;margin-bottom:6px;">🖥 Сайты</h4>
+                <p style="font-size:14px;">Создаю сайты под ключ: лендинги для продажи товаров и услуг, сайты-визитки компаний и специалистов, а также полноценные веб-сервисы со сложной серверной логикой. Верстка адаптивная, формы отправляют заявки в Telegram или на почту, по желанию подключаю метрики и аналитику.</p>
             </div>
-            <div style="background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px 12px;text-align:center;">
-                <div style="font-size:28px;font-weight:700;color:var(--accent);">100%</div>
-                <div style="font-size:12px;color:var(--text-secondary);">Гарантия</div>
+            
+            <div style="margin-bottom:16px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);">
+                <h4 style="color:var(--text);font-size:16px;margin-bottom:6px;">📱 Telegram Mini Apps</h4>
+                <p style="font-size:14px;">Разрабатываю встроенные веб-приложения для Telegram. Калькуляторы, опросники, ToDo-листы, инструменты для бизнеса — компактные и удобные интерфейсы, которые работают прямо внутри мессенджера без установки дополнительных приложений.</p>
+            </div>
+            
+            <div style="margin-bottom:20px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);">
+                <h4 style="color:var(--text);font-size:16px;margin-bottom:6px;">🕵️ OSINT-утилиты для терминала</h4>
+                <p style="font-size:14px;">Создаю консольные инструменты для сбора данных из открытых источников. Скрипты для проверки номеров, email-адресов, анализа социальных сетей и других публичных данных. С поддержкой прокси, цветным выводом, логированием и экспортом отчетов в TXT, JSON или CSV.</p>
+            </div>
+            
+            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">
+                Как я работаю
+            </p>
+            
+            <div style="margin-bottom:12px;padding:12px 16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);display:flex;align-items:flex-start;gap:12px;">
+                <span style="color:#ff4444;font-weight:700;font-size:18px;">1.</span>
+                <div><strong style="color:var(--text);">Обсуждаем задачу</strong> — я уточняю детали, чтобы полностью понять, что нужно сделать.</div>
+            </div>
+            
+            <div style="margin-bottom:12px;padding:12px 16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);display:flex;align-items:flex-start;gap:12px;">
+                <span style="color:#ff4444;font-weight:700;font-size:18px;">2.</span>
+                <div><strong style="color:var(--text);">Называю фиксированную цену и срок</strong> — без скрытых платежей и сюрпризов в процессе.</div>
+            </div>
+            
+            <div style="margin-bottom:12px;padding:12px 16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);display:flex;align-items:flex-start;gap:12px;">
+                <span style="color:#ff4444;font-weight:700;font-size:18px;">3.</span>
+                <div><strong style="color:var(--text);">Разрабатываю прототип или промежуточную версию</strong> — показываю прогресс и получаю обратную связь.</div>
+            </div>
+            
+            <div style="margin-bottom:12px;padding:12px 16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);display:flex;align-items:flex-start;gap:12px;">
+                <span style="color:#ff4444;font-weight:700;font-size:18px;">4.</span>
+                <div><strong style="color:var(--text);">Доделываю и тестирую</strong> — проверяю, чтобы все работало стабильно.</div>
+            </div>
+            
+            <div style="margin-bottom:20px;padding:12px 16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);display:flex;align-items:flex-start;gap:12px;">
+                <span style="color:#ff4444;font-weight:700;font-size:18px;">5.</span>
+                <div><strong style="color:var(--text);">Сдаю готовый проект</strong> с инструкцией по запуску и обслуживанию.</div>
+            </div>
+            
+            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">
+                Почему стоит работать со мной
+            </p>
+            
+            <div style="margin-bottom:8px;padding:8px 16px;display:flex;align-items:center;gap:10px;">
+                <span style="color:#ff4444;">•</span>
+                <span><strong style="color:var(--text);">Индивидуальный подход</strong> — подстраиваюсь под конкретную задачу, а не леплю шаблоны.</span>
+            </div>
+            <div style="margin-bottom:8px;padding:8px 16px;display:flex;align-items:center;gap:10px;">
+                <span style="color:#ff4444;">•</span>
+                <span><strong style="color:var(--text);">Фиксированная цена</strong> — озвучиваю до старта, она не меняется в процессе.</span>
+            </div>
+            <div style="margin-bottom:8px;padding:8px 16px;display:flex;align-items:center;gap:10px;">
+                <span style="color:#ff4444;">•</span>
+                <span><strong style="color:var(--text);">Реальные сроки</strong> — говорю как есть, не завышаю и не занижаю.</span>
+            </div>
+            <div style="margin-bottom:8px;padding:8px 16px;display:flex;align-items:center;gap:10px;">
+                <span style="color:#ff4444;">•</span>
+                <span><strong style="color:var(--text);">Поддержка после сдачи</strong> — помогаю с запуском и отвечаю на вопросы.</span>
+            </div>
+            <div style="margin-bottom:8px;padding:8px 16px;display:flex;align-items:center;gap:10px;">
+                <span style="color:#ff4444;">•</span>
+                <span><strong style="color:var(--text);">Честность</strong> — если не могу сделать качественно, откажусь сразу, чтобы не терять ваше время.</span>
+            </div>
+            
+            <div style="display:grid;grid-template-columns:1fr;gap:12px;margin-top:24px;max-width:200px;margin-left:auto;margin-right:auto;">
+                <div style="background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px 12px;text-align:center;">
+                    <div style="font-size:28px;font-weight:700;color:var(--accent);">100%</div>
+                    <div style="font-size:12px;color:var(--text-secondary);">Гарантия</div>
+                </div>
             </div>
         </div>
     </div>
@@ -940,33 +978,18 @@ body {
     </div>
     <div style="margin-top:20px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:13px;color:var(--text-secondary);text-align:center">Выберите чат для общения</div>
 </div>
-
 <!-- КОНТАКТЫ -->
 <div id="contacts" class="page">
     <h2>Контакты</h2>
     <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">
-        Свяжитесь со мной любым удобным способом. Отвечаю в течение 24 часов.
+        Свяжитесь со мной в Telegram. Отвечаю в течение 24 часов.
     </p>
     <div style="display:flex;flex-direction:column;gap:12px;">
         <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
             <span style="font-size:24px;">📱</span>
             <div>
                 <div style="font-size:12px;color:var(--text-secondary);">Telegram</div>
-                <div style="font-size:16px;color:var(--text);">@sprintdrop</div>
-            </div>
-        </div>
-        <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
-            <span style="font-size:24px;">🐙</span>
-            <div>
-                <div style="font-size:12px;color:var(--text-secondary);">GitHub</div>
-                <div style="font-size:16px;color:var(--text);">github.com/sprintdrop</div>
-            </div>
-        </div>
-        <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
-            <span style="font-size:24px;">✉️</span>
-            <div>
-                <div style="font-size:12px;color:var(--text-secondary);">Email</div>
-                <div style="font-size:16px;color:var(--text);">exeld@proton.me</div>
+                <div style="font-size:16px;color:var(--text);">@Exeld_coder</div>
             </div>
         </div>
     </div>
@@ -1032,7 +1055,7 @@ body {
     </div>
     <div class="typing" id="supportTyping"><span>.</span><span>.</span><span>.</span></div>
     
-    <!-- БЛОК С КНОПКАМИ-ВОПРОСАМИ (6-10 штук) -->
+    <!-- БЛОК С КНОПКАМИ-ВОПРОСАМИ (10 штук) -->
     <div style="padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--glass-border);background:var(--glass-bg);">
         <button onclick="quickQuestion('Привет! Как дела?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">👋 Привет</button>
         <button onclick="quickQuestion('Сколько стоят услуги?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">💰 Цены</button>
@@ -1451,10 +1474,10 @@ var supportKnowledge = [
       answer: 'Мой стек технологий:\n• Backend: Python, Flask, Django, Aiogram\n• Frontend: React, HTML, CSS, JavaScript\n• Базы данных: PostgreSQL, SQLite, MongoDB\n• Другое: Docker, Git, REST API, TON' },
     
     { keywords: ['контакты', 'связаться', 'телеграм', 'telegram', '@', 'связь'], 
-      answer: 'Связь через Telegram: @sprintdrop\nEmail: exeld@proton.me\nGitHub: github.com/sprintdrop' },
+      answer: 'Связь через Telegram: @sprintdrop' },
     
     { keywords: ['гарантия', 'качество', 'надёжность', 'доверие'], 
-      answer: 'Предоставляю гарантию на все проекты. Бесплатная поддержка в течение 1 месяца после сдачи. Работаю по договору. Имею положительные отзывы.' },
+      answer: 'Предоставляю 100% гарантию на все проекты. Бесплатная поддержка в течение 1 месяца после сдачи. Работаю по договору.' },
     
     { keywords: ['шутка', 'смеш', 'хаха', 'lol', 'прикол', 'анекдот'], 
       answer: '🤣 Программист приходит в магазин.\n— У вас есть хлеб?\n— Нет.\n— А молоко?\n— Нет.\n— А яблоки?\n— Нет.\n— Зачем вы тогда открыли магазин?\n— Хороший вопрос! Давайте это запишем в бэклог.' },
@@ -1668,9 +1691,22 @@ function switchAdminTab(tab, btn) {
     document.querySelectorAll('.admin-tabs button').forEach(function(el) {
         el.classList.remove('active');
     });
-    document.getElementById('admin' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    var tabId = 'admin' + tab.charAt(0).toUpperCase() + tab.slice(1);
+    var el = document.getElementById(tabId);
+    if (el) el.classList.add('active');
     if (btn) btn.classList.add('active');
 }
+
+// Открытие админки по двойному клику на логотип
+document.addEventListener('DOMContentLoaded', function() {
+    var logo = document.getElementById('adminTrigger');
+    if (logo) {
+        logo.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            openAdmin();
+        });
+    }
+});
 function renderAdminSupport() {
     var container = document.getElementById('adminSupportList');
     if (!container) return;
@@ -1841,6 +1877,7 @@ function completeOrder(id) {
     syncData();
     renderAdminOrders();
 }
+
 // ============================================================
 // 7. КОРЗИНА
 // ============================================================
@@ -2010,8 +2047,14 @@ function checkout() {
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
         initData();
-        // Автоматический вход в админку по двойному клику на логотип
-        document.querySelector('.logo').addEventListener('dblclick', openAdmin);
+        // Открытие админки по двойному клику на логотип
+        var logo = document.getElementById('adminTrigger');
+        if (logo) {
+            logo.addEventListener('dblclick', function(e) {
+                e.preventDefault();
+                openAdmin();
+            });
+        }
     });
 </script>
 </body>
