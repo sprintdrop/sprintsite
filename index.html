@@ -19,8 +19,6 @@
             --glow: rgba(255,255,255,0.02);
             --chat-bot: rgba(255,255,255,0.08);
             --chat-user: rgba(255,255,255,0.15);
-            --chat-support: rgba(255,255,255,0.06);
-            --chat-specialist: rgba(255,255,255,0.10);
         }
         [data-theme=light] {
             --bg: #e8e8e8;
@@ -34,8 +32,6 @@
             --glow: rgba(0,0,0,0.02);
             --chat-bot: rgba(0,0,0,0.06);
             --chat-user: rgba(0,0,0,0.12);
-            --chat-support: rgba(0,0,0,0.04);
-            --chat-specialist: rgba(0,0,0,0.08);
         }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -48,6 +44,7 @@ body {
     min-height: 100vh;
     position: relative;
     z-index: 1;
+    padding-bottom: 90px;
 }
 .container { max-width: 500px; margin: 0 auto; position: relative; z-index: 2; }
 #starsCanvas {
@@ -109,7 +106,6 @@ body {
     transition: .2s;
 }
 .theme-toggle:active { transform: scale(.9); }
-.cart-badge { font-size: 14px; color: var(--text-secondary); cursor: pointer; }
 .nav {
     display: flex;
     gap: 8px;
@@ -187,37 +183,6 @@ body {
     0%, 100% { transform: translateX(-50%) translateY(0); }
     50% { transform: translateX(-50%) translateY(-8px); }
 }
-.utp-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-top: 16px;
-}
-.utp-item {
-    background: var(--glass-bg);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-radius: var(--radius);
-    padding: 12px 6px;
-    text-align: center;
-    border: 1px solid var(--glass-border);
-    font-size: 13px;
-}
-.utp-item .icon { font-size: 22px; display: block; margin-bottom: 4px; }
-.case { padding: 14px 0; border-bottom: 1px solid var(--glass-border); }
-.case:last-child { border-bottom: none; }
-.case h3 { font-size: 16px; font-weight: 500; }
-.case p { font-size: 14px; color: var(--text-secondary); margin: 4px 0 8px; }
-.case .tag {
-    display: inline-block;
-    background: var(--glass-bg);
-    backdrop-filter: blur(4px);
-    padding: 2px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    color: var(--text-secondary);
-    border: 1px solid var(--glass-border);
-}
 .service-card {
     display: flex;
     justify-content: space-between;
@@ -229,76 +194,68 @@ body {
 .service-card .info h3 { font-size: 15px; font-weight: 500; }
 .service-card .info p { font-size: 13px; color: var(--text-secondary); }
 .service-card .price { font-weight: 600; }
-.service-card .btn-add {
+/* ЧАТ - ПЛАВАЮЩАЯ ИКОНКА */
+.chat-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     background: var(--accent);
     color: var(--bg);
     border: none;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    font-size: 18px;
+    font-size: 28px;
     cursor: pointer;
-    transition: .15s;
+    box-shadow: 0 4px 20px rgba(255,255,255,0.2);
+    z-index: 999;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.service-card .btn-add:active { opacity: .6; }
-.chat-menu-item {
-    background: var(--glass-bg);
-    backdrop-filter: blur(4px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius);
-    padding: 16px;
-    cursor: pointer;
-    transition: .2s;
-}
-.chat-menu-item:active {
-    background: var(--accent);
-    color: var(--bg);
-    border-color: var(--accent);
-}
-.chat-menu-item .chat-icon { font-size: 28px; }
-.chat-menu-item .chat-label { font-weight: 500; font-size: 16px; }
-.chat-menu-item .chat-desc { font-size: 13px; color: var(--text-secondary); }
-.chat-page {
-    display: none;
-    flex-direction: column;
-    background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+.chat-fab:hover { transform: scale(1.1); }
+.chat-fab:active { transform: scale(0.9); }
+
+/* ЧАТ-ОКНО */
+.chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    width: 380px;
+    max-width: calc(100vw - 48px);
+    max-height: 500px;
+    background: var(--bg);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     box-shadow: var(--glass-shadow);
-    padding: 0;
-    min-height: 400px;
-    margin-top: 10px;
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
-.chat-page.active { display: flex; }
-.chat-header {
+.chat-window.open { display: flex; }
+
+.chat-window .chat-header {
     padding: 14px 18px;
     border-bottom: 1px solid var(--glass-border);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    background: var(--glass-bg);
 }
-.chat-header h4 { font-size: 16px; font-weight: 500; }
-.chat-header .close-chat {
+.chat-window .chat-header h4 { font-size: 16px; font-weight: 500; }
+.chat-window .chat-header .close-chat {
     background: none;
     border: none;
     font-size: 22px;
     color: var(--text-secondary);
     cursor: pointer;
 }
-.chat-header .chat-type-badge {
-    font-size: 10px;
-    padding: 2px 10px;
-    border-radius: 12px;
-    font-weight: 600;
-    background: var(--accent);
-    color: var(--bg);
-}
-.chat-header .chat-type-badge.support { background: #4caf50; }
-.chat-header .chat-type-badge.specialist { background: #ff9800; }
-.chat-messages {
+.chat-window .chat-messages {
     flex: 1;
     padding: 12px 16px;
     overflow-y: auto;
@@ -306,9 +263,10 @@ body {
     flex-direction: column;
     gap: 8px;
     min-height: 200px;
-    max-height: 400px;
+    max-height: 300px;
+    background: var(--glass-bg);
 }
-.chat-messages .msg {
+.chat-window .chat-messages .msg {
     max-width: 85%;
     padding: 10px 14px;
     border-radius: 14px;
@@ -317,47 +275,31 @@ body {
     word-wrap: break-word;
     animation: fadeIn .3s ease;
 }
-.chat-messages .msg.bot {
+.chat-window .chat-messages .msg.bot {
     background: var(--chat-bot);
     border: 1px solid var(--glass-border);
     align-self: flex-start;
     border-bottom-left-radius: 4px;
 }
-.chat-messages .msg.user {
+.chat-window .chat-messages .msg.user {
     background: var(--chat-user);
     border: 1px solid var(--glass-border);
     align-self: flex-end;
     border-bottom-right-radius: 4px;
 }
-.chat-messages .msg.support {
-    background: var(--chat-support);
-    border: 1px solid #4caf50;
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    border-left: 3px solid #4caf50;
-}
-.chat-messages .msg.specialist {
-    background: var(--chat-specialist);
-    border: 1px solid #ff9800;
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    border-left: 3px solid #ff9800;
-}
-.chat-messages .msg .sender-name {
+.chat-window .chat-messages .msg .sender-name {
     font-size: 11px;
     font-weight: 600;
     margin-bottom: 2px;
     display: block;
 }
-.chat-messages .msg .sender-name.support { color: #4caf50; }
-.chat-messages .msg .sender-name.specialist { color: #ff9800; }
-.chat-messages .msg .time {
+.chat-window .chat-messages .msg .time {
     font-size: 10px;
     opacity: .5;
     margin-top: 4px;
     display: block;
 }
-.chat-messages .typing {
+.chat-window .chat-messages .typing {
     align-self: flex-start;
     padding: 8px 14px;
     background: var(--chat-bot);
@@ -368,13 +310,13 @@ body {
     color: var(--text-secondary);
     display: none;
 }
-.chat-messages .typing.active { display: block; }
-.chat-messages .typing span {
+.chat-window .chat-messages .typing.active { display: block; }
+.chat-window .chat-messages .typing span {
     animation: dots 1.4s infinite;
     display: inline-block;
 }
-.chat-messages .typing span:nth-child(2) { animation-delay: .2s; }
-.chat-messages .typing span:nth-child(3) { animation-delay: .4s; }
+.chat-window .chat-messages .typing span:nth-child(2) { animation-delay: .2s; }
+.chat-window .chat-messages .typing span:nth-child(3) { animation-delay: .4s; }
 @keyframes dots {
     0%, 60%, 100% { opacity: .3; transform: translateY(0); }
     30% { opacity: 1; transform: translateY(-4px); }
@@ -383,14 +325,15 @@ body {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
-.chat-input {
+.chat-window .chat-input {
     padding: 12px 16px;
     border-top: 1px solid var(--glass-border);
     display: flex;
     gap: 10px;
     flex-shrink: 0;
+    background: var(--glass-bg);
 }
-.chat-input input {
+.chat-window .chat-input input {
     flex: 1;
     background: var(--glass-bg);
     backdrop-filter: blur(4px);
@@ -402,9 +345,9 @@ body {
     outline: none;
     transition: .2s;
 }
-.chat-input input::placeholder { color: var(--text-secondary); }
-.chat-input input:focus { border-color: var(--accent); }
-.chat-input button {
+.chat-window .chat-input input::placeholder { color: var(--text-secondary); }
+.chat-window .chat-input input:focus { border-color: var(--accent); }
+.chat-window .chat-input button {
     background: var(--accent);
     color: var(--bg);
     border: none;
@@ -416,67 +359,8 @@ body {
     transition: .2s;
     flex-shrink: 0;
 }
-.chat-input button:active { transform: scale(.9); }
-.chat-input button:disabled { opacity: .4; }
-.cart-overlay {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid var(--glass-border);
-    padding: 20px;
-    border-radius: var(--radius) var(--radius) 0 0;
-    display: none;
-    z-index: 999;
-    max-height: 70vh;
-    overflow-y: auto;
-}
-.cart-overlay.show { display: block; }
-.cart-overlay .close {
-    float: right;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-    color: var(--text-secondary);
-}
-.cart-overlay h3 { margin-bottom: 12px; font-weight: 500; }
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--glass-border);
-    font-size: 14px;
-}
-.cart-item .remove {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-size: 16px;
-}
-.cart-total { font-size: 18px; font-weight: 500; margin: 16px 0 12px; }
-.btn-checkout {
-    width: 100%;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    padding: 14px;
-    border-radius: var(--radius);
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-}
-.btn-checkout:active { opacity: .7; }
-@media (max-width: 480px) {
-    body { padding: 12px; }
-    .page { padding: 18px 14px; }
-    .header { padding: 12px 14px; }
-    .chat-messages { max-height: 300px; }
-}
+.chat-window .chat-input button:active { transform: scale(.9); }
+.chat-window .chat-input button:disabled { opacity: .4; }
 .admin-overlay {
     position: fixed;
     top: 0;
@@ -497,7 +381,7 @@ body {
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     padding: 24px;
-    max-width: 600px;
+    max-width: 700px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -535,20 +419,72 @@ body {
 }
 .admin-panel .admin-tab { display: none; }
 .admin-panel .admin-tab.active { display: block; }
-.admin-panel .admin-chat-item {
+.admin-login {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+.admin-login input {
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text);
+    font-size: 16px;
+}
+.admin-login button {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 12px;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.admin-login .error { color: #ff6b6b; font-size: 14px; text-align: center; }
+.admin-chat-notification {
+    background: #ff4444;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-left: 6px;
+}
+.admin-edit-field {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text);
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+.admin-edit-field:focus { outline: none; border-color: var(--accent); }
+.admin-edit-field.textarea { min-height: 100px; resize: vertical; }
+.admin-save-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 8px 20px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+.admin-save-btn:active { opacity: .7; }
+.admin-service-item {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     padding: 12px;
     margin-bottom: 10px;
 }
-.admin-panel .admin-chat-item .question { font-weight: 500; color: var(--text); }
-.admin-panel .admin-chat-item .answer {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-top: 4px;
-}
-.admin-panel .admin-chat-item .answer-input {
+.admin-service-item input {
     width: 100%;
     padding: 8px 12px;
     border-radius: var(--radius);
@@ -556,142 +492,78 @@ body {
     background: var(--glass-bg);
     color: var(--text);
     font-size: 14px;
-    margin-top: 8px;
+    margin-bottom: 6px;
 }
-.admin-panel .admin-chat-item .answer-btn {
-    background: var(--accent);
-    color: var(--bg);
+.admin-service-item .del-btn {
+    background: #ff4444;
+    color: #fff;
     border: none;
-    padding: 6px 16px;
+    padding: 4px 12px;
     border-radius: var(--radius);
     cursor: pointer;
-    font-weight: 500;
-    margin-top: 6px;
-}
-.admin-panel .admin-chat-item .status {
     font-size: 12px;
-    color: var(--text-secondary);
-    margin-top: 4px;
 }
-.admin-panel .admin-chat-item .status.answered { color: #4caf50; }
-.admin-panel .admin-chat-item .status.pending { color: #ff9800; }
-        .admin-login {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-        .admin-login input {
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 16px;
-        }
-        .admin-login button {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 12px;
-            border-radius: var(--radius);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .admin-login .error { color: #ff6b6b; font-size: 14px; text-align: center; }
-        .admin-chat-notification {
-            background: #ff4444;
-            color: #fff;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-left: 6px;
-        }
-        .cabinet-info {
-            margin-top: 16px;
-            padding: 16px;
-            background: var(--glass-bg);
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-        }
-        .cabinet-info .label { font-size: 12px; color: var(--text-secondary); }
-        .cabinet-info .value { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
-        .reg-step { display: none; }
-        .reg-step.active { display: block; }
-        .reg-step input {
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        .reg-step input:focus { outline: none; border-color: var(--accent); }
-        .reg-step .generate-link {
-            color: #ff4444;
-            font-size: 13px;
-            cursor: pointer;
-            display: block;
-            text-align: right;
-            margin-top: -8px;
-            margin-bottom: 12px;
-        }
-        .reg-step .generate-link:active { opacity: .7; }
-        .auth-btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: var(--radius);
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: .2s;
-        }
-        .auth-btn.primary { background: var(--accent); color: var(--bg); }
-        .auth-btn.secondary {
-            background: var(--glass-bg);
-            color: var(--text);
-            border: 1px solid var(--glass-border);
-        }
-        .auth-btn:active { transform: scale(.97); }
-        .search-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius);
-            border: 1px solid var(--glass-border);
-            background: var(--glass-bg);
-            color: var(--text);
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
-        .search-input:focus { outline: none; border-color: var(--accent); }
-        .search-result-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-        .search-result-item .name { font-weight: 500; color: var(--text); }
-        .search-result-item .info { font-size: 12px; color: var(--text-secondary); }
-        .search-result-item .btn-chat {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 6px 16px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 6px;
-        }
+.admin-service-item .del-btn:active { opacity: .7; }
+.cabinet-info {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--glass-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+}
+.cabinet-info .label { font-size: 12px; color: var(--text-secondary); }
+.cabinet-info .value { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+.reg-step { display: none; }
+.reg-step.active { display: block; }
+.reg-step input {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text);
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+.reg-step input:focus { outline: none; border-color: var(--accent); }
+.reg-step .generate-link {
+    color: #ff4444;
+    font-size: 13px;
+    cursor: pointer;
+    display: block;
+    text-align: right;
+    margin-top: -8px;
+    margin-bottom: 12px;
+}
+.reg-step .generate-link:active { opacity: .7; }
+.auth-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: .2s;
+}
+.auth-btn.primary { background: var(--accent); color: var(--bg); }
+.auth-btn.secondary {
+    background: var(--glass-bg);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+}
+.auth-btn:active { transform: scale(.97); }
+@media (max-width: 480px) {
+    body { padding: 12px; padding-bottom: 80px; }
+    .page { padding: 18px 14px; }
+    .header { padding: 12px 14px; }
+    .chat-window { width: calc(100vw - 32px); right: 16px; bottom: 80px; max-height: 400px; }
+    .chat-fab { width: 54px; height: 54px; font-size: 24px; bottom: 16px; right: 16px; }
+}
     </style>
 </head>
 <body>
 <canvas id="starsCanvas"></canvas>
+
 <!-- АДМИН-ПАНЕЛЬ -->
 <div class="admin-overlay" id="adminOverlay">
     <div class="admin-panel">
@@ -704,21 +576,49 @@ body {
         </div>
         <div id="adminContent" style="display:none">
             <div class="admin-tabs">
-                <button class="active" onclick="switchAdminTab('support',this)">Поддержка <span id="supportNotif" class="admin-chat-notification" style="display:none">0</span></button>
-                <button onclick="switchAdminTab('specialist',this)">Специалист <span id="specialistNotif" class="admin-chat-notification" style="display:none">0</span></button>
-                <button onclick="switchAdminTab('users',this)">Пользователи</button>
-                <button onclick="switchAdminTab('search',this)">Поиск</button>
-                <button onclick="switchAdminTab('payments',this)">Оплаты</button>
-                <button onclick="switchAdminTab('services',this)">Услуги</button>
-                <button onclick="switchAdminTab('orders',this)">Заказы</button>
+                <button class="active" onclick="switchAdminTab('texts',this)">📝 Тексты</button>
+                <button onclick="switchAdminTab('services',this)">💰 Прайс</button>
+                <button onclick="switchAdminTab('support',this)">💬 Вопросы</button>
+                <button onclick="switchAdminTab('users',this)">👥 Пользователи</button>
             </div>
-            <div id="adminSupport" class="admin-tab active"><h3>Вопросы в поддержку</h3><div id="adminSupportList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
-            <div id="adminSpecialist" class="admin-tab"><h3>Вопросы специалисту</h3><div id="adminSpecialistList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
-            <div id="adminUsers" class="admin-tab"><h3>Пользователи</h3><div id="adminUsersList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
-            <div id="adminSearch" class="admin-tab"><h3>Поиск пользователя</h3><input class="search-input" type="text" id="searchInput" placeholder="Введите никнейм..." oninput="searchUser()"><div id="searchResults"><p style="color:var(--text-secondary)">Начните вводить никнейм</p></div></div>
-            <div id="adminPayments" class="admin-tab"><h3>Подтверждения оплаты</h3><div id="adminPaymentsList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
-            <div id="adminServices" class="admin-tab"><h3>Управление услугами</h3><div id="adminServicesList"></div></div>
-            <div id="adminOrders" class="admin-tab"><h3>Заказы</h3><div id="adminOrdersList"></div></div>
+            
+            <!-- Вкладка: Тексты -->
+            <div id="adminTexts" class="admin-tab active">
+                <h3>Редактирование текстов</h3>
+                <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Название (заголовок в шапке)</label>
+                <input class="admin-edit-field" id="editSiteTitle" placeholder="EXELD | DEV">
+                <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Герой-заголовок (H1)</label>
+                <input class="admin-edit-field" id="editHeroTitle" placeholder="EXELD">
+                <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Герой-подзаголовок</label>
+                <input class="admin-edit-field" id="editHeroSub" placeholder="Full-Stack Developer">
+                <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Герой-описание</label>
+                <input class="admin-edit-field" id="editHeroDesc" placeholder="Разработка под заказ...">
+                <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Текст "Обо мне" (главная)</label>
+                <textarea class="admin-edit-field textarea" id="editAboutText" placeholder="Текст о себе..."></textarea>
+                <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Биография (полный текст)</label>
+                <textarea class="admin-edit-field textarea" id="editBioText" placeholder="Полная биография..." style="min-height:200px;"></textarea>
+                <button class="admin-save-btn" onclick="saveTexts()">💾 Сохранить тексты</button>
+            </div>
+            
+            <!-- Вкладка: Прайс -->
+            <div id="adminServices" class="admin-tab">
+                <h3>Редактирование прайса</h3>
+                <div id="adminServicesList"></div>
+                <button class="admin-save-btn" onclick="saveServices()">💾 Сохранить прайс</button>
+                <button class="admin-save-btn" style="background:#4caf50;" onclick="addServiceCategory()">➕ Добавить категорию</button>
+            </div>
+            
+            <!-- Вкладка: Вопросы -->
+            <div id="adminSupport" class="admin-tab">
+                <h3>Вопросы пользователей</h3>
+                <div id="adminSupportList"><p style="color:var(--text-secondary);">Загрузка...</p></div>
+            </div>
+            
+            <!-- Вкладка: Пользователи -->
+            <div id="adminUsers" class="admin-tab">
+                <h3>Пользователи</h3>
+                <div id="adminUsersList"><p style="color:var(--text-secondary);">Загрузка...</p></div>
+            </div>
         </div>
     </div>
 </div>
@@ -726,10 +626,9 @@ body {
 <div class="container">
     <!-- ШАПКА (ЛИПКИЙ ХЕДЕР) -->
     <div class="header">
-        <span class="logo" id="adminTrigger" title="Двойной клик для входа в админку">EXELD <span>| DEV</span></span>
+        <span class="logo" id="adminTrigger" title="Двойной клик для входа в админку"><span id="siteTitle">EXELD</span> <span>| DEV</span></span>
         <div class="header-actions">
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
-            <span class="cart-badge">🛒 <span id="cartCounter">0</span></span>
         </div>
     </div>
     
@@ -739,28 +638,25 @@ body {
         <button onclick="showPage('bio')">Биография</button>
         <button onclick="showPage('services')">Услуги</button>
         <button onclick="showPage('contacts')">Контакты</button>
-        <button onclick="showPage('chatMenuPage')">Чаты</button>
         <button onclick="showPage('cabinet')">Кабинет</button>
-        <button onclick="toggleCart()">Корзина</button>
     </div>
     
     <!-- ГЛАВНАЯ -->
     <div id="home" class="page active">
         
         <!-- ГЕРОЙ-СЕКЦИЯ -->
-        <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;position:relative;overflow:hidden;">
+        <div style="min-height:80vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;position:relative;overflow:hidden;">
             
-            <!-- Анимированный фон -->
             <div style="position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%, rgba(255,255,255,0.03) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.02) 0%, transparent 50%);animation:float 20s infinite alternate;z-index:0;"></div>
             
             <div style="position:relative;z-index:1;padding:40px 20px;">
-                <h1 style="font-size:64px;font-weight:900;letter-spacing:-2px;color:var(--text);text-shadow:0 0 60px rgba(255,255,255,0.1),0 0 120px rgba(255,255,255,0.05);margin:0 0 10px 0;line-height:1.1;">
+                <h1 style="font-size:64px;font-weight:900;letter-spacing:-2px;color:var(--text);text-shadow:0 0 60px rgba(255,255,255,0.1),0 0 120px rgba(255,255,255,0.05);margin:0 0 10px 0;line-height:1.1;" id="heroTitle">
                     EXELD
                 </h1>
-                <p style="font-size:20px;font-weight:300;color:var(--text-secondary);letter-spacing:6px;text-transform:uppercase;margin-bottom:16px;">
+                <p style="font-size:20px;font-weight:300;color:var(--text-secondary);letter-spacing:6px;text-transform:uppercase;margin-bottom:16px;" id="heroSub">
                     Full-Stack Developer
                 </p>
-                <p style="font-size:18px;color:var(--text-secondary);max-width:400px;margin:0 auto 30px;line-height:1.6;">
+                <p style="font-size:18px;color:var(--text-secondary);max-width:400px;margin:0 auto 30px;line-height:1.6;" id="heroDesc">
                     Разработка под заказ • Telegram-боты • Сайты • Mini Apps • OSINT-утилиты
                 </p>
                 <button onclick="showPage('services')" style="display:inline-block;background:var(--accent);color:var(--bg);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:600;border:2px solid var(--accent);cursor:pointer;transition:all 0.3s;margin:5px;">
@@ -771,7 +667,6 @@ body {
                 </button>
             </div>
             
-            <!-- Индикатор скролла -->
             <div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);animation:bounce 2s infinite;z-index:1;">
                 <span style="display:block;width:24px;height:40px;border:2px solid var(--text-secondary);border-radius:12px;position:relative;">
                     <span style="display:block;width:4px;height:8px;background:var(--text-secondary);border-radius:2px;position:absolute;top:8px;left:50%;transform:translateX(-50%);animation:scrollDown 2s infinite;"></span>
@@ -781,13 +676,11 @@ body {
     <!-- БЛОК: ОБО МНЕ -->
     <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:30px 24px;box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;">
         <h2 style="font-size:22px;font-weight:600;margin-bottom:12px;letter-spacing:-0.3px;">Обо мне</h2>
-        <p style="color:var(--text-secondary);font-size:15px;line-height:1.8;margin-bottom:12px;">
-            Меня зовут <strong style="color:var(--text);">Exeld</strong>. Я занимаюсь разработкой под заказ, специализируюсь на создании <strong style="color:var(--text);">Telegram-ботов</strong>, <strong style="color:var(--text);">сайтов</strong>, <strong style="color:var(--text);">мини-приложений внутри Telegram</strong> и <strong style="color:var(--text);">OSINT-утилит для терминала</strong>.
-        </p>
-        <p style="color:var(--text-secondary);font-size:15px;line-height:1.8;margin-bottom:12px;">
-            В коммерческой разработке я всего 2 недели, но за это время успешно сдал <strong style="color:var(--text);">4 проекта под ключ</strong> — от обсуждения технического задания до финального тестирования и передачи заказчику. Да, опыта пока немного, но я наверстываю это скоростью, ответственным подходом и желанием доводить каждую задачу до идеала. Работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.
-        </p>
-        <button onclick="showPage('bio')" style="display:inline-block;background:#ff4444;color:#fff;font-size:14px;font-weight:600;padding:10px 28px;border-radius:30px;border:none;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,68,68,0.3);">
+        <div id="aboutText" style="color:var(--text-secondary);font-size:15px;line-height:1.8;">
+            <p style="margin-bottom:12px;">Меня зовут <strong style="color:var(--text);">Exeld</strong>. Я занимаюсь разработкой под заказ, специализируюсь на создании <strong style="color:var(--text);">Telegram-ботов</strong>, <strong style="color:var(--text);">сайтов</strong>, <strong style="color:var(--text);">мини-приложений внутри Telegram</strong> и <strong style="color:var(--text);">OSINT-утилит для терминала</strong>.</p>
+            <p style="margin-bottom:12px;">В коммерческой разработке я всего 2 недели, но за это время успешно сдал <strong style="color:var(--text);">4 проекта под ключ</strong> — от обсуждения технического задания до финального тестирования и передачи заказчику. Да, опыта пока немного, но я наверстываю это скоростью, ответственным подходом и желанием доводить каждую задачу до идеала. Работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.</p>
+        </div>
+        <button onclick="showPage('bio')" style="display:inline-block;background:#ff4444;color:#fff;font-size:14px;font-weight:600;padding:10px 28px;border-radius:30px;border:none;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,68,68,0.3);margin-top:12px;">
             Подробнее →
         </button>
     </div>
@@ -813,19 +706,13 @@ body {
         
         <hr style="border:1px solid var(--glass-border);margin-bottom:20px;">
         
-        <div style="color:var(--text-secondary);font-size:15px;line-height:1.9;">
+        <div id="bioText" style="color:var(--text-secondary);font-size:15px;line-height:1.9;">
             
-            <p style="margin-bottom:16px;">
-                Меня зовут <strong style="color:var(--text);">Exeld</strong>. Я занимаюсь разработкой под заказ, специализируюсь на создании <strong style="color:var(--text);">Telegram-ботов</strong>, <strong style="color:var(--text);">сайтов</strong>, <strong style="color:var(--text);">мини-приложений внутри Telegram</strong> и <strong style="color:var(--text);">OSINT-утилит для терминала</strong>.
-            </p>
+            <p style="margin-bottom:16px;">Меня зовут <strong style="color:var(--text);">Exeld</strong>. Я занимаюсь разработкой под заказ, специализируюсь на создании <strong style="color:var(--text);">Telegram-ботов</strong>, <strong style="color:var(--text);">сайтов</strong>, <strong style="color:var(--text);">мини-приложений внутри Telegram</strong> и <strong style="color:var(--text);">OSINT-утилит для терминала</strong>.</p>
             
-            <p style="margin-bottom:20px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border-left:3px solid #ff4444;">
-                В коммерческой разработке я всего <strong style="color:var(--text);">2 недели</strong>, но за это время успешно сдал <strong style="color:var(--text);">4 проекта под ключ</strong> — от обсуждения технического задания до финального тестирования и передачи заказчику. Да, опыта пока немного, но я наверстываю это скоростью, ответственным подходом и желанием доводить каждую задачу до идеала. Работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.
-            </p>
+            <p style="margin-bottom:20px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border-left:3px solid #ff4444;">В коммерческой разработке я всего <strong style="color:var(--text);">2 недели</strong>, но за это время успешно сдал <strong style="color:var(--text);">4 проекта под ключ</strong> — от обсуждения технического задания до финального тестирования и передачи заказчику. Да, опыта пока немного, но я наверстываю это скоростью, ответственным подходом и желанием доводить каждую задачу до идеала. Работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.</p>
             
-            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">
-                Что я делаю
-            </p>
+            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">Что я делаю</p>
             
             <div style="margin-bottom:16px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);">
                 <h4 style="color:var(--text);font-size:16px;margin-bottom:6px;">🤖 Telegram-боты</h4>
@@ -836,7 +723,6 @@ body {
                 <h4 style="color:var(--text);font-size:16px;margin-bottom:6px;">🖥 Сайты</h4>
                 <p style="font-size:14px;">Создаю сайты под ключ: лендинги для продажи товаров и услуг, сайты-визитки компаний и специалистов, а также полноценные веб-сервисы со сложной серверной логикой. Верстка адаптивная, формы отправляют заявки в Telegram или на почту, по желанию подключаю метрики и аналитику.</p>
             </div>
-            
             <div style="margin-bottom:16px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);">
                 <h4 style="color:var(--text);font-size:16px;margin-bottom:6px;">📱 Telegram Mini Apps</h4>
                 <p style="font-size:14px;">Разрабатываю встроенные веб-приложения для Telegram. Калькуляторы, опросники, ToDo-листы, инструменты для бизнеса — компактные и удобные интерфейсы, которые работают прямо внутри мессенджера без установки дополнительных приложений.</p>
@@ -847,9 +733,7 @@ body {
                 <p style="font-size:14px;">Создаю консольные инструменты для сбора данных из открытых источников. Скрипты для проверки номеров, email-адресов, анализа социальных сетей и других публичных данных. С поддержкой прокси, цветным выводом, логированием и экспортом отчетов в TXT, JSON или CSV.</p>
             </div>
             
-            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">
-                Как я работаю
-            </p>
+            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">Как я работаю</p>
             
             <div style="margin-bottom:12px;padding:12px 16px;background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);display:flex;align-items:flex-start;gap:12px;">
                 <span style="color:#ff4444;font-weight:700;font-size:18px;">1.</span>
@@ -876,9 +760,7 @@ body {
                 <div><strong style="color:var(--text);">Сдаю готовый проект</strong> с инструкцией по запуску и обслуживанию.</div>
             </div>
             
-            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">
-                Почему стоит работать со мной
-            </p>
+            <p style="margin-bottom:16px;font-weight:500;color:var(--text);font-size:18px;margin-top:24px;">Почему стоит работать со мной</p>
             
             <div style="margin-bottom:8px;padding:8px 16px;display:flex;align-items:center;gap:10px;">
                 <span style="color:#ff4444;">•</span>
@@ -920,263 +802,230 @@ body {
         <!-- Telegram-боты -->
         <div style="margin-top:16px;">
             <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">🤖 Telegram-боты</h3>
-            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Простой бот с базовыми командами</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('Telegram-бот Легкий', '1 500 – 3 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Средний</h3><p>Бот с API, платежами, админ-панелью</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('Telegram-бот Средний', '4 000 – 7 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Полноценный бизнес-бот с CRM, аналитикой</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('Telegram-бот Сложный', '8 000 – 12 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Простой бот с базовыми командами</p></div><div class="price">1 500 – 3 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Средний</h3><p>Бот с API, платежами, админ-панелью</p></div><div class="price">4 000 – 7 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Полноценный бизнес-бот с CRM, аналитикой</p></div><div class="price">8 000 – 12 500 ₽</div></div>
         </div>
         
         <!-- Сайты -->
         <div style="margin-top:16px;">
             <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">🌐 Сайты</h3>
-            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Сайт-визитка, лендинг</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('Сайт Легкий', '1 500 – 3 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Средний</h3><p>Корпоративный сайт с админ-панелью</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('Сайт Средний', '4 000 – 7 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Интернет-магазин, CRM-система</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('Сайт Сложный', '8 000 – 12 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Сайт-визитка, лендинг</p></div><div class="price">1 500 – 3 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Средний</h3><p>Корпоративный сайт с админ-панелью</p></div><div class="price">4 000 – 7 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Интернет-магазин, CRM-система</p></div><div class="price">8 000 – 12 500 ₽</div></div>
         </div>
         
         <!-- Mini Apps -->
         <div style="margin-top:16px;">
             <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">📱 Mini Apps</h3>
-            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Мини-приложение с базовым функционалом</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('Mini App Легкий', '1 500 – 3 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Средний</h3><p>Mini App с API, интеграция с TON</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('Mini App Средний', '4 000 – 7 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Полноценное приложение с WebApp API</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('Mini App Сложный', '8 000 – 12 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Мини-приложение с базовым функционалом</p></div><div class="price">1 500 – 3 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Средний</h3><p>Mini App с API, интеграция с TON</p></div><div class="price">4 000 – 7 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Полноценное приложение с WebApp API</p></div><div class="price">8 000 – 12 500 ₽</div></div>
         </div>
         
         <!-- OSINT-утилиты -->
         <div style="margin-top:16px;">
             <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">🕵️ OSINT-утилиты</h3>
-            <div class="service-card"><div class="info"><h3>Легкая</h3><p>Сбор данных из открытых источников</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('OSINT-утилита Легкая', '1 500 – 3 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Средняя</h3><p>Парсинг, анализ данных, отчеты</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('OSINT-утилита Средняя', '4 000 – 7 500 ₽')">+</button></div>
-            <div class="service-card"><div class="info"><h3>Сложная</h3><p>Автоматизированный сбор и анализ больших данных</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('OSINT-утилита Сложная', '8 000 – 12 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Легкая</h3><p>Сбор данных из открытых источников</p></div><div class="price">1 500 – 3 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Средняя</h3><p>Парсинг, анализ данных, отчеты</p></div><div class="price">4 000 – 7 500 ₽</div></div>
+            <div class="service-card"><div class="info"><h3>Сложная</h3><p>Автоматизированный сбор и анализ больших данных</p></div><div class="price">8 000 – 12 500 ₽</div></div>
         </div>
     </div>
 </div>
-<!-- КОРЗИНА -->
-<div class="cart-overlay" id="cartOverlay">
-    <button class="close" onclick="toggleCart()">✕</button>
-    <h3>Корзина</h3>
-    <div id="cartList"></div>
-    <div class="cart-total" id="cartTotal">0 ₽</div>
-    <button class="btn-checkout" onclick="checkout()">Оформить заказ</button>
-</div>
-
-<!-- МЕНЮ ЧАТОВ -->
-<div id="chatMenuPage" class="page">
-    <h2>Чаты</h2>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
-        <div class="chat-menu-item" onclick="openChat('support')">
-            <div style="display:flex;align-items:center;gap:12px">
-                <span class="chat-icon">💬</span>
-                <div><div class="chat-label">Чат с поддержкой</div><div class="chat-desc">Общие вопросы, ИИ-помощник</div></div>
-            </div>
-        </div>
-        <div class="chat-menu-item" onclick="openChat('specialist')">
-            <div style="display:flex;align-items:center;gap:12px">
-                <span class="chat-icon">🕵️</span>
-                <div><div class="chat-label">Чат со специалистом</div><div class="chat-desc">Консультация эксперта</div></div>
+    <!-- КОНТАКТЫ -->
+    <div id="contacts" class="page">
+        <h2>Контакты</h2>
+        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">
+            Свяжитесь со мной в Telegram. Отвечаю в течение 24 часов.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
+                <span style="font-size:24px;">📱</span>
+                <div>
+                    <div style="font-size:12px;color:var(--text-secondary);">Telegram</div>
+                    <div style="font-size:16px;color:var(--text);">@sprintdrop</div>
+                </div>
             </div>
         </div>
     </div>
-    <div style="margin-top:20px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:13px;color:var(--text-secondary);text-align:center">Выберите чат для общения</div>
-</div>
-<!-- КОНТАКТЫ -->
-<div id="contacts" class="page">
-    <h2>Контакты</h2>
-    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">
-        Свяжитесь со мной в Telegram. Отвечаю в течение 24 часов.
-    </p>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-        <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
-            <span style="font-size:24px;">📱</span>
-            <div>
-                <div style="font-size:12px;color:var(--text-secondary);">Telegram</div>
-                <div style="font-size:16px;color:var(--text);">@Exeld_coder</div>
+
+    <!-- ЛИЧНЫЙ КАБИНЕТ -->
+    <div id="cabinet" class="page">
+        <h2>Личный кабинет</h2>
+        <div id="cabinetContent" style="display:none">
+            <div class="cabinet-info">
+                <div class="label">Nickname</div>
+                <div class="value" id="cabinetName"></div>
             </div>
+            <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button>
+        </div>
+        <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+            <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
+            <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
         </div>
     </div>
-</div>
-<!-- ЛИЧНЫЙ КАБИНЕТ -->
-<div id="cabinet" class="page">
-    <h2>Личный кабинет</h2>
-    <div id="cabinetContent" style="display:none">
-        <div class="cabinet-info">
-            <div class="label">Nickname</div>
-            <div class="value" id="cabinetName"></div>
+    
+    <!-- РЕГИСТРАЦИЯ -->
+    <div id="register" class="page">
+        <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
+        <h2>Регистрация</h2>
+        <div id="regStep1" class="reg-step active">
+            <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Введите ваш Nickname</label>
+            <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
+            <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary)"></div>
+            <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
         </div>
-        <div style="margin-top:16px"><h4>История заказов</h4><div id="cabinetOrders"></div></div>
-        <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button>
+        <div id="regStep2" class="reg-step">
+            <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Придумайте пароль</label>
+            <input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте">
+            <span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span>
+            <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
+        </div>
     </div>
-    <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
-        <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
-        <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
+    
+    <!-- ВХОД -->
+    <div id="login" class="page">
+        <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
+        <h2>Вход</h2>
+        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Ваш Nickname</label>
+        <input type="text" id="loginName" placeholder="Введите никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
+        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Пароль</label>
+        <input type="password" id="loginPassword" placeholder="Введите пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
+        <button class="auth-btn primary" onclick="loginUser()">Войти</button>
     </div>
 </div>
+<!-- ПЛАВАЮЩАЯ ИКОНКА ЧАТА -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" title="Чат с поддержкой">
+    💬
+</button>
 
-<!-- РЕГИСТРАЦИЯ -->
-<div id="register" class="page">
-    <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-    <h2>Регистрация</h2>
-    <div id="regStep1" class="reg-step active">
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Введите ваш Nickname</label>
-        <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
-        <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary)"></div>
-        <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
-    </div>
-    <div id="regStep2" class="reg-step">
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Придумайте пароль</label>
-        <input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте">
-        <span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span>
-        <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
-    </div>
-</div>
-
-<!-- ВХОД -->
-<div id="login" class="page">
-    <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-    <h2>Вход</h2>
-    <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Ваш Nickname</label>
-    <input type="text" id="loginName" placeholder="Введите никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
-    <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Пароль</label>
-    <input type="password" id="loginPassword" placeholder="Введите пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
-    <button class="auth-btn primary" onclick="loginUser()">Войти</button>
-</div>
-<!-- ЧАТ С ПОДДЕРЖКОЙ -->
-<div id="chatSupport" class="chat-page">
+<!-- ОКНО ЧАТА -->
+<div class="chat-window" id="chatWindow">
     <div class="chat-header">
         <h4>💬 Чат с поддержкой</h4>
-        <span class="chat-type-badge support">🤖 ИИ-помощник</span>
-        <button class="close-chat" onclick="closeChat()">✕</button>
+        <button class="close-chat" onclick="toggleChat()">✕</button>
     </div>
-    <div class="chat-messages" id="supportMessages">
+    <div class="chat-messages" id="chatMessages">
         <div class="msg bot">
             <span class="sender-name bot">🤖 ИИ-помощник</span>
-            Привет! Я ИИ-помощник. Задавай вопросы или нажимай на кнопки ниже! 🚀
+            Привет! Я ИИ-помощник Exeld. Задавай любой вопрос — я отвечу как можно подробнее! 🚀
             <span class="time">00:00</span>
         </div>
     </div>
-    <div class="typing" id="supportTyping"><span>.</span><span>.</span><span>.</span></div>
-    
-    <!-- БЛОК С КНОПКАМИ-ВОПРОСАМИ (10 штук) -->
-    <div style="padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--glass-border);background:var(--glass-bg);">
-        <button onclick="quickQuestion('Привет! Как дела?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">👋 Привет</button>
-        <button onclick="quickQuestion('Сколько стоят услуги?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">💰 Цены</button>
-        <button onclick="quickQuestion('Какие сроки выполнения?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">⏱️ Сроки</button>
-        <button onclick="quickQuestion('Как оплатить заказ?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">💳 Оплата</button>
-        <button onclick="quickQuestion('Что такое Full-Stack разработка?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🖥️ Full-Stack</button>
-        <button onclick="quickQuestion('Какие технологии используете?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">⚙️ Технологии</button>
-        <button onclick="quickQuestion('Как связаться с вами?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">📞 Контакты</button>
-        <button onclick="quickQuestion('Есть ли гарантия?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🛡️ Гарантия</button>
-        <button onclick="quickQuestion('Расскажи шутку')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">😂 Шутка</button>
-        <button onclick="quickQuestion('Ты кто?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🤖 Кто ты?</button>
-    </div>
-    
+    <div class="typing" id="chatTyping"><span>.</span><span>.</span><span>.</span></div>
     <div class="chat-input">
-        <input type="text" id="supportInput" placeholder="Напиши вопрос..." autofocus>
-        <button onclick="sendSupportMessage()">➤</button>
-    </div>
-</div>
-    <!-- ЧАТ СО СПЕЦИАЛИСТОМ -->
-    <div id="chatSpecialist" class="chat-page">
-        <div class="chat-header">
-            <h4>🕵️ Чат со специалистом</h4>
-            <span class="chat-type-badge specialist">Эксперт</span>
-            <button class="close-chat" onclick="closeChat()">✕</button>
-        </div>
-        <div class="chat-messages" id="specialistMessages">
-            <div class="msg bot">
-                <span class="sender-name bot">🕵️ Специалист</span>
-                Здравствуйте! Опишите вашу задачу, и я помогу вам. 📊
-                <span class="time">00:00</span>
-            </div>
-        </div>
-        <div class="typing" id="specialistTyping"><span>.</span><span>.</span><span>.</span></div>
-        <div class="chat-input">
-            <input type="text" id="specialistInput" placeholder="Опишите задачу..." autofocus>
-            <button onclick="sendSpecialistMessage()">➤</button>
-        </div>
+        <input type="text" id="chatInput" placeholder="Напиши вопрос..." autofocus>
+        <button onclick="sendChatMessage()">➤</button>
     </div>
 </div>
 <script>
     // ============================================================
-    // 0. НАСТРОЙКИ GITHUB
+    // 0. НАСТРОЙКИ GITHUB И ДАННЫЕ
     // ============================================================
     const GITHUB_USERNAME = 'sprintdrop';
     const GITHUB_REPO = 'sprintsite';
     const GITHUB_FILE = 'data.json';
 
-    let appData = { users: [], unansweredSupport: [], unansweredSpecialist: [], paymentConfirmations: [], orders: [] };
+    let appData = { 
+        users: [], 
+        questions: [],
+        siteTexts: {
+            siteTitle: 'EXELD',
+            heroTitle: 'EXELD',
+            heroSub: 'Full-Stack Developer',
+            heroDesc: 'Разработка под заказ • Telegram-боты • Сайты • Mini Apps • OSINT-утилиты',
+            aboutText: '<p style="margin-bottom:12px;">Меня зовут <strong style="color:var(--text);">Exeld</strong>. Я занимаюсь разработкой под заказ, специализируюсь на создании <strong style="color:var(--text);">Telegram-ботов</strong>, <strong style="color:var(--text);">сайтов</strong>, <strong style="color:var(--text);">мини-приложений внутри Telegram</strong> и <strong style="color:var(--text);">OSINT-утилит для терминала</strong>.</p><p style="margin-bottom:12px;">В коммерческой разработке я всего 2 недели, но за это время успешно сдал <strong style="color:var(--text);">4 проекта под ключ</strong> — от обсуждения технического задания до финального тестирования и передачи заказчику. Да, опыта пока немного, но я наверстываю это скоростью, ответственным подходом и желанием доводить каждую задачу до идеала. Работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.</p>',
+            bioText: '...'
+        },
+        services: [
+            { category: '🤖 Telegram-боты', items: [
+                { name: 'Легкий', desc: 'Простой бот с базовыми командами', price: '1 500 – 3 500 ₽' },
+                { name: 'Средний', desc: 'Бот с API, платежами, админ-панелью', price: '4 000 – 7 500 ₽' },
+                { name: 'Сложный', desc: 'Полноценный бизнес-бот с CRM, аналитикой', price: '8 000 – 12 500 ₽' }
+            ]},
+            { category: '🌐 Сайты', items: [
+                { name: 'Легкий', desc: 'Сайт-визитка, лендинг', price: '1 500 – 3 500 ₽' },
+                { name: 'Средний', desc: 'Корпоративный сайт с админ-панелью', price: '4 000 – 7 500 ₽' },
+                { name: 'Сложный', desc: 'Интернет-магазин, CRM-система', price: '8 000 – 12 500 ₽' }
+            ]},
+            { category: '📱 Mini Apps', items: [
+                { name: 'Легкий', desc: 'Мини-приложение с базовым функционалом', price: '1 500 – 3 500 ₽' },
+                { name: 'Средний', desc: 'Mini App с API, интеграция с TON', price: '4 000 – 7 500 ₽' },
+                { name: 'Сложный', desc: 'Полноценное приложение с WebApp API', price: '8 000 – 12 500 ₽' }
+            ]},
+            { category: '🕵️ OSINT-утилиты', items: [
+                { name: 'Легкая', desc: 'Сбор данных из открытых источников', price: '1 500 – 3 500 ₽' },
+                { name: 'Средняя', desc: 'Парсинг, анализ данных, отчеты', price: '4 000 – 7 500 ₽' },
+                { name: 'Сложная', desc: 'Автоматизированный сбор и анализ больших данных', price: '8 000 – 12 500 ₽' }
+            ]}
+        ]
+    };
+    
     let users = [];
-    let unansweredSupport = [];
-    let unansweredSpecialist = [];
-    let paymentConfirmations = [];
-    let orders = [];
+    let questions = [];
     let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-    let cart = [];
-
-    function getGitHubToken() {
-        if (typeof window.GITHUB_TOKEN !== 'undefined' && window.GITHUB_TOKEN) {
-            return window.GITHUB_TOKEN;
-        }
-        const savedToken = localStorage.getItem('github_token');
-        if (savedToken) {
-            return savedToken;
-        }
-        console.warn('GitHub токен не найден. Используется анонимный доступ.');
-        return null;
+function getGitHubToken() {
+    if (typeof window.GITHUB_TOKEN !== 'undefined' && window.GITHUB_TOKEN) {
+        return window.GITHUB_TOKEN;
     }
-
-    async function loadFromGitHub() {
-        try {
-            const token = getGitHubToken();
-            const headers = {};
-            if (token) {
-                headers['Authorization'] = 'token ' + token;
-            }
-            const r = await fetch('https://api.github.com/repos/' + GITHUB_USERNAME + '/' + GITHUB_REPO + '/contents/' + GITHUB_FILE, {
-                headers: headers
-            });
-            if (r.ok) {
-                const d = await r.json();
-                return JSON.parse(decodeURIComponent(escape(atob(d.content))));
-            }
-        } catch (e) { console.log('Ошибка загрузки с GitHub:', e); }
-        return null;
+    const savedToken = localStorage.getItem('github_token');
+    if (savedToken) {
+        return savedToken;
     }
+    return null;
+}
 
-    async function saveToGitHub(data) {
+async function loadFromGitHub() {
+    try {
         const token = getGitHubToken();
-        if (!token) {
-            console.warn('Нет токена. Данные сохранены локально.');
-            localStorage.setItem('appData_backup', JSON.stringify(data));
-            return false;
+        const headers = {};
+        if (token) {
+            headers['Authorization'] = 'token ' + token;
         }
-        
-        let sha = '';
-        try {
-            const r = await fetch('https://api.github.com/repos/' + GITHUB_USERNAME + '/' + GITHUB_REPO + '/contents/' + GITHUB_FILE, {
-                headers: { 'Authorization': 'token ' + token }
-            });
-            if (r.ok) {
-                const d = await r.json();
-                sha = d.sha;
-            }
-        } catch (e) {}
-        
-        const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-        try {
-            const response = await fetch('https://api.github.com/repos/' + GITHUB_USERNAME + '/' + GITHUB_REPO + '/contents/' + GITHUB_FILE, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': 'token ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message: 'Обновление данных', content: content, sha: sha || undefined })
-            });
-            return response.ok;
-        } catch (e) {
-            console.error('Ошибка сохранения на GitHub:', e);
-            return false;
+        const r = await fetch('https://api.github.com/repos/' + GITHUB_USERNAME + '/' + GITHUB_REPO + '/contents/' + GITHUB_FILE, {
+            headers: headers
+        });
+        if (r.ok) {
+            const d = await r.json();
+            return JSON.parse(decodeURIComponent(escape(atob(d.content))));
         }
+    } catch (e) { console.log('Ошибка загрузки с GitHub:', e); }
+    return null;
+}
+
+async function saveToGitHub(data) {
+    const token = getGitHubToken();
+    if (!token) {
+        localStorage.setItem('appData_backup', JSON.stringify(data));
+        return false;
     }
+    let sha = '';
+    try {
+        const r = await fetch('https://api.github.com/repos/' + GITHUB_USERNAME + '/' + GITHUB_REPO + '/contents/' + GITHUB_FILE, {
+            headers: { 'Authorization': 'token ' + token }
+        });
+        if (r.ok) {
+            const d = await r.json();
+            sha = d.sha;
+        }
+    } catch (e) {}
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    try {
+        const response = await fetch('https://api.github.com/repos/' + GITHUB_USERNAME + '/' + GITHUB_REPO + '/contents/' + GITHUB_FILE, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'token ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: 'Обновление данных', content: content, sha: sha || undefined })
+        });
+        return response.ok;
+    } catch (e) {
+        console.error('Ошибка сохранения на GitHub:', e);
+        return false;
+    }
+}
+
 async function initData() {
     const data = await loadFromGitHub();
     if (data) { 
@@ -1186,10 +1035,7 @@ async function initData() {
         if (backup) {
             try {
                 appData = JSON.parse(backup);
-                console.log('Данные восстановлены из локального бэкапа');
             } catch (e) {}
-        } else {
-            await saveToGitHub(appData);
         }
     }
     applyData();
@@ -1197,18 +1043,12 @@ async function initData() {
 
 function applyData() {
     users = appData.users || [];
-    unansweredSupport = appData.unansweredSupport || [];
-    unansweredSpecialist = appData.unansweredSpecialist || [];
-    paymentConfirmations = appData.paymentConfirmations || [];
-    orders = appData.orders || [];
+    questions = appData.questions || [];
+    if (appData.services) appData.services = appData.services;
+    if (appData.siteTexts) appData.siteTexts = appData.siteTexts;
+    applyTexts();
+    renderServices();
     updateCabinetUI();
-    updateAdminNotification('support');
-    updateAdminNotification('specialist');
-    renderAdminUsers();
-    renderAdminPayments();
-    renderAdminSupport();
-    renderAdminSpecialist();
-    
     setTimeout(function() {
         if (!currentUser) {
             showPage('register');
@@ -1220,119 +1060,37 @@ function applyData() {
 
 async function syncData() {
     appData.users = users;
-    appData.unansweredSupport = unansweredSupport;
-    appData.unansweredSpecialist = unansweredSpecialist;
-    appData.paymentConfirmations = paymentConfirmations;
-    appData.orders = orders;
+    appData.questions = questions;
     localStorage.setItem('appData_backup', JSON.stringify(appData));
-    var saved = await saveToGitHub(appData);
-    if (!saved) {
-        console.log('Данные сохранены локально');
-    }
+    await saveToGitHub(appData);
 }
-// ============================================================
-// 1. ПОИСК ПОЛЬЗОВАТЕЛЯ
-// ============================================================
-function searchUser() {
-    var q = document.getElementById('searchInput').value.trim().toLowerCase();
-    var r = document.getElementById('searchResults');
-    if (q.length < 2) { 
-        r.innerHTML = '<p style="color:var(--text-secondary);">Введите минимум 2 символа</p>'; 
-        return; 
-    }
-    var found = users.filter(function(u) { 
-        return u.name.toLowerCase().includes(q); 
-    });
-    if (!found.length) { 
-        r.innerHTML = '<p style="color:var(--text-secondary);">Пользователь не найден</p>'; 
-        return; 
-    }
-    var html = '';
-    found.forEach(function(u) {
-        var a = unansweredSupport.filter(function(m) { 
-            return m.userName === u.name && !m.answered; 
+function applyTexts() {
+    const t = appData.siteTexts || {};
+    if (t.siteTitle) document.getElementById('siteTitle').textContent = t.siteTitle;
+    if (t.heroTitle) document.getElementById('heroTitle').textContent = t.heroTitle;
+    if (t.heroSub) document.getElementById('heroSub').textContent = t.heroSub;
+    if (t.heroDesc) document.getElementById('heroDesc').textContent = t.heroDesc;
+    if (t.aboutText) document.getElementById('aboutText').innerHTML = t.aboutText;
+    if (t.bioText) document.getElementById('bioText').innerHTML = t.bioText;
+}
+
+function renderServices() {
+    const container = document.getElementById('servicesList');
+    if (!container) return;
+    const services = appData.services || [];
+    let html = '';
+    services.forEach(function(cat) {
+        html += '<div style="margin-top:16px;"><h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">' + cat.category + '</h3>';
+        cat.items.forEach(function(item) {
+            html += '<div class="service-card"><div class="info"><h3>' + item.name + '</h3><p>' + item.desc + '</p></div><div class="price">' + item.price + '</div></div>';
         });
-        var b = unansweredSpecialist.filter(function(m) { 
-            return m.userName === u.name && !m.answered; 
-        });
-        html += '<div class="search-result-item">' +
-            '<div class="name">👤 ' + u.name + '</div>' +
-            '<div class="info">Сообщений: ' + (a.length + b.length) + '</div>' +
-            '<button class="btn-chat" onclick="openChatWithUser(\'' + u.name + '\')">✉️ Написать</button>' +
-            '</div>';
+        html += '</div>';
     });
-    r.innerHTML = html;
-}
-
-function openChatWithUser(name) {
-    var user = users.find(function(u) { return u.name === name; });
-    if (!user) { 
-        alert('Пользователь не найден'); 
-        return; 
-    }
-    document.body.insertAdjacentHTML('beforeend', 
-        '<div class="admin-chat-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">' +
-            '<div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;max-width:500px;width:100%;max-height:90vh;display:flex;flex-direction:column;">' +
-                '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
-                    '<h3>💬 Чат с ' + name + '</h3>' +
-                    '<button onclick="this.closest(\'.admin-chat-modal\').remove()" style="background:none;border:none;font-size:24px;color:var(--text-secondary);cursor:pointer;">✕</button>' +
-                '</div>' +
-                '<div id="adminChatMessages" style="flex:1;overflow-y:auto;padding:12px;background:var(--glass-bg);border-radius:var(--radius);max-height:300px;min-height:200px;">' + renderUserMessages(name) + '</div>' +
-                '<div style="display:flex;gap:10px;margin-top:12px;">' +
-                    '<input type="text" id="adminChatInput" placeholder="Введите сообщение..." style="flex:1;padding:10px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);">' +
-                    '<button onclick="sendAdminMessage(\'' + name + '\')" style="background:var(--accent);color:var(--bg);border:none;padding:10px 20px;border-radius:var(--radius);cursor:pointer;font-weight:600;">Отправить</button>' +
-                '</div>' +
-            '</div>' +
-        '</div>'
-    );
-    document.getElementById('adminChatInput').focus();
-}
-function renderUserMessages(name) {
-    var all = [].concat(
-        unansweredSupport.filter(function(m) { return m.userName === name; }),
-        unansweredSpecialist.filter(function(m) { return m.userName === name; })
-    ).sort(function(a, b) { return a.id - b.id; });
-    if (!all.length) {
-        return '<p style="color:var(--text-secondary);text-align:center;padding:20px;">Нет сообщений.</p>';
-    }
-    return all.map(function(m) {
-        var type = m.type === 'support' ? 'Поддержка' : 'Специалист';
-        return '<div style="padding:8px 0;border-bottom:1px solid var(--glass-border);">' +
-            '<div style="font-size:12px;color:var(--text-secondary);">[' + type + '] ' + m.timestamp + '</div>' +
-            '<div style="font-size:14px;">' + m.question + '</div>' +
-            (m.answer ? '<div style="font-size:13px;color:#4caf50;margin-top:4px;">→ ' + m.answer + '</div>' : '') +
-            '</div>';
-    }).join('');
-}
-
-function sendAdminMessage(name) {
-    var input = document.getElementById('adminChatInput');
-    var text = input.value.trim();
-    if (!text) return;
-    unansweredSupport.push({ 
-        id: Date.now(), 
-        question: text, 
-        userName: name, 
-        answer: '', 
-        answered: false, 
-        type: 'support', 
-        timestamp: new Date().toLocaleString(), 
-        isAdmin: true 
-    });
-    syncData();
-    input.value = '';
-    var container = document.getElementById('adminChatMessages');
-    if (container) { 
-        container.innerHTML = renderUserMessages(name); 
-        container.scrollTop = container.scrollHeight; 
-    }
-    renderAdminSupport();
-    renderAdminSpecialist();
-    updateAdminNotification('support');
+    container.innerHTML = html;
 }
 
 // ============================================================
-// 2. ЗВЁЗДЫ И ТЕМА
+// 1. ЗВЁЗДЫ И ТЕМА
 // ============================================================
 var canvas = document.getElementById('starsCanvas');
 var ctx = canvas.getContext('2d');
@@ -1400,145 +1158,41 @@ function toggleTheme() {
 }
 updateStarColor('#fff');
 // ============================================================
-// 3. НАВИГАЦИЯ
+// 2. НАВИГАЦИЯ
 // ============================================================
 function showPage(id) {
     document.querySelectorAll('.page').forEach(function(p) {
         p.classList.remove('active');
     });
-    document.querySelectorAll('.chat-page').forEach(function(p) {
-        p.classList.remove('active');
-    });
-    
     var page = document.getElementById(id);
     if (page) {
         page.classList.add('active');
-        console.log('📄 Показана страница:', id);
-    } else {
-        console.warn('⚠️ Страница не найдена:', id);
     }
-    
-    var cart = document.getElementById('cartOverlay');
-    if (cart) cart.classList.remove('show');
-    
     if (id === 'cabinet') updateCabinetUI();
 }
 
-function openChat(type) {
-    document.querySelectorAll('.page').forEach(function(p) {
-        p.classList.remove('active');
-    });
-    document.querySelectorAll('.chat-page').forEach(function(p) {
-        p.classList.remove('active');
-    });
-    
-    if (type === 'support') {
-        var el = document.getElementById('chatSupport');
-        if (el) el.classList.add('active');
-    } else if (type === 'specialist') {
-        var el = document.getElementById('chatSpecialist');
-        if (el) el.classList.add('active');
-    }
-}
-
-function closeChat() {
-    document.querySelectorAll('.chat-page').forEach(function(p) {
-        p.classList.remove('active');
-    });
-    document.querySelectorAll('.page').forEach(function(p) {
-        p.classList.remove('active');
-    });
-    var menu = document.getElementById('chatMenuPage');
-    if (menu) menu.classList.add('active');
-}
 // ============================================================
-// 4. ЧАТ С ПОДДЕРЖКОЙ (ИИ-помощник) - БАЗА ЗНАНИЙ
+// 3. ЧАТ
 // ============================================================
-var supportKnowledge = [
-    { keywords: ['привет', 'здравствуй', 'ку', 'hello', 'hi'], 
-      answer: 'Здравствуйте! Я ИИ-помощник поддержки. Чем могу помочь? 🚀' },
-    
-    { keywords: ['цена', 'сколько', 'стоимость', 'прайс', 'рублей', '₽'], 
-      answer: 'Цены на услуги:\n• Telegram-боты: Легкий 1 500–3 500₽, Средний 4 000–7 500₽, Сложный 8 000–12 500₽\n• Сайты: Легкий 1 500–3 500₽, Средний 4 000–7 500₽, Сложный 8 000–12 500₽\n• Mini Apps: Легкий 1 500–3 500₽, Средний 4 000–7 500₽, Сложный 8 000–12 500₽\n• OSINT-утилиты: Легкая 1 500–3 500₽, Средняя 4 000–7 500₽, Сложная 8 000–12 500₽' },
-    
-    { keywords: ['срок', 'время', 'быстро', 'долго', 'скоро', 'выполнение'], 
-      answer: 'Сроки выполнения:\n• Легкие проекты — 2-5 дней\n• Средние проекты — 1-2 недели\n• Сложные проекты — 2-4 недели\nТочные сроки обсуждаются индивидуально.' },
-    
-    { keywords: ['оплата', 'крипта', 'usdt', 'биткоин', 'деньги', 'платить', 'карта'], 
-      answer: 'Оплата принимается в рублях (перевод на карту) и в USDT (BEP20/ERC20). Кошелёк: UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n' },
-    
-    { keywords: ['full-stack', 'fullstack', 'фулстек', 'фулл-стек', 'разработчик'], 
-      answer: 'Full-Stack разработка — это создание как серверной (backend), так и клиентской (frontend) частей приложений. Я работаю с Python, JavaScript, Flask, React, Aiogram и другими технологиями.' },
-    
-    { keywords: ['технологии', 'стек', 'языки', 'фреймворки', 'инструменты'], 
-      answer: 'Мой стек технологий:\n• Backend: Python, Flask, Django, Aiogram\n• Frontend: React, HTML, CSS, JavaScript\n• Базы данных: PostgreSQL, SQLite, MongoDB\n• Другое: Docker, Git, REST API, TON' },
-    
-    { keywords: ['контакты', 'связаться', 'телеграм', 'telegram', '@', 'связь'], 
-      answer: 'Связь через Telegram: @sprintdrop' },
-    
-    { keywords: ['гарантия', 'качество', 'надёжность', 'доверие'], 
-      answer: 'Предоставляю 100% гарантию на все проекты. Бесплатная поддержка в течение 1 месяца после сдачи. Работаю по договору.' },
-    
-    { keywords: ['шутка', 'смеш', 'хаха', 'lol', 'прикол', 'анекдот'], 
-      answer: '🤣 Программист приходит в магазин.\n— У вас есть хлеб?\n— Нет.\n— А молоко?\n— Нет.\n— А яблоки?\n— Нет.\n— Зачем вы тогда открыли магазин?\n— Хороший вопрос! Давайте это запишем в бэклог.' },
-    
-    { keywords: ['кто ты', 'ты кто', 'представься', 'расскажи о себе', 'бот'], 
-      answer: '🤖 Я ИИ-помощник поддержки! Умею отвечать на вопросы про услуги, цены, сроки, оплату, технологии. Могу рассказать шутку. Чем могу помочь? 🚀' },
-    
-    { keywords: ['спасибо', 'thx', 'thanks', 'благодарю'], 
-      answer: '😊 Пожалуйста! Всегда рад помочь! Если понадобится что-то ещё — обращайся. Удачи! 🍀' },
-    
-    { keywords: ['пока', 'до свидания', 'bye', 'goodbye', 'прощай'], 
-      answer: '👋 До свидания! Хорошего дня! Если будут вопросы — я здесь. Возвращайся! 🚀' },
-    
-    { keywords: ['telegram бот', 'телеграм бот', 'бот'], 
-      answer: 'Разрабатываю Telegram-ботов любой сложности. Легкие (1 500–3 500₽), Средние (4 000–7 500₽), Сложные (8 000–12 500₽). Использую Aiogram, интеграция с API, платежи.' },
-    
-    { keywords: ['mini app', 'мини приложение', 'webapp'], 
-      answer: 'Разрабатываю Mini Apps для Telegram. Легкие (1 500–3 500₽), Средние (4 000–7 500₽), Сложные (8 000–12 500₽). Интеграция с TON-кошельками, WebApp API.' }
-];
-function getSupportAnswer(text) {
-    var lower = text.toLowerCase();
-    for (var i = 0; i < supportKnowledge.length; i++) {
-        var entry = supportKnowledge[i];
-        for (var j = 0; j < entry.keywords.length; j++) {
-            if (lower.includes(entry.keywords[j])) return entry.answer;
-        }
-    }
-    return null;
-}
-
-function sendSupportMessage() {
-    var supportMessages = document.getElementById('supportMessages');
-    var supportInput = document.getElementById('supportInput');
-    var supportTyping = document.getElementById('supportTyping');
-    
-    if (!supportInput || !supportMessages) return;
-    
-    var text = supportInput.value.trim();
-    if (!text) return;
-    
-    addSupportMessage(text, 'user', 'Вы', supportMessages);
-    supportInput.value = '';
-    supportInput.disabled = true;
-    supportTyping.classList.add('active');
-    supportMessages.scrollTop = supportMessages.scrollHeight;
-    
-    setTimeout(function() {
-        supportTyping.classList.remove('active');
-        var answer = getSupportAnswer(text);
-        if (answer) {
-            addSupportMessage(answer, 'bot', '🤖 ИИ-помощник', supportMessages);
+function toggleChat() {
+    var win = document.getElementById('chatWindow');
+    var fab = document.getElementById('chatFab');
+    if (win) {
+        win.classList.toggle('open');
+        if (win.classList.contains('open')) {
+            fab.textContent = '✕';
+            document.getElementById('chatInput').focus();
         } else {
-            addSupportMessage('Я не совсем понял вопрос. Передал оператору поддержки. Он скоро ответит.', 'bot', '🤖 ИИ-помощник', supportMessages);
-            saveUnansweredSupport(text);
+            fab.textContent = '💬';
         }
-        supportInput.disabled = false;
-        supportInput.focus();
-    }, 500 + Math.random() * 1000);
+    }
 }
 
-function addSupportMessage(text, sender, senderName, container) {
+function addChatMessage(text, sender, senderName) {
+    var container = document.getElementById('chatMessages
+function addChatMessage(text, sender, senderName) {
+    var container = document.getElementById('chatMessages');
+    if (!container) return;
     var div = document.createElement('div');
     div.className = 'msg ' + sender;
     if (senderName) {
@@ -1558,98 +1212,128 @@ function addSupportMessage(text, sender, senderName, container) {
     container.scrollTop = container.scrollHeight;
 }
 
-function quickQuestion(text) {
-    var input = document.getElementById('supportInput');
-    if (input) {
-        input.value = text;
-        sendSupportMessage();
-    }
-}
-
-function saveUnansweredSupport(text) {
-    if (!currentUser) {
-        alert('Пожалуйста, авторизуйтесь, чтобы задать вопрос.');
-        return;
-    }
-    unansweredSupport.push({
-        id: Date.now(),
-        question: text,
-        userName: currentUser.name,
-        answer: '',
-        answered: false,
-        type: 'support',
-        timestamp: new Date().toLocaleString()
-    });
-    syncData();
-    updateAdminNotification('support');
-}
-// ============================================================
-// 5. ЧАТ СО СПЕЦИАЛИСТОМ
-// ============================================================
-function sendSpecialistMessage() {
-    var specialistMessages = document.getElementById('specialistMessages');
-    var specialistInput = document.getElementById('specialistInput');
-    var specialistTyping = document.getElementById('specialistTyping');
-    
-    if (!specialistInput || !specialistMessages) return;
-    
-    var text = specialistInput.value.trim();
+function sendChatMessage() {
+    var input = document.getElementById('chatInput');
+    var typing = document.getElementById('chatTyping');
+    if (!input) return;
+    var text = input.value.trim();
     if (!text) return;
-    
-    addSpecialistMessage(text, 'user', 'Вы', specialistMessages);
-    specialistInput.value = '';
-    specialistInput.disabled = true;
-    specialistTyping.classList.add('active');
-    specialistMessages.scrollTop = specialistMessages.scrollHeight;
-    
+    addChatMessage(text, 'user', 'Вы');
+    input.value = '';
+    input.disabled = true;
+    typing.classList.add('active');
     setTimeout(function() {
-        specialistTyping.classList.remove('active');
-        saveUnansweredSpecialist(text);
-        addSpecialistMessage('Здравствуйте! Специалист ответит вам в ближайшее время.', 'bot', '🕵️ Специалист', specialistMessages);
-        specialistInput.disabled = false;
-        specialistInput.focus();
+        typing.classList.remove('active');
+        var answer = getAIAnswer(text);
+        addChatMessage(answer, 'bot', '🤖 Exeld');
+        input.disabled = false;
+        input.focus();
     }, 500 + Math.random() * 800);
 }
 
-function addSpecialistMessage(text, sender, senderName, container) {
-    var div = document.createElement('div');
-    div.className = 'msg ' + sender;
-    if (senderName) {
-        var span = document.createElement('span');
-        span.className = 'sender-name ' + sender;
-        span.textContent = senderName;
-        div.appendChild(span);
+// ============================================================
+// 4. ИИ-ПОМОЩНИК (МАКСИМАЛЬНО УЛУЧШЕННЫЙ)
+// ============================================================
+function getAIAnswer(text) {
+    var lower = text.toLowerCase();
+    
+    // Приветствия
+    if (lower.match(/привет|здравствуй|ку|hello|hi|хай|салам|здарова/)) {
+        return 'Привет! 👋 Я Exeld, Full-Stack разработчик. Рад знакомству! Чем могу помочь? Рассказывай, что нужно разработать — Telegram-бота, сайт, Mini App или OSINT-утилиту?';
     }
-    div.appendChild(document.createTextNode(text));
-    var now = new Date();
-    var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
-    var timeSpan = document.createElement('span');
-    timeSpan.className = 'time';
-    timeSpan.textContent = time;
-    div.appendChild(timeSpan);
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-}
-
-function saveUnansweredSpecialist(text) {
-    if (!currentUser) {
-        alert('Пожалуйста, авторизуйтесь, чтобы задать вопрос.');
-        return;
+    
+    // Цены
+    if (lower.match(/цена|сколько|стоимость|прайс|рублей|₽|дорого|дешево|бюджет/)) {
+        return '💰 Вот мои цены на услуги:\n\n🤖 Telegram-боты:\n• Легкий — 1 500 – 3 500 ₽\n• Средний — 4 000 – 7 500 ₽\n• Сложный — 8 000 – 12 500 ₽\n\n🌐 Сайты:\n• Легкий — 1 500 – 3 500 ₽\n• Средний — 4 000 – 7 500 ₽\n• Сложный — 8 000 – 12 500 ₽\n\n📱 Mini Apps:\n• Легкий — 1 500 – 3 500 ₽\n• Средний — 4 000 – 7 500 ₽\n• Сложный — 8 000 – 12 500 ₽\n\n🕵️ OSINT-утилиты:\n• Легкая — 1 500 – 3 500 ₽\n• Средняя — 4 000 – 7 500 ₽\n• Сложная — 8 000 – 12 500 ₽\n\nЦена фиксированная, называю до старта работы. Без скрытых платежей!';
     }
-    unansweredSpecialist.push({
-        id: Date.now(),
-        question: text,
-        userName: currentUser.name,
-        answer: '',
-        answered: false,
-        type: 'specialist',
-        timestamp: new Date().toLocaleString()
-    });
-    syncData();
-    updateAdminNotification('specialist');
+    
+    // Сроки
+    if (lower.match(/срок|время|быстро|долго|скоро|выполнение|когда|через|дней|недель|месяцев/)) {
+        return '⏱️ Сроки выполнения проектов:\n\n• Легкие проекты — 2-5 дней\n• Средние проекты — 1-2 недели\n• Сложные проекты — 2-4 недели\n\nТочные сроки обсуждаем индивидуально после обсуждения задачи. Я всегда называю реальные сроки — не завышаю и не занижаю.';
+    }
+    
+    // Оплата
+    if (lower.match(/оплат|крипт|usdt|биткоин|деньг|платить|карт|перевод|счет|реквизит/)) {
+        return '💳 Оплата принимается в рублях (перевод на карту). Также могу принять USDT (BEP20/ERC20) по желанию клиента.\n\nКошелёк USDT: UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n\n\nОплата фиксированная — называю сумму до старта, она не меняется в процессе работы.';
+    }
+    
+    // Full-Stack / технологии
+    if (lower.match(/full-stack|fullstack|фулстек|фулл-стек|стек|технолог|язык|фреймворк|инструмент/)) {
+        return '🖥️ Мой стек технологий:\n\n• Backend: Python, Flask, Django, Aiogram\n• Frontend: React, HTML, CSS, JavaScript\n• Базы данных: PostgreSQL, SQLite, MongoDB\n• Другое: Docker, Git, REST API, TON\n\nFull-Stack разработка — это создание и серверной (backend), и клиентской (frontend) частей приложений. Я могу сделать проект полностью под ключ!';
+    }
+    
+    // Контакты
+    if (lower.match(/контакт|связаться|телеграм|telegram|@|связь|написать|позвонить/)) {
+        return '📱 Связь со мной:\n\n• Telegram: @sprintdrop\n• Email: exeld@proton.me\n• GitHub: github.com/sprintdrop\n\nОтвечаю в течение 24 часов. Пиши в Telegram — самый быстрый способ связи!';
+    }
+    
+    // Гарантия
+    if (lower.match(/гарант|качеств|надёжн|довери|надежн|ответствен/)) {
+        return '🛡️ Гарантия и качество:\n\n• 100% гарантия на все проекты\n• Бесплатная поддержка в течение 1 месяца после сдачи\n• Работаю по договору\n• Всегда на связи после завершения проекта\n• Если не могу сделать качественно — откажусь сразу, чтобы не терять ваше время\n\nЯ работаю так, чтобы клиент получил рабочий продукт, а не сырой код, который требует доработок.';
+    }
+    
+    // Шутка
+    if (lower.match(/шутк|смеш|хаха|lol|прикол|анекдот|смешно|юмор/)) {
+        var jokes = [
+            '🤣 Программист приходит в магазин.\n— У вас есть хлеб?\n— Нет.\n— А молоко?\n— Нет.\n— А яблоки?\n— Нет.\n— Зачем вы тогда открыли магазин?\n— Хороший вопрос! Давайте это запишем в бэклог.',
+            '😄 Разработчик просыпается ночью в холодном поту:\n— Приснилось, что я забыл поставить точку с запятой...\nЖена: — Успокойся, это всего лишь сон.\nРазработчик: — А вдруг нет?!',
+            '😂 Сколько программистов нужно, чтобы заменить лампочку?\n— Ни одного, это аппаратная проблема!',
+            '🤓 Что говорит программист, когда видит баг?\n— Это не баг, это фича!',
+            '😅 Разработчик — это человек, который решает проблему, которую вы не знали, что у вас есть, способом, который вы не понимаете.'
+        ];
+        return jokes[Math.floor(Math.random() * jokes.length)];
+    }
+    
+    // Кто ты / о себе
+    if (lower.match(/кто ты|ты кто|представься|расскажи о себе|ты бот|бот|твое имя/)) {
+        return '👋 Привет! Я Exeld — Full-Stack разработчик.\n\nСпециализируюсь на создании:\n• 🤖 Telegram-ботов любой сложности\n• 🌐 Сайтов под ключ\n• 📱 Mini Apps для Telegram\n• 🕵️ OSINT-утилит для терминала\n\nВ коммерческой разработке 2 недели, но уже сдал 4 проекта под ключ. Работаю быстро, качественно и с фиксированной ценой.\n\nЧем могу помочь вам?';
+    }
+    
+    // Спасибо / благодарность
+    if (lower.match(/спасибо|thx|thanks|благодарю|благодар|мерси/)) {
+        return '😊 Пожалуйста! Всегда рад помочь! Если понадобится что-то ещё — обращайся. Удачи с проектом! 🍀\n\nИ помни: я всегда на связи в Telegram: @sprintdrop';
+    }
+    
+    // Пока / прощание
+    if (lower.match(/пока|до свидания|bye|goodbye|прощай|увидимся|давай|счастливо/)) {
+        return '👋 До свидания! Хорошего дня! Если будут вопросы или понадобится разработка — я здесь. Возвращайся! 🚀\n\nTelegram: @sprintdrop — всегда на связи.';
+    }
+    
+    // Telegram-боты
+    if (lower.match(/телеграм бот|телеграм-бот|telegram бот|бот телеграм|сделать бота|бот для телеги/)) {
+        return '🤖 Разрабатываю Telegram-ботов любой сложности:\n\n• Легкий (1 500 – 3 500 ₽) — базовые команды, простая логика\n• Средний (4 000 – 7 500 ₽) — клавиатуры, сценарии диалога, базы данных, Google Таблицы\n• Сложный (8 000 – 12 500 ₽) — многоуровневая структура, платежи, внешние API, очереди задач, админ-панель в Telegram\n\nИспользую Aiogram. Расскажите, что нужно — сделаю!';
+    }
+    
+    // Mini Apps
+    if (lower.match(/mini app|мини прилож|webapp|встроен|приложени в телеграм/)) {
+        return '📱 Разрабатываю Mini Apps для Telegram:\n\n• Легкий (1 500 – 3 500 ₽) — базовый функционал\n• Средний (4 000 – 7 500 ₽) — с API, интеграция с TON\n• Сложный (8 000 – 12 500 ₽) — полноценное приложение с WebApp API\n\nКалькуляторы, опросники, ToDo-листы, инструменты для бизнеса — всё, что работает прямо внутри мессенджера!';
+    }
+    
+    // Сайты
+    if (lower.match(/сайт|лендинг|визитка|интернет-магазин|корпоративн|веб-сервис|сделать сайт|разработка сайта/)) {
+        return '🌐 Создаю сайты под ключ:\n\n• Легкий (1 500 – 3 500 ₽) — сайт-визитка, лендинг\n• Средний (4 000 – 7 500 ₽) — корпоративный сайт с админ-панелью\n• Сложный (8 000 – 12 500 ₽) — интернет-магазин, CRM-система\n\nАдаптивная верстка, формы отправляют заявки в Telegram, по желанию метрики и аналитика.';
+    }
+    
+    // OSINT
+    if (lower.match(/osint|утилит|терминал|скрипт|парсинг|сбор данных|консольн|командн|проверк|номер|email|соцсет/)) {
+        return '🕵️ Создаю OSINT-утилиты для терминала:\n\n• Легкая (1 500 – 3 500 ₽) — сбор данных из открытых источников\n• Средняя (4 000 – 7 500 ₽) — парсинг, анализ данных, отчеты\n• Сложная (8 000 – 12 500 ₽) — автоматизированный сбор и анализ больших данных\n\nС поддержкой прокси, цветным выводом, логированием и экспортом отчетов в TXT, JSON или CSV.';
+    }
+    
+    // Как работаю / процесс
+    if (lower.match(/как работа|процесс|этап|алгоритм|порядок|схема/)) {
+        return '📋 Как я работаю:\n\n1️⃣ Обсуждаем задачу — уточняю детали\n2️⃣ Называю фиксированную цену и срок\n3️⃣ Разрабатываю прототип или промежуточную версию\n4️⃣ Доделываю и тестирую\n5️⃣ Сдаю готовый проект с инструкцией\n\nНикаких сюрпризов — только честность и прозрачность!';
+    }
+    
+    // Помощь / что можешь
+    if (lower.match(/помощ|что можешь|что умеешь|возможност|помоги/)) {
+        return '🚀 Я могу помочь вам с разработкой:\n\n• 🤖 Telegram-ботов (любой сложности)\n• 🌐 Сайтов (лендинги, корпоративные, сервисы)\n• 📱 Mini Apps для Telegram\n• 🕵️ OSINT-утилит для терминала\n\nТакже могу:\n• Настроить сервер и базы данных\n• Интегрировать платежные системы\n• Сделать админ-панели\n• Написать скрипты автоматизации\n\nПросто расскажите, что нужно!';
+    }
+    
+    // По умолчанию — умный ответ
+    return '🤔 Хороший вопрос! Давайте разберемся.\n\nЕсли вы спрашиваете про разработку — я могу сделать Telegram-бота, сайт, Mini App или OSINT-утилиту. Напишите подробнее, что именно нужно, и я назову цену и сроки.\n\nИли, если у вас просто вопрос по работе — уточните, я с радостью отвечу!\n\nКонтакты: @sprintdrop (Telegram) — всегда на связи! 💬';
 }
 // ============================================================
-// 6. АДМИН-ПАНЕЛЬ
+// 5. АДМИН-ПАНЕЛЬ
 // ============================================================
 var ADMIN_PASSWORD = 'admin123';
 
@@ -1671,14 +1355,10 @@ function adminLogin() {
     if (pass === ADMIN_PASSWORD) {
         document.getElementById('adminLogin').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
-        renderAdminSupport();
-        renderAdminSpecialist();
-        renderAdminUsers();
-        renderAdminPayments();
+        loadAdminTexts();
         renderAdminServices();
-        renderAdminOrders();
-        updateAdminNotification('support');
-        updateAdminNotification('specialist');
+        renderAdminSupport();
+        renderAdminUsers();
     } else {
         document.getElementById('adminError').textContent = 'Неверный пароль!';
     }
@@ -1695,9 +1375,12 @@ function switchAdminTab(tab, btn) {
     var el = document.getElementById(tabId);
     if (el) el.classList.add('active');
     if (btn) btn.classList.add('active');
+    if (tab === 'texts') loadAdminTexts();
+    if (tab === 'services') renderAdminServices();
+    if (tab === 'support') renderAdminSupport();
+    if (tab === 'users') renderAdminUsers();
 }
 
-// Открытие админки по двойному клику на логотип
 document.addEventListener('DOMContentLoaded', function() {
     var logo = document.getElementById('adminTrigger');
     if (logo) {
@@ -1707,73 +1390,124 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+function loadAdminTexts() {
+    var t = appData.siteTexts || {};
+    document.getElementById('editSiteTitle').value = t.siteTitle || 'EXELD';
+    document.getElementById('editHeroTitle').value = t.heroTitle || 'EXELD';
+    document.getElementById('editHeroSub').value = t.heroSub || 'Full-Stack Developer';
+    document.getElementById('editHeroDesc').value = t.heroDesc || 'Разработка под заказ • Telegram-боты • Сайты • Mini Apps • OSINT-утилиты';
+    document.getElementById('editAboutText').value = t.aboutText || '';
+    document.getElementById('editBioText').value = t.bioText || '';
+}
+
+function saveTexts() {
+    appData.siteTexts = {
+        siteTitle: document.getElementById('editSiteTitle').value.trim(),
+        heroTitle: document.getElementById('editHeroTitle').value.trim(),
+        heroSub: document.getElementById('editHeroSub').value.trim(),
+        heroDesc: document.getElementById('editHeroDesc').value.trim(),
+        aboutText: document.getElementById('editAboutText').value,
+        bioText: document.getElementById('editBioText').value
+    };
+    applyTexts();
+    syncData();
+    alert('✅ Тексты сохранены!');
+}
+function renderAdminServices() {
+    var container = document.getElementById('adminServicesList');
+    if (!container) return;
+    var services = appData.services || [];
+    var html = '';
+    services.forEach(function(cat, ci) {
+        html += '<div class="admin-service-item" data-cat="' + ci + '">';
+        html += '<input class="admin-edit-field" id="catName_' + ci + '" value="' + cat.category + '" placeholder="Название категории">';
+        cat.items.forEach(function(item, ii) {
+            html += '<div style="display:flex;gap:8px;margin-bottom:6px;">';
+            html += '<input style="flex:1;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:13px;" id="itemName_' + ci + '_' + ii + '" value="' + item.name + '" placeholder="Название">';
+            html += '<input style="flex:2;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:13px;" id="itemDesc_' + ci + '_' + ii + '" value="' + item.desc + '" placeholder="Описание">';
+            html += '<input style="flex:1;padding:6px 10px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:13px;" id="itemPrice_' + ci + '_' + ii + '" value="' + item.price + '" placeholder="Цена">';
+            html += '<button class="del-btn" onclick="removeServiceItem(' + ci + ',' + ii + ')">✕</button>';
+            html += '</div>';
+        });
+        html += '<button class="admin-save-btn" style="background:#4caf50;padding:4px 12px;font-size:12px;" onclick="addServiceItem(' + ci + ')">➕ Добавить услугу</button>';
+        html += '<button class="del-btn" onclick="removeServiceCategory(' + ci + ')" style="margin-left:8px;">🗑 Удалить категорию</button>';
+        html += '</div>';
+    });
+    container.innerHTML = html;
+}
+
+function addServiceCategory() {
+    appData.services.push({ category: 'Новая категория', items: [{ name: 'Новая услуга', desc: 'Описание', price: '0 ₽' }] });
+    renderAdminServices();
+}
+
+function removeServiceCategory(index) {
+    if (confirm('Удалить категорию?')) {
+        appData.services.splice(index, 1);
+        renderAdminServices();
+    }
+}
+
+function addServiceItem(catIndex) {
+    appData.services[catIndex].items.push({ name: 'Новая услуга', desc: 'Описание', price: '0 ₽' });
+    renderAdminServices();
+}
+
+function removeServiceItem(catIndex, itemIndex) {
+    if (confirm('Удалить услугу?')) {
+        appData.services[catIndex].items.splice(itemIndex, 1);
+        renderAdminServices();
+    }
+}
+
+function saveServices() {
+    var services = [];
+    var cats = document.querySelectorAll('.admin-service-item');
+    cats.forEach(function(catEl, ci) {
+        var category = document.getElementById('catName_' + ci).value.trim();
+        var items = [];
+        var itemEls = catEl.querySelectorAll('[id^="itemName_' + ci + '_"]');
+        itemEls.forEach(function(el, ii) {
+            var name = document.getElementById('itemName_' + ci + '_' + ii).value.trim();
+            var desc = document.getElementById('itemDesc_' + ci + '_' + ii).value.trim();
+            var price = document.getElementById('itemPrice_' + ci + '_' + ii).value.trim();
+            if (name) items.push({ name: name, desc: desc, price: price });
+        });
+        if (category) services.push({ category: category, items: items });
+    });
+    appData.services = services;
+    renderServices();
+    syncData();
+    alert('✅ Прайс сохранён!');
+}
 function renderAdminSupport() {
     var container = document.getElementById('adminSupportList');
     if (!container) return;
-    var unanswered = unansweredSupport.filter(function(m) { return !m.answered; });
-    if (!unanswered.length) {
-        container.innerHTML = '<p style="color:var(--text-secondary);">Нет новых вопросов.</p>';
+    if (!questions.length) {
+        container.innerHTML = '<p style="color:var(--text-secondary);">Нет вопросов.</p>';
         return;
     }
     var html = '';
-    unanswered.forEach(function(m) {
+    questions.forEach(function(q) {
         html += '<div class="admin-chat-item">' +
-            '<div class="question">❓ ' + m.question + '</div>' +
-            '<div style="font-size:12px;color:var(--text-secondary);">👤 ' + m.userName + ' | ' + m.timestamp + '</div>' +
-            '<input class="answer-input" id="answerSupport_' + m.id + '" placeholder="Введите ответ...">' +
-            '<button class="answer-btn" onclick="answerSupport(' + m.id + ')">Ответить</button>' +
-            '<div class="status pending">⏳ Ожидает ответа</div>' +
+            '<div class="question">❓ ' + q.question + '</div>' +
+            '<div style="font-size:12px;color:var(--text-secondary);">👤 ' + (q.userName || 'Гость') + ' | ' + q.timestamp + '</div>' +
+            (q.answer ? '<div class="answer">✅ Ответ: ' + q.answer + '</div>' : 
+            '<div><input class="answer-input" id="answerQ_' + q.id + '" placeholder="Введите ответ..."><button class="answer-btn" onclick="answerQuestion(' + q.id + ')">Ответить</button></div>') +
             '</div>';
     });
     container.innerHTML = html;
 }
 
-function answerSupport(id) {
-    var input = document.getElementById('answerSupport_' + id);
+function answerQuestion(id) {
+    var input = document.getElementById('answerQ_' + id);
     var answer = input.value.trim();
     if (!answer) { alert('Введите ответ'); return; }
-    var msg = unansweredSupport.find(function(m) { return m.id === id; });
-    if (msg) {
-        msg.answer = answer;
-        msg.answered = true;
+    var q = questions.find(function(q) { return q.id === id; });
+    if (q) {
+        q.answer = answer;
         syncData();
         renderAdminSupport();
-        updateAdminNotification('support');
-    }
-}
-
-function renderAdminSpecialist() {
-    var container = document.getElementById('adminSpecialistList');
-    if (!container) return;
-    var unanswered = unansweredSpecialist.filter(function(m) { return !m.answered; });
-    if (!unanswered.length) {
-        container.innerHTML = '<p style="color:var(--text-secondary);">Нет новых вопросов.</p>';
-        return;
-    }
-    var html = '';
-    unanswered.forEach(function(m) {
-        html += '<div class="admin-chat-item">' +
-            '<div class="question">❓ ' + m.question + '</div>' +
-            '<div style="font-size:12px;color:var(--text-secondary);">👤 ' + m.userName + ' | ' + m.timestamp + '</div>' +
-            '<input class="answer-input" id="answerSpecialist_' + m.id + '" placeholder="Введите ответ...">' +
-            '<button class="answer-btn" onclick="answerSpecialist(' + m.id + ')">Ответить</button>' +
-            '<div class="status pending">⏳ Ожидает ответа</div>' +
-            '</div>';
-    });
-    container.innerHTML = html;
-}
-
-function answerSpecialist(id) {
-    var input = document.getElementById('answerSpecialist_' + id);
-    var answer = input.value.trim();
-    if (!answer) { alert('Введите ответ'); return; }
-    var msg = unansweredSpecialist.find(function(m) { return m.id === id; });
-    if (msg) {
-        msg.answer = answer;
-        msg.answered = true;
-        syncData();
-        renderAdminSpecialist();
-        updateAdminNotification('specialist');
     }
 }
 function renderAdminUsers() {
@@ -1785,277 +1519,218 @@ function renderAdminUsers() {
     }
     var html = '';
     users.forEach(function(u) {
-        var supportCount = unansweredSupport.filter(function(m) { return m.userName === u.name && !m.answered; }).length;
-        var specialistCount = unansweredSpecialist.filter(function(m) { return m.userName === u.name && !m.answered; }).length;
+        var userQuestions = questions.filter(function(q) { return q.userName === u.name; });
         html += '<div class="admin-chat-item" style="display:flex;justify-content:space-between;align-items:center;">' +
-            '<div><strong>' + u.name + '</strong><div style="font-size:12px;color:var(--text-secondary);">Вопросов: ' + (supportCount + specialistCount) + '</div></div>' +
-            '<button class="btn-chat" onclick="openChatWithUser(\'' + u.name + '\')">✉️</button>' +
+            '<div><strong>' + u.name + '</strong><div style="font-size:12px;color:var(--text-secondary);">Вопросов: ' + userQuestions.length + '</div></div>' +
             '</div>';
     });
     container.innerHTML = html;
 }
 
-function renderAdminPayments() {
-    var container = document.getElementById('adminPaymentsList');
-    if (!container) return;
-    if (!paymentConfirmations.length) {
-        container.innerHTML = '<p style="color:var(--text-secondary);">Нет подтверждений оплаты.</p>';
-        return;
-    }
-    var html = '';
-    paymentConfirmations.forEach(function(p) {
-        html += '<div class="admin-chat-item">' +
-            '<div>💳 ' + p.userName + ' — ' + p.amount + '</div>' +
-            '<div style="font-size:12px;color:var(--text-secondary);">' + p.timestamp + '</div>' +
-            '<button class="answer-btn" onclick="confirmPayment(' + p.id + ')">✅ Подтвердить</button>' +
-            '</div>';
-    });
-    container.innerHTML = html;
-}
-
-function confirmPayment(id) {
-    paymentConfirmations = paymentConfirmations.filter(function(p) { return p.id !== id; });
-    syncData();
-    renderAdminPayments();
-}
-
-function updateAdminNotification(type) {
-    var notifId = type === 'support' ? 'supportNotif' : 'specialistNotif';
-    var notif = document.getElementById(notifId);
-    if (!notif) return;
-    var count = type === 'support' 
-        ? unansweredSupport.filter(function(m) { return !m.answered; }).length
-        : unansweredSpecialist.filter(function(m) { return !m.answered; }).length;
-    if (count > 0) {
-        notif.style.display = 'inline';
-        notif.textContent = count;
+// ============================================================
+// 6. ЛИЧНЫЙ КАБИНЕТ
+// ============================================================
+function updateCabinetUI() {
+    if (currentUser) {
+        document.getElementById('cabinetContent').style.display = 'block';
+        document.getElementById('authButtons').style.display = 'none';
+        document.getElementById('cabinetName').textContent = currentUser.name;
     } else {
-        notif.style.display = 'none';
+        document.getElementById('cabinetContent').style.display = 'none';
+        document.getElementById('authButtons').style.display = 'flex';
     }
 }
-function renderAdminServices() {
-    var container = document.getElementById('adminServicesList');
-    if (!container) return;
-    var services = [
-        { cat: 'Telegram-боты', items: ['Легкий (1 500–3 500₽)', 'Средний (4 000–7 500₽)', 'Сложный (8 000–12 500₽)'] },
-        { cat: 'Сайты', items: ['Легкий (1 500–3 500₽)', 'Средний (4 000–7 500₽)', 'Сложный (8 000–12 500₽)'] },
-        { cat: 'Mini Apps', items: ['Легкий (1 500–3 500₽)', 'Средний (4 000–7 500₽)', 'Сложный (8 000–12 500₽)'] },
-        { cat: 'OSINT-утилиты', items: ['Легкая (1 500–3 500₽)', 'Средняя (4 000–7 500₽)', 'Сложная (8 000–12 500₽)'] }
-    ];
-    var html = '';
-    services.forEach(function(cat) {
-        html += '<div style="margin:12px 0;"><h4 style="color:var(--text);">' + cat.cat + '</h4>';
-        cat.items.forEach(function(item) {
-            html += '<div style="padding:6px 0;font-size:14px;color:var(--text-secondary);">• ' + item + '</div>';
-        });
-        html += '</div>';
-    });
-    container.innerHTML = html;
-}
 
-function renderAdminOrders() {
-    var container = document.getElementById('adminOrdersList');
-    if (!container) return;
-    if (!orders.length) {
-        container.innerHTML = '<p style="color:var(--text-secondary);">Нет заказов.</p>';
+function logoutUser() {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    updateCabinetUI();
+    showPage('home');
+}
+// ============================================================
+// 7. РЕГИСТРАЦИЯ И ВХОД
+// ============================================================
+function checkUsername() {
+    var name = document.getElementById('regName').value.trim();
+    var btn = document.getElementById('regNextBtn');
+    var status = document.getElementById('usernameStatus');
+    if (!name) {
+        status.textContent = 'Введите никнейм';
+        btn.disabled = true;
         return;
     }
-    var html = '';
-    orders.forEach(function(o) {
-        html += '<div class="admin-chat-item">' +
-            '<div>📦 ' + o.userName + '</div>' +
-            '<div style="font-size:13px;">' + o.items.join(', ') + '</div>' +
-            '<div style="font-size:12px;color:var(--text-secondary);">Сумма: ' + o.total + '₽ | ' + o.timestamp + '</div>' +
-            '<button class="answer-btn" onclick="completeOrder(' + o.id + ')">✅ Выполнено</button>' +
-            '</div>';
-    });
-    container.innerHTML = html;
+    if (users.find(function(u) { return u.name === name; })) {
+        status.textContent = '❌ Этот никнейм уже занят';
+        status.style.color = '#ff6b6b';
+        btn.disabled = true;
+    } else {
+        status.textContent = '✅ Никнейм доступен';
+        status.style.color = '#4caf50';
+        btn.disabled = false;
+    }
 }
 
-function completeOrder(id) {
-    orders = orders.filter(function(o) { return o.id !== id; });
+function regStep1Next() {
+    document.getElementById('regStep1').classList.remove('active');
+    document.getElementById('regStep2').classList.add('active');
+}
+
+function generatePassword() {
+    var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    var pass = '';
+    for (var i = 0; i < 12; i++) {
+        pass += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    document.getElementById('regPassword').value = pass;
+}
+
+function regStep2Next() {
+    var name = document.getElementById('regName').value.trim();
+    var password = document.getElementById('regPassword').value.trim();
+    if (!password) { alert('Введите пароль'); return; }
+    users.push({ name: name, password: password });
+    currentUser = { name: name };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
     syncData();
-    renderAdminOrders();
+    updateCabinetUI();
+    showPage('home');
 }
 
-// ============================================================
-// 7. КОРЗИНА
-// ============================================================
-function addToCart(name, price) {
-    cart.push({ name: name, price: price });
-    updateCartUI();
-}
-
-function updateCartUI() {
-    document.getElementById('cartCounter').textContent = cart.length;
-    var list = document.getElementById('cartList');
-    if (!list) return;
-    if (!cart.length) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Корзина пуста</p>';
-        document.getElementById('cartTotal').textContent = '0 ₽';
-        return;
-    }
-    var html = '';
-    var total = 0;
-    cart.forEach(function(item, index) {
-        var priceNum = parseInt(item.price.replace(/\D/g,''));
-        if (!isNaN(priceNum)) total += priceNum;
-        html += '<div class="cart-item">' +
-            '<span>' + item.name + ' — ' + item.price + '</span>' +
-            '<button class="remove" onclick="removeFromCart(' + index + ')">✕</button>' +
-            '</div>';
-    });
-    list.innerHTML = html;
-    document.getElementById('cartTotal').textContent = total + ' ₽';
-}
-
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCartUI();
-}
-
-function toggleCart() {
-    var overlay = document.getElementById('cartOverlay');
-    if (overlay) {
-        overlay.classList.toggle('show');
-        updateCartUI();
-    }
-}
-
-function checkout() {
-    if (!cart.length) { alert('Корзина пуста'); return; }
-    if (!currentUser) { alert('Войдите в аккаунт для оформления заказа'); return; }
-    var total = 0;
-    var items = [];
-    cart.forEach(function(item) {
-        items.push(item.name);
-        var priceNum = parseInt(item.price.replace(/\D/g,''));
-        if (!isNaN(priceNum)) total += priceNum;
-    });
-    orders.push({
-        id: Date.now(),
-        userName: currentUser.name,
-        items: items,
-        total: total,
-        timestamp: new Date().toLocaleString()
-    });
-    cart = [];
-    syncData();
-    updateCartUI();
-    toggleCart();
-    alert('✅ Заказ оформлен! Специалист свяжется с вами в ближайшее время.');
-}
-    // ============================================================
-    // 8. ЛИЧНЫЙ КАБИНЕТ
-    // ============================================================
-    function updateCabinetUI() {
-        if (currentUser) {
-            document.getElementById('cabinetContent').style.display = 'block';
-            document.getElementById('authButtons').style.display = 'none';
-            document.getElementById('cabinetName').textContent = currentUser.name;
-            var ordersHtml = '';
-            var userOrders = orders.filter(function(o) { return o.userName === currentUser.name; });
-            if (!userOrders.length) {
-                ordersHtml = '<p style="color:var(--text-secondary);">Нет заказов</p>';
-            } else {
-                userOrders.forEach(function(o) {
-                    ordersHtml += '<div style="padding:8px 0;border-bottom:1px solid var(--glass-border);font-size:14px;">' +
-                        '📦 ' + o.items.join(', ') + ' — ' + o.total + '₽<br>' +
-                        '<span style="font-size:12px;color:var(--text-secondary);">' + o.timestamp + '</span>' +
-                        '</div>';
-                });
-            }
-            document.getElementById('cabinetOrders').innerHTML = ordersHtml;
-        } else {
-            document.getElementById('cabinetContent').style.display = 'none';
-            document.getElementById('authButtons').style.display = 'flex';
-        }
-    }
-
-    function logoutUser() {
-        currentUser = null;
-        localStorage.removeItem('currentUser');
-        updateCabinetUI();
-        showPage('home');
-    }
-
-    // ============================================================
-    // 9. РЕГИСТРАЦИЯ И ВХОД
-    // ============================================================
-    function checkUsername() {
-        var name = document.getElementById('regName').value.trim();
-        var btn = document.getElementById('regNextBtn');
-        var status = document.getElementById('usernameStatus');
-        if (!name) {
-            status.textContent = 'Введите никнейм';
-            btn.disabled = true;
-            return;
-        }
-        if (users.find(function(u) { return u.name === name; })) {
-            status.textContent = '❌ Этот никнейм уже занят';
-            status.style.color = '#ff6b6b';
-            btn.disabled = true;
-        } else {
-            status.textContent = '✅ Никнейм доступен';
-            status.style.color = '#4caf50';
-            btn.disabled = false;
-        }
-    }
-
-    function regStep1Next() {
-        document.getElementById('regStep1').classList.remove('active');
-        document.getElementById('regStep2').classList.add('active');
-    }
-
-    function generatePassword() {
-        var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-        var pass = '';
-        for (var i = 0; i < 12; i++) {
-            pass += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        document.getElementById('regPassword').value = pass;
-    }
-
-    function regStep2Next() {
-        var name = document.getElementById('regName').value.trim();
-        var password = document.getElementById('regPassword').value.trim();
-        if (!password) { alert('Введите пароль'); return; }
-        users.push({ name: name, password: password });
+function loginUser() {
+    var name = document.getElementById('loginName').value.trim();
+    var password = document.getElementById('loginPassword').value.trim();
+    var user = users.find(function(u) { return u.name === name && u.password === password; });
+    if (user) {
         currentUser = { name: name };
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        syncData();
         updateCabinetUI();
         showPage('home');
+    } else {
+        alert('Неверный логин или пароль');
     }
+}
+// ============================================================
+// 8. СОХРАНЕНИЕ ВОПРОСОВ ОТ ПОЛЬЗОВАТЕЛЕЙ
+// ============================================================
+function saveQuestion(text) {
+    questions.push({
+        id: Date.now(),
+        question: text,
+        userName: currentUser ? currentUser.name : 'Гость',
+        timestamp: new Date().toLocaleString(),
+        answer: ''
+    });
+    syncData();
+    renderAdminSupport();
+}
 
-    function loginUser() {
-        var name = document.getElementById('loginName').value.trim();
-        var password = document.getElementById('loginPassword').value.trim();
-        var user = users.find(function(u) { return u.name === name && u.password === password; });
-        if (user) {
-            currentUser = { name: name };
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            updateCabinetUI();
-            showPage('home');
-        } else {
-            alert('Неверный логин или пароль');
-        }
-    }
-
-    // ============================================================
-    // 10. ЗАПУСК
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', function() {
-        initData();
-        // Открытие админки по двойному клику на логотип
-        var logo = document.getElementById('adminTrigger');
-        if (logo) {
-            logo.addEventListener('dblclick', function(e) {
-                e.preventDefault();
-                openAdmin();
-            });
+// Переопределяем sendChatMessage для сохранения вопросов
+var originalSendChatMessage = sendChatMessage;
+sendChatMessage = function() {
+    var input = document.getElementById('chatInput');
+    var typing = document.getElementById('chatTyping');
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text) return;
+    addChatMessage(text, 'user', 'Вы');
+    input.value = '';
+    input.disabled = true;
+    typing.classList.add('active');
+    
+    // Сохраняем вопрос
+    saveQuestion(text);
+    
+    setTimeout(function() {
+        typing.classList.remove('active');
+        var answer = getAIAnswer(text);
+        addChatMessage(answer, 'bot', '🤖 Exeld');
+        input.disabled = false;
+        input.focus();
+    }, 500 + Math.random() * 800);
+};
+// ============================================================
+// 9. ОБРАБОТЧИКИ СОБЫТИЙ
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Enter в чате
+    document.getElementById('chatInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendChatMessage();
         }
     });
-</script>
+    
+    // Enter в админ-пароле
+    document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            adminLogin();
+        }
+    });
+    
+    // Запуск
+    initData();
+});
+// ============================================================
+// 10. БЫСТРЫЕ ВОПРОСЫ (кнопки в чате)
+// ============================================================
+// Добавляем кнопки быстрых вопросов под приветствием
+function addQuickButtons() {
+    var container = document.getElementById('chatMessages');
+    if (!container) return;
+    var div = document.createElement('div');
+    div.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;padding:4px 0;';
+    var questions = [
+        '👋 Привет!',
+        '💰 Сколько стоят услуги?',
+        '⏱️ Какие сроки?',
+        '💳 Как оплатить?',
+        '🖥️ Что такое Full-Stack?',
+        '⚙️ Какие технологии?',
+        '📞 Как связаться?',
+        '🛡️ Есть ли гарантия?',
+        '😂 Расскажи шутку',
+        '🤖 Кто ты?'
+    ];
+    questions.forEach(function(q) {
+        var btn = document.createElement('button');
+        btn.textContent = q;
+        btn.style.cssText = 'background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:16px;padding:4px 12px;font-size:11px;color:var(--text);cursor:pointer;transition:.2s;white-space:nowrap;';
+        btn.onclick = function() {
+            document.getElementById('chatInput').value = q.replace(/^.{1,2}\s/, '');
+            sendChatMessage();
+        };
+        div.appendChild(btn);
+    });
+    container.appendChild(div);
+}
+
+// Добавляем кнопки после загрузки
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(addQuickButtons, 500);
+});
+// ============================================================
+// 11. ОТКРЫТИЕ/ЗАКРЫТИЕ ЧАТА ПО КЛИКУ НА ИКОНКУ
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    var fab = document.getElementById('chatFab');
+    if (fab) {
+        fab.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleChat();
+        });
+    }
+    
+    // Закрытие чата при клике вне него
+    document.addEventListener('click', function(e) {
+        var win = document.getElementById('chatWindow');
+        var fab = document.getElementById('chatFab');
+        if (win && win.classList.contains('open')) {
+            if (!win.contains(e.target) && !fab.contains(e.target)) {
+                toggleChat();
+            }
+        }
+    });
+});
 </body>
 </html>
