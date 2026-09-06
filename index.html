@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXELD OSINT</title>
+    <title>EXELD DEV</title>
     
     <!-- Подключаем config.js для GitHub токена -->
     <script src="config.js"></script>
@@ -170,7 +170,6 @@ body {
     font-weight: 500;
     margin-bottom: 12px;
 }
-
 /* Анимации для герой-секции */
 @keyframes float {
     0% { transform: translate(0, 0) rotate(0deg); }
@@ -689,7 +688,6 @@ body {
 </head>
 <body>
 <canvas id="starsCanvas"></canvas>
-
 <!-- АДМИН-ПАНЕЛЬ -->
 <div class="admin-overlay" id="adminOverlay">
     <div class="admin-panel">
@@ -703,7 +701,7 @@ body {
         <div id="adminContent" style="display:none">
             <div class="admin-tabs">
                 <button class="active" onclick="switchAdminTab('support',this)">Поддержка <span id="supportNotif" class="admin-chat-notification" style="display:none">0</span></button>
-                <button onclick="switchAdminTab('specialist',this)">OSINT-специалист <span id="specialistNotif" class="admin-chat-notification" style="display:none">0</span></button>
+                <button onclick="switchAdminTab('specialist',this)">Специалист <span id="specialistNotif" class="admin-chat-notification" style="display:none">0</span></button>
                 <button onclick="switchAdminTab('users',this)">Пользователи</button>
                 <button onclick="switchAdminTab('search',this)">Поиск</button>
                 <button onclick="switchAdminTab('payments',this)">Оплаты</button>
@@ -711,7 +709,7 @@ body {
                 <button onclick="switchAdminTab('orders',this)">Заказы</button>
             </div>
             <div id="adminSupport" class="admin-tab active"><h3>Вопросы в поддержку</h3><div id="adminSupportList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
-            <div id="adminSpecialist" class="admin-tab"><h3>Вопросы OSINT-специалисту</h3><div id="adminSpecialistList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
+            <div id="adminSpecialist" class="admin-tab"><h3>Вопросы специалисту</h3><div id="adminSpecialistList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
             <div id="adminUsers" class="admin-tab"><h3>Пользователи</h3><div id="adminUsersList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
             <div id="adminSearch" class="admin-tab"><h3>Поиск пользователя</h3><input class="search-input" type="text" id="searchInput" placeholder="Введите никнейм..." oninput="searchUser()"><div id="searchResults"><p style="color:var(--text-secondary)">Начните вводить никнейм</p></div></div>
             <div id="adminPayments" class="admin-tab"><h3>Подтверждения оплаты</h3><div id="adminPaymentsList"><p style="color:var(--text-secondary)">Загрузка...</p></div></div>
@@ -724,14 +722,14 @@ body {
 <div class="container">
     <!-- ШАПКА (ЛИПКИЙ ХЕДЕР) -->
     <div class="header">
-        <span class="logo">EXELD <span>| OSINT</span></span>
+        <span class="logo">EXELD <span>| DEV</span></span>
         <div class="header-actions">
             <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
             <span class="cart-badge">🛒 <span id="cartCounter">0</span></span>
         </div>
     </div>
     
-    <!-- СКРЫТАЯ КНОПКА ДЛЯ ОТКРЫТИЯ АДМИНКИ (для телефона) -->
+    <!-- СКРЫТАЯ КНОПКА ДЛЯ ОТКРЫТИЯ АДМИНКИ -->
     <div style="text-align:center;margin:0;padding:0;height:0;overflow:visible;">
         <button onclick="openAdmin()" 
                 style="opacity:0.05;background:transparent;border:none;padding:30px 20px;font-size:8px;color:transparent;cursor:pointer;width:100%;height:10px;display:block;position:relative;z-index:10;">
@@ -749,75 +747,67 @@ body {
         <button onclick="showPage('cabinet')">Кабинет</button>
         <button onclick="toggleCart()">Корзина</button>
     </div>
-<!-- ГЛАВНАЯ -->
-<div id="home" class="page active">
     
-    <!-- БЛОК 1: ГЕРОЙ-СЕКЦИЯ (100% высоты) -->
-    <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;position:relative;overflow:hidden;">
+    <!-- ГЛАВНАЯ -->
+    <div id="home" class="page active">
         
-        <!-- Анимированный фон -->
-        <div style="position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%, rgba(255,255,255,0.03) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.02) 0%, transparent 50%);animation:float 20s infinite alternate;z-index:0;"></div>
-        
-        <div style="position:relative;z-index:1;padding:40px 20px;">
-            <!-- Имя -->
-            <h1 style="font-size:64px;font-weight:900;letter-spacing:-2px;color:var(--text);text-shadow:0 0 60px rgba(255,255,255,0.1),0 0 120px rgba(255,255,255,0.05);margin:0 0 10px 0;line-height:1.1;">
-                EXELD
-            </h1>
+        <!-- ГЕРОЙ-СЕКЦИЯ -->
+        <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;position:relative;overflow:hidden;">
             
-            <!-- Подзаголовок -->
-            <p style="font-size:20px;font-weight:300;color:var(--text-secondary);letter-spacing:6px;text-transform:uppercase;margin-bottom:16px;">
-                OSINT-исследователь
-            </p>
+            <!-- Анимированный фон -->
+            <div style="position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%, rgba(255,255,255,0.03) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.02) 0%, transparent 50%);animation:float 20s infinite alternate;z-index:0;"></div>
             
-            <!-- Слоган -->
-            <p style="font-size:18px;color:var(--text-secondary);max-width:400px;margin:0 auto 30px;line-height:1.6;">
-                Нахожу уязвимости там, где их не ждут
-            </p>
+            <div style="position:relative;z-index:1;padding:40px 20px;">
+                <h1 style="font-size:64px;font-weight:900;letter-spacing:-2px;color:var(--text);text-shadow:0 0 60px rgba(255,255,255,0.1),0 0 120px rgba(255,255,255,0.05);margin:0 0 10px 0;line-height:1.1;">
+                    EXELD
+                </h1>
+                <p style="font-size:20px;font-weight:300;color:var(--text-secondary);letter-spacing:6px;text-transform:uppercase;margin-bottom:16px;">
+                    Full-Stack Developer
+                </p>
+                <p style="font-size:18px;color:var(--text-secondary);max-width:400px;margin:0 auto 30px;line-height:1.6;">
+                    Создаю решения там, где другие видят проблемы
+                </p>
+                <button onclick="showPage('services')" style="display:inline-block;background:var(--accent);color:var(--bg);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:600;border:2px solid var(--accent);cursor:pointer;transition:all 0.3s;margin:5px;">
+                    Мои услуги →
+                </button>
+                <button onclick="showPage('contacts')" style="display:inline-block;background:transparent;color:var(--text);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:400;border:2px solid var(--glass-border);cursor:pointer;transition:all 0.3s;margin:5px;">
+                    Связаться
+                </button>
+            </div>
             
-            <!-- Кнопки -->
-            <button onclick="showPage('services')" style="display:inline-block;background:var(--accent);color:var(--bg);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:600;border:2px solid var(--accent);cursor:pointer;transition:all 0.3s;margin:5px;">
-                Перейти к услугам →
-            </button>
-            <button onclick="showPage('contacts')" style="display:inline-block;background:transparent;color:var(--text);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:400;border:2px solid var(--glass-border);cursor:pointer;transition:all 0.3s;margin:5px;">
-                Связаться
-            </button>
+            <!-- Индикатор скролла -->
+            <div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);animation:bounce 2s infinite;z-index:1;">
+                <span style="display:block;width:24px;height:40px;border:2px solid var(--text-secondary);border-radius:12px;position:relative;">
+                    <span style="display:block;width:4px;height:8px;background:var(--text-secondary);border-radius:2px;position:absolute;top:8px;left:50%;transform:translateX(-50%);animation:scrollDown 2s infinite;"></span>
+                </span>
+            </div>
         </div>
-        
-        <!-- Индикатор скролла -->
-        <div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);animation:bounce 2s infinite;z-index:1;">
-            <span style="display:block;width:24px;height:40px;border:2px solid var(--text-secondary);border-radius:12px;position:relative;">
-                <span style="display:block;width:4px;height:8px;background:var(--text-secondary);border-radius:2px;position:absolute;top:8px;left:50%;transform:translateX(-50%);animation:scrollDown 2s infinite;"></span>
-            </span>
-        </div>
-    </div>
-    
-    <!-- БЛОК 2: КРАТКАЯ ИНФОРМАЦИЯ О ВЛАДЕЛЬЦЕ -->
+    <!-- БЛОК: ОБО МНЕ -->
     <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:30px 24px;box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;">
         <h2 style="font-size:22px;font-weight:600;margin-bottom:12px;letter-spacing:-0.3px;">Обо мне</h2>
         <p style="color:var(--text-secondary);font-size:15px;line-height:1.8;margin-bottom:12px;">
-            Более <strong style="color:var(--text);">двух лет</strong> профессионально занимаюсь <strong style="color:var(--text);">OSINT</strong> — разведкой по открытым источникам. 
-            Моя специализация — на стыке веб-технологий и финансовой безопасности. 
-            Анализирую цифровую инфраструктуру бизнеса: от технического аудита сайтов до финансовой разведки 
-            и построения связей между бенефициарами.
+            Более <strong style="color:var(--text);">трёх лет</strong> профессионально занимаюсь <strong style="color:var(--text);">Full-Stack разработкой</strong>. 
+            Специализируюсь на создании Telegram-ботов, веб-сайтов, Mini Apps и OSINT-утилит. 
+            Пишу на Python, JavaScript, использую Aiogram, Flask, React, а также работаю с API и базами данных.
         </p>
         <button onclick="showPage('bio')" style="display:inline-block;color:var(--accent);font-size:14px;font-weight:500;text-decoration:none;border-bottom:2px solid var(--accent);padding-bottom:2px;background:transparent;border:none;cursor:pointer;transition:all 0.3s;">
             Подробнее →
         </button>
     </div>
     
-    <!-- БЛОК 3: БЫСТРЫЕ ЦИФРЫ -->
+    <!-- БЛОК: БЫСТРЫЕ ЦИФРЫ -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:10px;">
         <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:20px 12px;text-align:center;">
             <div style="font-size:28px;font-weight:700;color:var(--accent);">50+</div>
             <div style="font-size:12px;color:var(--text-secondary);">Проектов</div>
         </div>
         <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:20px 12px;text-align:center;">
-            <div style="font-size:28px;font-weight:700;color:var(--accent);">2+</div>
+            <div style="font-size:28px;font-weight:700;color:var(--accent);">3+</div>
             <div style="font-size:12px;color:var(--text-secondary);">Лет опыта</div>
         </div>
         <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:20px 12px;text-align:center;">
             <div style="font-size:28px;font-weight:700;color:var(--accent);">100%</div>
-            <div style="font-size:12px;color:var(--text-secondary);">Конфиденциальность</div>
+            <div style="font-size:12px;color:var(--text-secondary);">Гарантия качества</div>
         </div>
     </div>
 </div>
@@ -829,14 +819,14 @@ body {
         
         <h2 style="font-size:28px;font-weight:700;margin-bottom:4px;letter-spacing:-0.5px;color:var(--text);">EXELD</h2>
         <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;letter-spacing:2px;text-transform:uppercase;">
-            OSINT-исследователь • Специалист по открытым источникам
+            Full-Stack Developer • Специалист по Telegram-ботам и веб-разработке
         </p>
         
         <hr style="border:1px solid var(--glass-border);margin-bottom:20px;">
         
         <div style="color:var(--text-secondary);font-size:15px;line-height:1.9;">
             <p style="margin-bottom:16px;">
-                Меня зовут <strong style="color:var(--text);">Exeld</strong>, и вот уже более <strong style="color:var(--text);">двух лет</strong> я профессионально занимаюсь <strong style="color:var(--text);">OSINT</strong> (разведкой по открытым источникам). Моя специализация лежит на стыке веб-технологий и финансовой безопасности. Я не просто ищу данные — я анализирую цифровую инфраструктуру бизнеса.
+                Меня зовут <strong style="color:var(--text);">Exeld</strong>, и вот уже более <strong style="color:var(--text);">трёх лет</strong> я профессионально занимаюсь <strong style="color:var(--text);">Full-Stack разработкой</strong>. Моя специализация — создание Telegram-ботов любой сложности, веб-сайтов, Mini Apps и OSINT-утилит.
             </p>
             
             <p style="margin-bottom:16px;font-weight:500;color:var(--text);">
@@ -845,39 +835,39 @@ body {
             
             <ul style="list-style:none;padding:0;margin-bottom:16px;">
                 <li style="padding:8px 0 8px 28px;position:relative;border-bottom:1px solid var(--glass-border);">
-                    <span style="position:absolute;left:0;top:8px;font-size:16px;">🔍</span>
-                    <strong style="color:var(--text);">Технический анализ сайтов:</strong>
-                    <span style="color:var(--text-secondary);">Сканирование стека технологий (CMS, серверное ПО, плагины), выявление уязвимостей в конфигурациях и поиск скрытых поддоменов.</span>
+                    <span style="position:absolute;left:0;top:8px;font-size:16px;">🤖</span>
+                    <strong style="color:var(--text);">Telegram-боты:</strong>
+                    <span style="color:var(--text-secondary);">Разработка ботов на Python (Aiogram), интеграция с API, платежные системы, административные панели.</span>
                 </li>
                 <li style="padding:8px 0 8px 28px;position:relative;border-bottom:1px solid var(--glass-border);">
-                    <span style="position:absolute;left:0;top:8px;font-size:16px;">💰</span>
-                    <strong style="color:var(--text);">Финансовая разведка:</strong>
-                    <span style="color:var(--text-secondary);">Глубинный сбор данных по компаниям (выручка, налоги, судебные дела).</span>
+                    <span style="position:absolute;left:0;top:8px;font-size:16px;">🌐</span>
+                    <strong style="color:var(--text);">Веб-сайты:</strong>
+                    <span style="color:var(--text-secondary);">Создание сайтов на Flask, Django, React. Верстка, адаптив, подключение баз данных.</span>
                 </li>
                 <li style="padding:8px 0 8px 28px;position:relative;">
-                    <span style="position:absolute;left:0;top:8px;font-size:16px;">🔗</span>
-                    <strong style="color:var(--text);">Построение связей:</strong>
-                    <span style="color:var(--text-secondary);">Восстановление цепочек бенефициаров, поиск перекрестных ссылок между учредителями, директорами и аффилированными лицами, проверка лицензионной чистоты.</span>
+                    <span style="position:absolute;left:0;top:8px;font-size:16px;">📱</span>
+                    <strong style="color:var(--text);">Mini Apps:</strong>
+                    <span style="color:var(--text-secondary);">Разработка мини-приложений для Telegram, интеграция с TON-кошельками, WebApp API.</span>
                 </li>
             </ul>
             
             <p style="margin-top:16px;padding:16px;background:var(--glass-bg);border-radius:var(--radius);border-left:3px solid var(--accent);">
-                За плечами — <strong style="color:var(--text);">десятки завершенных расследований</strong> для служб безопасности и Due Diligence. Я помогаю заказчикам видеть реальную структуру бизнеса за фасадом красивых сайтов и официальных выписок.
+                За плечами — <strong style="color:var(--text);">десятки завершенных проектов</strong> для бизнеса и частных лиц. Я помогаю клиентам автоматизировать процессы, создавать удобные интерфейсы и решать сложные технические задачи.
             </p>
         </div>
         
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:24px;">
             <div style="background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px 12px;text-align:center;">
-                <div style="font-size:28px;font-weight:700;color:var(--accent);">2+</div>
+                <div style="font-size:28px;font-weight:700;color:var(--accent);">3+</div>
                 <div style="font-size:12px;color:var(--text-secondary);">Года опыта</div>
             </div>
             <div style="background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px 12px;text-align:center;">
                 <div style="font-size:28px;font-weight:700;color:var(--accent);">50+</div>
-                <div style="font-size:12px;color:var(--text-secondary);">Расследований</div>
+                <div style="font-size:12px;color:var(--text-secondary);">Проектов</div>
             </div>
             <div style="background:var(--glass-bg);border-radius:var(--radius);border:1px solid var(--glass-border);padding:16px 12px;text-align:center;">
                 <div style="font-size:28px;font-weight:700;color:var(--accent);">100%</div>
-                <div style="font-size:12px;color:var(--text-secondary);">Конфиденциальность</div>
+                <div style="font-size:12px;color:var(--text-secondary);">Гарантия</div>
             </div>
         </div>
     </div>
@@ -886,17 +876,48 @@ body {
 <div id="services" class="page">
     <h2>Услуги</h2>
     <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">
-        Предлагаю полный спектр OSINT-услуг для бизнеса и частных лиц. Работаю с юридическими лицами и частными заказами. Полная конфиденциальность гарантирована.
+        Предлагаю полный спектр услуг по разработке. Работаю с юридическими лицами и частными заказами. Гарантия качества на все проекты.
     </p>
-    <div id="servicesList"></div>
+    <div id="servicesList">
+        <!-- Telegram-боты -->
+        <div style="margin-top:16px;">
+            <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">🤖 Telegram-боты</h3>
+            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Простой бот с базовыми командами</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('Telegram-бот Легкий', '1 500 – 3 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Средний</h3><p>Бот с API, платежами, админ-панелью</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('Telegram-бот Средний', '4 000 – 7 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Полноценный бизнес-бот с CRM, аналитикой</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('Telegram-бот Сложный', '8 000 – 12 500 ₽')">+</button></div>
+        </div>
+        
+        <!-- Сайты -->
+        <div style="margin-top:16px;">
+            <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">🌐 Сайты</h3>
+            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Сайт-визитка, лендинг</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('Сайт Легкий', '1 500 – 3 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Средний</h3><p>Корпоративный сайт с админ-панелью</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('Сайт Средний', '4 000 – 7 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Интернет-магазин, CRM-система</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('Сайт Сложный', '8 000 – 12 500 ₽')">+</button></div>
+        </div>
+        
+        <!-- Mini Apps -->
+        <div style="margin-top:16px;">
+            <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">📱 Mini Apps</h3>
+            <div class="service-card"><div class="info"><h3>Легкий</h3><p>Мини-приложение с базовым функционалом</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('Mini App Легкий', '1 500 – 3 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Средний</h3><p>Mini App с API, интеграция с TON</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('Mini App Средний', '4 000 – 7 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Сложный</h3><p>Полноценное приложение с WebApp API</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('Mini App Сложный', '8 000 – 12 500 ₽')">+</button></div>
+        </div>
+        
+        <!-- OSINT-утилиты -->
+        <div style="margin-top:16px;">
+            <h3 style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">🕵️ OSINT-утилиты</h3>
+            <div class="service-card"><div class="info"><h3>Легкая</h3><p>Сбор данных из открытых источников</p></div><div class="price">1 500 – 3 500 ₽</div><button class="btn-add" onclick="addToCart('OSINT-утилита Легкая', '1 500 – 3 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Средняя</h3><p>Парсинг, анализ данных, отчеты</p></div><div class="price">4 000 – 7 500 ₽</div><button class="btn-add" onclick="addToCart('OSINT-утилита Средняя', '4 000 – 7 500 ₽')">+</button></div>
+            <div class="service-card"><div class="info"><h3>Сложная</h3><p>Автоматизированный сбор и анализ больших данных</p></div><div class="price">8 000 – 12 500 ₽</div><button class="btn-add" onclick="addToCart('OSINT-утилита Сложная', '8 000 – 12 500 ₽')">+</button></div>
+        </div>
+    </div>
 </div>
-
 <!-- КОРЗИНА -->
 <div class="cart-overlay" id="cartOverlay">
     <button class="close" onclick="toggleCart()">✕</button>
     <h3>Корзина</h3>
     <div id="cartList"></div>
-    <div class="cart-total" id="cartTotal">0 USDT</div>
+    <div class="cart-total" id="cartTotal">0 ₽</div>
     <button class="btn-checkout" onclick="checkout()">Оформить заказ</button>
 </div>
 
@@ -913,135 +934,133 @@ body {
         <div class="chat-menu-item" onclick="openChat('specialist')">
             <div style="display:flex;align-items:center;gap:12px">
                 <span class="chat-icon">🕵️</span>
-                <div><div class="chat-label">Чат с OSINT-специалистом</div><div class="chat-desc">Консультация эксперта</div></div>
+                <div><div class="chat-label">Чат со специалистом</div><div class="chat-desc">Консультация эксперта</div></div>
             </div>
         </div>
     </div>
     <div style="margin-top:20px;padding:14px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);font-size:13px;color:var(--text-secondary);text-align:center">Выберите чат для общения</div>
 </div>
-    <!-- КОНТАКТЫ -->
-    <div id="contacts" class="page">
-        <h2>Контакты</h2>
-        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">
-            Свяжитесь со мной любым удобным способом. Отвечаю в течение 24 часов.
-        </p>
-        <div style="display:flex;flex-direction:column;gap:12px;">
-            <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
-                <span style="font-size:24px;">📱</span>
-                <div>
-                    <div style="font-size:12px;color:var(--text-secondary);">Telegram</div>
-                    <div style="font-size:16px;color:var(--text);">@sprintdrop</div>
-                </div>
+
+<!-- КОНТАКТЫ -->
+<div id="contacts" class="page">
+    <h2>Контакты</h2>
+    <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">
+        Свяжитесь со мной любым удобным способом. Отвечаю в течение 24 часов.
+    </p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">📱</span>
+            <div>
+                <div style="font-size:12px;color:var(--text-secondary);">Telegram</div>
+                <div style="font-size:16px;color:var(--text);">@sprintdrop</div>
             </div>
-            <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
-                <span style="font-size:24px;">🐙</span>
-                <div>
-                    <div style="font-size:12px;color:var(--text-secondary);">GitHub</div>
-                    <div style="font-size:16px;color:var(--text);">github.com/sprintdrop</div>
-                </div>
+        </div>
+        <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">🐙</span>
+            <div>
+                <div style="font-size:12px;color:var(--text-secondary);">GitHub</div>
+                <div style="font-size:16px;color:var(--text);">github.com/sprintdrop</div>
             </div>
-            <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
-                <span style="font-size:24px;">✉️</span>
-                <div>
-                    <div style="font-size:12px;color:var(--text-secondary);">Email</div>
-                    <div style="font-size:16px;color:var(--text);">exeld@proton.me</div>
-                </div>
+        </div>
+        <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">✉️</span>
+            <div>
+                <div style="font-size:12px;color:var(--text-secondary);">Email</div>
+                <div style="font-size:16px;color:var(--text);">exeld@proton.me</div>
             </div>
         </div>
     </div>
-    
-    <!-- ЛИЧНЫЙ КАБИНЕТ -->
-    <div id="cabinet" class="page">
-        <h2>Личный кабинет</h2>
-        <div id="cabinetContent" style="display:none">
-            <div class="cabinet-info">
-                <div class="label">Nickname</div>
-                <div class="value" id="cabinetName"></div>
-            </div>
-            <div style="margin-top:16px"><h4>История заказов</h4><div id="cabinetOrders"></div></div>
-            <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button>
+</div>
+<!-- ЛИЧНЫЙ КАБИНЕТ -->
+<div id="cabinet" class="page">
+    <h2>Личный кабинет</h2>
+    <div id="cabinetContent" style="display:none">
+        <div class="cabinet-info">
+            <div class="label">Nickname</div>
+            <div class="value" id="cabinetName"></div>
         </div>
-        <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
-            <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
-            <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
+        <div style="margin-top:16px"><h4>История заказов</h4><div id="cabinetOrders"></div></div>
+        <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button>
+    </div>
+    <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+        <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
+        <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
+    </div>
+</div>
+
+<!-- РЕГИСТРАЦИЯ -->
+<div id="register" class="page">
+    <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
+    <h2>Регистрация</h2>
+    <div id="regStep1" class="reg-step active">
+        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Введите ваш Nickname</label>
+        <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
+        <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary)"></div>
+        <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
+    </div>
+    <div id="regStep2" class="reg-step">
+        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Придумайте пароль</label>
+        <input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте">
+        <span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span>
+        <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
+    </div>
+</div>
+
+<!-- ВХОД -->
+<div id="login" class="page">
+    <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
+    <h2>Вход</h2>
+    <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Ваш Nickname</label>
+    <input type="text" id="loginName" placeholder="Введите никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
+    <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Пароль</label>
+    <input type="password" id="loginPassword" placeholder="Введите пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
+    <button class="auth-btn primary" onclick="loginUser()">Войти</button>
+</div>
+<!-- ЧАТ С ПОДДЕРЖКОЙ -->
+<div id="chatSupport" class="chat-page">
+    <div class="chat-header">
+        <h4>💬 Чат с поддержкой</h4>
+        <span class="chat-type-badge support">🤖 ИИ-помощник</span>
+        <button class="close-chat" onclick="closeChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="supportMessages">
+        <div class="msg bot">
+            <span class="sender-name bot">🤖 ИИ-помощник</span>
+            Привет! Я ИИ-помощник. Задавай вопросы или нажимай на кнопки ниже! 🚀
+            <span class="time">00:00</span>
         </div>
     </div>
+    <div class="typing" id="supportTyping"><span>.</span><span>.</span><span>.</span></div>
     
-    <!-- РЕГИСТРАЦИЯ -->
-    <div id="register" class="page">
-        <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-        <h2>Регистрация</h2>
-        <div id="regStep1" class="reg-step active">
-            <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Введите ваш Nickname</label>
-            <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
-            <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary)"></div>
-            <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
-        </div>
-        <div id="regStep2" class="reg-step">
-            <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Придумайте пароль</label>
-            <input type="text" id="regPassword" placeholder="Введите пароль или сгенерируйте">
-            <span class="generate-link" onclick="generatePassword()">Сгенерировать пароль</span>
-            <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
-        </div>
+    <!-- БЛОК С КНОПКАМИ-ВОПРОСАМИ (6-10 штук) -->
+    <div style="padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--glass-border);background:var(--glass-bg);">
+        <button onclick="quickQuestion('Привет! Как дела?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">👋 Привет</button>
+        <button onclick="quickQuestion('Сколько стоят услуги?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">💰 Цены</button>
+        <button onclick="quickQuestion('Какие сроки выполнения?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">⏱️ Сроки</button>
+        <button onclick="quickQuestion('Как оплатить заказ?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">💳 Оплата</button>
+        <button onclick="quickQuestion('Что такое Full-Stack разработка?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🖥️ Full-Stack</button>
+        <button onclick="quickQuestion('Какие технологии используете?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">⚙️ Технологии</button>
+        <button onclick="quickQuestion('Как связаться с вами?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">📞 Контакты</button>
+        <button onclick="quickQuestion('Есть ли гарантия?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🛡️ Гарантия</button>
+        <button onclick="quickQuestion('Расскажи шутку')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">😂 Шутка</button>
+        <button onclick="quickQuestion('Ты кто?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🤖 Кто ты?</button>
     </div>
     
-    <!-- ВХОД -->
-    <div id="login" class="page">
-        <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
-        <h2>Вход</h2>
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Ваш Nickname</label>
-        <input type="text" id="loginName" placeholder="Введите никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
-        <label style="display:block;margin-bottom:6px;color:var(--text-secondary)">Пароль</label>
-        <input type="password" id="loginPassword" placeholder="Введите пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px">
-        <button class="auth-btn primary" onclick="loginUser()">Войти</button>
+    <div class="chat-input">
+        <input type="text" id="supportInput" placeholder="Напиши вопрос..." autofocus>
+        <button onclick="sendSupportMessage()">➤</button>
     </div>
-    
-    <!-- ЧАТ С ПОДДЕРЖКОЙ -->
-    <div id="chatSupport" class="chat-page">
-        <div class="chat-header">
-            <h4>💬 Чат с поддержкой</h4>
-            <span class="chat-type-badge support">🤖 ИИ-помощник</span>
-            <button class="close-chat" onclick="closeChat()">✕</button>
-        </div>
-        <div class="chat-messages" id="supportMessages">
-            <div class="msg bot">
-                <span class="sender-name bot">🤖 ИИ-помощник</span>
-                Привет! Я ИИ-помощник. Задавай вопросы или нажимай на кнопки ниже! 🚀
-                <span class="time">00:00</span>
-            </div>
-        </div>
-        <div class="typing" id="supportTyping"><span>.</span><span>.</span><span>.</span></div>
-        
-        <!-- БЛОК С КНОПКАМИ-ВОПРОСАМИ -->
-        <div style="padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--glass-border);background:var(--glass-bg);">
-            <button onclick="quickQuestion('Привет! Как дела?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">👋 Привет</button>
-            <button onclick="quickQuestion('Сколько стоят услуги?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">💰 Цены</button>
-            <button onclick="quickQuestion('Какие сроки выполнения?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">⏱️ Сроки</button>
-            <button onclick="quickQuestion('Как оплатить заказ?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">💳 Оплата</button>
-            <button onclick="quickQuestion('Что такое OSINT?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🕵️ OSINT</button>
-            <button onclick="quickQuestion('Как связаться с вами?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">📞 Контакты</button>
-            <button onclick="quickQuestion('Это анонимно?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🔒 Анонимно</button>
-            <button onclick="quickQuestion('Проводите аудит безопасности?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🛡️ Безопасность</button>
-            <button onclick="quickQuestion('Расскажи шутку')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">😂 Шутка</button>
-            <button onclick="quickQuestion('Ты кто?')" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text);cursor:pointer;transition:.2s;">🤖 Кто ты?</button>
-        </div>
-        
-        <div class="chat-input">
-            <input type="text" id="supportInput" placeholder="Напиши вопрос..." autofocus>
-            <button onclick="sendSupportMessage()">➤</button>
-        </div>
-    </div>
-    
-    <!-- ЧАТ С OSINT-СПЕЦИАЛИСТОМ -->
+</div>
+    <!-- ЧАТ СО СПЕЦИАЛИСТОМ -->
     <div id="chatSpecialist" class="chat-page">
         <div class="chat-header">
-            <h4>🕵️ Чат с OSINT-специалистом</h4>
+            <h4>🕵️ Чат со специалистом</h4>
             <span class="chat-type-badge specialist">Эксперт</span>
             <button class="close-chat" onclick="closeChat()">✕</button>
         </div>
         <div class="chat-messages" id="specialistMessages">
             <div class="msg bot">
-                <span class="sender-name bot">🕵️ OSINT-специалист</span>
+                <span class="sender-name bot">🕵️ Специалист</span>
                 Здравствуйте! Опишите вашу задачу, и я помогу вам. 📊
                 <span class="time">00:00</span>
             </div>
@@ -1135,60 +1154,59 @@ body {
             return false;
         }
     }
-
-    async function initData() {
-        const data = await loadFromGitHub();
-        if (data) { 
-            appData = data; 
+async function initData() {
+    const data = await loadFromGitHub();
+    if (data) { 
+        appData = data; 
+    } else {
+        const backup = localStorage.getItem('appData_backup');
+        if (backup) {
+            try {
+                appData = JSON.parse(backup);
+                console.log('Данные восстановлены из локального бэкапа');
+            } catch (e) {}
         } else {
-            const backup = localStorage.getItem('appData_backup');
-            if (backup) {
-                try {
-                    appData = JSON.parse(backup);
-                    console.log('Данные восстановлены из локального бэкапа');
-                } catch (e) {}
-            } else {
-                await saveToGitHub(appData);
-            }
-        }
-        applyData();
-    }
-
-    function applyData() {
-        users = appData.users || [];
-        unansweredSupport = appData.unansweredSupport || [];
-        unansweredSpecialist = appData.unansweredSpecialist || [];
-        paymentConfirmations = appData.paymentConfirmations || [];
-        orders = appData.orders || [];
-        updateCabinetUI();
-        updateAdminNotification('support');
-        updateAdminNotification('specialist');
-        renderAdminUsers();
-        renderAdminPayments();
-        renderAdminSupport();
-        renderAdminSpecialist();
-        
-        setTimeout(function() {
-            if (!currentUser) {
-                showPage('register');
-            } else {
-                showPage('home');
-            }
-        }, 100);
-    }
-
-    async function syncData() {
-        appData.users = users;
-        appData.unansweredSupport = unansweredSupport;
-        appData.unansweredSpecialist = unansweredSpecialist;
-        appData.paymentConfirmations = paymentConfirmations;
-        appData.orders = orders;
-        localStorage.setItem('appData_backup', JSON.stringify(appData));
-        var saved = await saveToGitHub(appData);
-        if (!saved) {
-            console.log('Данные сохранены локально');
+            await saveToGitHub(appData);
         }
     }
+    applyData();
+}
+
+function applyData() {
+    users = appData.users || [];
+    unansweredSupport = appData.unansweredSupport || [];
+    unansweredSpecialist = appData.unansweredSpecialist || [];
+    paymentConfirmations = appData.paymentConfirmations || [];
+    orders = appData.orders || [];
+    updateCabinetUI();
+    updateAdminNotification('support');
+    updateAdminNotification('specialist');
+    renderAdminUsers();
+    renderAdminPayments();
+    renderAdminSupport();
+    renderAdminSpecialist();
+    
+    setTimeout(function() {
+        if (!currentUser) {
+            showPage('register');
+        } else {
+            showPage('home');
+        }
+    }, 100);
+}
+
+async function syncData() {
+    appData.users = users;
+    appData.unansweredSupport = unansweredSupport;
+    appData.unansweredSpecialist = unansweredSpecialist;
+    appData.paymentConfirmations = paymentConfirmations;
+    appData.orders = orders;
+    localStorage.setItem('appData_backup', JSON.stringify(appData));
+    var saved = await saveToGitHub(appData);
+    if (!saved) {
+        console.log('Данные сохранены локально');
+    }
+}
 // ============================================================
 // 1. ПОИСК ПОЛЬЗОВАТЕЛЯ
 // ============================================================
@@ -1246,7 +1264,6 @@ function openChatWithUser(name) {
     );
     document.getElementById('adminChatInput').focus();
 }
-
 function renderUserMessages(name) {
     var all = [].concat(
         unansweredSupport.filter(function(m) { return m.userName === name; }),
@@ -1290,6 +1307,7 @@ function sendAdminMessage(name) {
     renderAdminSpecialist();
     updateAdminNotification('support');
 }
+
 // ============================================================
 // 2. ЗВЁЗДЫ И ТЕМА
 // ============================================================
@@ -1358,7 +1376,6 @@ function toggleTheme() {
     }
 }
 updateStarColor('#fff');
-
 // ============================================================
 // 3. НАВИГАЦИЯ
 // ============================================================
@@ -1412,23 +1429,51 @@ function closeChat() {
     if (menu) menu.classList.add('active');
 }
 // ============================================================
-// 4. ЧАТ С ПОДДЕРЖКОЙ (ИИ-помощник)
+// 4. ЧАТ С ПОДДЕРЖКОЙ (ИИ-помощник) - БАЗА ЗНАНИЙ
 // ============================================================
 var supportKnowledge = [
-    { keywords: ['привет', 'здравствуй', 'ку', 'hello', 'hi'], answer: 'Здравствуйте! Я ИИ-помощник поддержки. Чем могу помочь?' },
-    { keywords: ['цена', 'сколько', 'стоимость', 'прайс', 'рублей', '$'], answer: 'Цены в USDT: телефон — 16.7, фото — 33.3, email — 11.1, досье — 55.6, профилирование — 133.3, юрлицо — 44.4, устойчивость — 66.7, контрагент — 166.7, мониторинг — 277.8, хеш — 8.9, метаданные — 5.6, домен — 33.3, полевое — 55.6.' },
-    { keywords: ['срок', 'время', 'быстро', 'долго', 'скоро'], answer: 'Сроки: телефон — 30 мин, фото — 1 час, email — 20 мин, досье — 2 часа, профилирование — 1 день, юрлицо — 2 часа, устойчивость — 4 часа, контрагент — 1 день, мониторинг — 30 дней.' },
-    { keywords: ['osint', 'разведка', 'сбор данных', 'информация', 'найти'], answer: 'OSINT — сбор данных из открытых источников: соцсети, домены, утечки, юр. структуры.' },
-    { keywords: ['оплата', 'крипта', 'usdt', 'биткоин', 'деньги', 'платить'], answer: 'Оплата только в USDT (BEP20/ERC20). Кошелёк: UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n' },
-    { keywords: ['контакты', 'связаться', 'телеграм', 'telegram', '@'], answer: 'Связь через Telegram: @sprintdrop' },
-    { keywords: ['анонимно', 'конфиденциально', 'приватно', 'секретно', 'скрыть', 'тайно'], answer: 'Работаю полностью анонимно и конфиденциально. Оплата криптой.' },
-    { keywords: ['уязвимость', 'безопасность', 'аудит', 'защита', 'взлом'], answer: 'Провожу аудит безопасности: поиск уязвимостей, проверка на утечки данных.' },
-    { keywords: ['шутка', 'смеш', 'хаха', 'lol', 'прикол'], answer: '🤣 Почему программисты путают Хэллоуин и Рождество? Потому что Oct 31 = Dec 25! 😄' },
-    { keywords: ['кто ты', 'ты кто', 'представься', 'расскажи о себе'], answer: '🤖 Я ИИ-помощник поддержки! Умею отвечать на вопросы про OSINT, цены, сроки, оплату. Могу рассказать шутку. Чем могу помочь? 🚀' },
-    { keywords: ['спасибо', 'thx', 'thanks', 'благодарю'], answer: '😊 Пожалуйста! Всегда рад помочь! Если понадобится что-то ещё — обращайся. Удачи! 🍀' },
-    { keywords: ['пока', 'до свидания', 'bye', 'goodbye', 'прощай'], answer: '👋 До свидания! Хорошего дня! Если будут вопросы — я здесь. Возвращайся! 🚀' }
+    { keywords: ['привет', 'здравствуй', 'ку', 'hello', 'hi'], 
+      answer: 'Здравствуйте! Я ИИ-помощник поддержки. Чем могу помочь? 🚀' },
+    
+    { keywords: ['цена', 'сколько', 'стоимость', 'прайс', 'рублей', '₽'], 
+      answer: 'Цены на услуги:\n• Telegram-боты: Легкий 1 500–3 500₽, Средний 4 000–7 500₽, Сложный 8 000–12 500₽\n• Сайты: Легкий 1 500–3 500₽, Средний 4 000–7 500₽, Сложный 8 000–12 500₽\n• Mini Apps: Легкий 1 500–3 500₽, Средний 4 000–7 500₽, Сложный 8 000–12 500₽\n• OSINT-утилиты: Легкая 1 500–3 500₽, Средняя 4 000–7 500₽, Сложная 8 000–12 500₽' },
+    
+    { keywords: ['срок', 'время', 'быстро', 'долго', 'скоро', 'выполнение'], 
+      answer: 'Сроки выполнения:\n• Легкие проекты — 2-5 дней\n• Средние проекты — 1-2 недели\n• Сложные проекты — 2-4 недели\nТочные сроки обсуждаются индивидуально.' },
+    
+    { keywords: ['оплата', 'крипта', 'usdt', 'биткоин', 'деньги', 'платить', 'карта'], 
+      answer: 'Оплата принимается в рублях (перевод на карту) и в USDT (BEP20/ERC20). Кошелёк: UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n' },
+    
+    { keywords: ['full-stack', 'fullstack', 'фулстек', 'фулл-стек', 'разработчик'], 
+      answer: 'Full-Stack разработка — это создание как серверной (backend), так и клиентской (frontend) частей приложений. Я работаю с Python, JavaScript, Flask, React, Aiogram и другими технологиями.' },
+    
+    { keywords: ['технологии', 'стек', 'языки', 'фреймворки', 'инструменты'], 
+      answer: 'Мой стек технологий:\n• Backend: Python, Flask, Django, Aiogram\n• Frontend: React, HTML, CSS, JavaScript\n• Базы данных: PostgreSQL, SQLite, MongoDB\n• Другое: Docker, Git, REST API, TON' },
+    
+    { keywords: ['контакты', 'связаться', 'телеграм', 'telegram', '@', 'связь'], 
+      answer: 'Связь через Telegram: @sprintdrop\nEmail: exeld@proton.me\nGitHub: github.com/sprintdrop' },
+    
+    { keywords: ['гарантия', 'качество', 'надёжность', 'доверие'], 
+      answer: 'Предоставляю гарантию на все проекты. Бесплатная поддержка в течение 1 месяца после сдачи. Работаю по договору. Имею положительные отзывы.' },
+    
+    { keywords: ['шутка', 'смеш', 'хаха', 'lol', 'прикол', 'анекдот'], 
+      answer: '🤣 Программист приходит в магазин.\n— У вас есть хлеб?\n— Нет.\n— А молоко?\n— Нет.\n— А яблоки?\n— Нет.\n— Зачем вы тогда открыли магазин?\n— Хороший вопрос! Давайте это запишем в бэклог.' },
+    
+    { keywords: ['кто ты', 'ты кто', 'представься', 'расскажи о себе', 'бот'], 
+      answer: '🤖 Я ИИ-помощник поддержки! Умею отвечать на вопросы про услуги, цены, сроки, оплату, технологии. Могу рассказать шутку. Чем могу помочь? 🚀' },
+    
+    { keywords: ['спасибо', 'thx', 'thanks', 'благодарю'], 
+      answer: '😊 Пожалуйста! Всегда рад помочь! Если понадобится что-то ещё — обращайся. Удачи! 🍀' },
+    
+    { keywords: ['пока', 'до свидания', 'bye', 'goodbye', 'прощай'], 
+      answer: '👋 До свидания! Хорошего дня! Если будут вопросы — я здесь. Возвращайся! 🚀' },
+    
+    { keywords: ['telegram бот', 'телеграм бот', 'бот'], 
+      answer: 'Разрабатываю Telegram-ботов любой сложности. Легкие (1 500–3 500₽), Средние (4 000–7 500₽), Сложные (8 000–12 500₽). Использую Aiogram, интеграция с API, платежи.' },
+    
+    { keywords: ['mini app', 'мини приложение', 'webapp'], 
+      answer: 'Разрабатываю Mini Apps для Telegram. Легкие (1 500–3 500₽), Средние (4 000–7 500₽), Сложные (8 000–12 500₽). Интеграция с TON-кошельками, WebApp API.' }
 ];
-
 function getSupportAnswer(text) {
     var lower = text.toLowerCase();
     for (var i = 0; i < supportKnowledge.length; i++) {
@@ -1463,9 +1508,7 @@ function sendSupportMessage() {
             addSupportMessage(answer, 'bot', '🤖 ИИ-помощник', supportMessages);
         } else {
             addSupportMessage('Я не совсем понял вопрос. Передал оператору поддержки. Он скоро ответит.', 'bot', '🤖 ИИ-помощник', supportMessages);
-            if (typeof saveUnansweredSupport === 'function') {
-                saveUnansweredSupport(text);
-            }
+            saveUnansweredSupport(text);
         }
         supportInput.disabled = false;
         supportInput.focus();
@@ -1500,8 +1543,25 @@ function quickQuestion(text) {
     }
 }
 
+function saveUnansweredSupport(text) {
+    if (!currentUser) {
+        alert('Пожалуйста, авторизуйтесь, чтобы задать вопрос.');
+        return;
+    }
+    unansweredSupport.push({
+        id: Date.now(),
+        question: text,
+        userName: currentUser.name,
+        answer: '',
+        answered: false,
+        type: 'support',
+        timestamp: new Date().toLocaleString()
+    });
+    syncData();
+    updateAdminNotification('support');
+}
 // ============================================================
-// 5. ЧАТ С OSINT-СПЕЦИАЛИСТОМ
+// 5. ЧАТ СО СПЕЦИАЛИСТОМ
 // ============================================================
 function sendSpecialistMessage() {
     var specialistMessages = document.getElementById('specialistMessages');
@@ -1521,10 +1581,8 @@ function sendSpecialistMessage() {
     
     setTimeout(function() {
         specialistTyping.classList.remove('active');
-        if (typeof saveUnansweredSpecialist === 'function') {
-            saveUnansweredSpecialist(text);
-        }
-        addSpecialistMessage('Здравствуйте! Специалист ответит вам в ближайшее время.', 'bot', '🕵️ OSINT-специалист', specialistMessages);
+        saveUnansweredSpecialist(text);
+        addSpecialistMessage('Здравствуйте! Специалист ответит вам в ближайшее время.', 'bot', '🕵️ Специалист', specialistMessages);
         specialistInput.disabled = false;
         specialistInput.focus();
     }, 500 + Math.random() * 800);
@@ -1549,589 +1607,412 @@ function addSpecialistMessage(text, sender, senderName, container) {
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
 }
-// ============================================================
-// 6. АДМИН-ПАНЕЛЬ (тройной тап)
-// ============================================================
-var adminTaps = 0;
-var adminTimer = null;
 
-document.addEventListener('click', function(e) {
-    if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.chat-menu-item')) {
+function saveUnansweredSpecialist(text) {
+    if (!currentUser) {
+        alert('Пожалуйста, авторизуйтесь, чтобы задать вопрос.');
         return;
     }
-    adminTaps++;
-    clearTimeout(adminTimer);
-    adminTimer = setTimeout(function() { 
-        adminTaps = 0; 
-    }, 2000);
-    if (adminTaps >= 3) {
-        adminTaps = 0;
-        openAdmin();
-    }
-});
+    unansweredSpecialist.push({
+        id: Date.now(),
+        question: text,
+        userName: currentUser.name,
+        answer: '',
+        answered: false,
+        type: 'specialist',
+        timestamp: new Date().toLocaleString()
+    });
+    syncData();
+    updateAdminNotification('specialist');
+}
+// ============================================================
+// 6. АДМИН-ПАНЕЛЬ
+// ============================================================
+var ADMIN_PASSWORD = 'admin123';
 
 function openAdmin() {
-    var overlay = document.getElementById('adminOverlay');
-    if (!overlay) return;
-    overlay.classList.add('show');
-    document.getElementById('adminPassword').value = '';
-    document.getElementById('adminError').textContent = '';
+    document.getElementById('adminOverlay').classList.add('show');
     document.getElementById('adminLogin').style.display = 'flex';
     document.getElementById('adminContent').style.display = 'none';
-    console.log('✅ Админ-панель открыта!');
+    document.getElementById('adminError').textContent = '';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminPassword').focus();
 }
 
 function closeAdmin() {
-    var overlay = document.getElementById('adminOverlay');
-    if (overlay) overlay.classList.remove('show');
+    document.getElementById('adminOverlay').classList.remove('show');
 }
 
 function adminLogin() {
     var pass = document.getElementById('adminPassword').value;
-    if (pass === '123') {
+    if (pass === ADMIN_PASSWORD) {
         document.getElementById('adminLogin').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
-        if (typeof renderAdminSupport === 'function') renderAdminSupport();
-        if (typeof renderAdminSpecialist === 'function') renderAdminSpecialist();
-        if (typeof renderAdminUsers === 'function') renderAdminUsers();
-        if (typeof renderAdminPayments === 'function') renderAdminPayments();
-        if (typeof renderAdminServices === 'function') renderAdminServices();
-        if (typeof renderAdminOrders === 'function') renderAdminOrders();
-        if (typeof updateAdminNotification === 'function') {
-            updateAdminNotification('support');
-            updateAdminNotification('specialist');
-        }
-        console.log('✅ Вход в админ-панель выполнен!');
+        renderAdminSupport();
+        renderAdminSpecialist();
+        renderAdminUsers();
+        renderAdminPayments();
+        renderAdminServices();
+        renderAdminOrders();
+        updateAdminNotification('support');
+        updateAdminNotification('specialist');
     } else {
-        document.getElementById('adminError').textContent = '❌ Неверный пароль! Попробуйте ещё раз.';
+        document.getElementById('adminError').textContent = 'Неверный пароль!';
     }
 }
 
 function switchAdminTab(tab, btn) {
-    document.querySelectorAll('.admin-tabs button').forEach(function(b) {
-        b.classList.remove('active');
+    document.querySelectorAll('.admin-tab').forEach(function(el) {
+        el.classList.remove('active');
     });
+    document.querySelectorAll('.admin-tabs button').forEach(function(el) {
+        el.classList.remove('active');
+    });
+    document.getElementById('admin' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
     if (btn) btn.classList.add('active');
-    document.querySelectorAll('.admin-tab').forEach(function(t) {
-        t.classList.remove('active');
-    });
-    var tabId = 'admin' + tab.charAt(0).toUpperCase() + tab.slice(1);
-    var tabEl = document.getElementById(tabId);
-    if (tabEl) tabEl.classList.add('active');
 }
-
 function renderAdminSupport() {
-    var list = document.getElementById('adminSupportList');
-    var unanswered = unansweredSupport.filter(function(q) { return !q.answered; });
-    if (unanswered.length === 0) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Нет непонятых вопросов.</p>';
-    } else {
-        list.innerHTML = unanswered.map(function(q) {
-            return '<div class="admin-chat-item" data-id="' + q.id + '">' +
-                '<div class="question">👤 ' + (q.userName || 'Гость') + ': ' + q.question + '</div>' +
-                '<div class="status pending">⏳ Ожидает ответа</div>' +
-                '<div style="font-size:12px;color:var(--text-secondary);">' + q.timestamp + '</div>' +
-                '<input class="answer-input" type="text" placeholder="Введите ответ..." id="supportAnswer_' + q.id + '">' +
-                '<button class="answer-btn" onclick="answerSupportQuestion(' + q.id + ')">Ответить</button>' +
-            '</div>';
-        }).join('');
+    var container = document.getElementById('adminSupportList');
+    if (!container) return;
+    var unanswered = unansweredSupport.filter(function(m) { return !m.answered; });
+    if (!unanswered.length) {
+        container.innerHTML = '<p style="color:var(--text-secondary);">Нет новых вопросов.</p>';
+        return;
     }
+    var html = '';
+    unanswered.forEach(function(m) {
+        html += '<div class="admin-chat-item">' +
+            '<div class="question">❓ ' + m.question + '</div>' +
+            '<div style="font-size:12px;color:var(--text-secondary);">👤 ' + m.userName + ' | ' + m.timestamp + '</div>' +
+            '<input class="answer-input" id="answerSupport_' + m.id + '" placeholder="Введите ответ...">' +
+            '<button class="answer-btn" onclick="answerSupport(' + m.id + ')">Ответить</button>' +
+            '<div class="status pending">⏳ Ожидает ответа</div>' +
+            '</div>';
+    });
+    container.innerHTML = html;
 }
 
-function answerSupportQuestion(id) {
-    var input = document.getElementById('supportAnswer_' + id);
+function answerSupport(id) {
+    var input = document.getElementById('answerSupport_' + id);
     var answer = input.value.trim();
-    if (!answer) return;
-    var q = unansweredSupport.find(function(q) { return q.id === id; });
-    if (q) {
-        q.answer = answer;
-        q.answered = true;
-        var container = document.getElementById('supportMessages');
-        if (container) {
-            addSupportMessage(answer, 'support', '📞 Поддержка', container);
-        }
+    if (!answer) { alert('Введите ответ'); return; }
+    var msg = unansweredSupport.find(function(m) { return m.id === id; });
+    if (msg) {
+        msg.answer = answer;
+        msg.answered = true;
+        syncData();
         renderAdminSupport();
         updateAdminNotification('support');
-        syncData();
     }
 }
 
 function renderAdminSpecialist() {
-    var list = document.getElementById('adminSpecialistList');
-    var unanswered = unansweredSpecialist.filter(function(q) { return !q.answered; });
-    if (unanswered.length === 0) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Нет вопросов для специалиста.</p>';
-    } else {
-        list.innerHTML = unanswered.map(function(q) {
-            return '<div class="admin-chat-item" data-id="' + q.id + '">' +
-                '<div class="question">👤 ' + (q.userName || 'Гость') + ': ' + q.question + '</div>' +
-                '<div class="status pending">⏳ Ожидает ответа</div>' +
-                '<div style="font-size:12px;color:var(--text-secondary);">' + q.timestamp + '</div>' +
-                '<input class="answer-input" type="text" placeholder="Введите ответ..." id="specialistAnswer_' + q.id + '">' +
-                '<button class="answer-btn" onclick="answerSpecialistQuestion(' + q.id + ')">Ответить</button>' +
-            '</div>';
-        }).join('');
+    var container = document.getElementById('adminSpecialistList');
+    if (!container) return;
+    var unanswered = unansweredSpecialist.filter(function(m) { return !m.answered; });
+    if (!unanswered.length) {
+        container.innerHTML = '<p style="color:var(--text-secondary);">Нет новых вопросов.</p>';
+        return;
     }
+    var html = '';
+    unanswered.forEach(function(m) {
+        html += '<div class="admin-chat-item">' +
+            '<div class="question">❓ ' + m.question + '</div>' +
+            '<div style="font-size:12px;color:var(--text-secondary);">👤 ' + m.userName + ' | ' + m.timestamp + '</div>' +
+            '<input class="answer-input" id="answerSpecialist_' + m.id + '" placeholder="Введите ответ...">' +
+            '<button class="answer-btn" onclick="answerSpecialist(' + m.id + ')">Ответить</button>' +
+            '<div class="status pending">⏳ Ожидает ответа</div>' +
+            '</div>';
+    });
+    container.innerHTML = html;
 }
 
-function answerSpecialistQuestion(id) {
-    var input = document.getElementById('specialistAnswer_' + id);
+function answerSpecialist(id) {
+    var input = document.getElementById('answerSpecialist_' + id);
     var answer = input.value.trim();
-    if (!answer) return;
-    var q = unansweredSpecialist.find(function(q) { return q.id === id; });
-    if (q) {
-        q.answer = answer;
-        q.answered = true;
-        var container = document.getElementById('specialistMessages');
-        if (container) {
-            addSpecialistMessage(answer, 'specialist', '🕵️ OSINT-специалист', container);
-        }
+    if (!answer) { alert('Введите ответ'); return; }
+    var msg = unansweredSpecialist.find(function(m) { return m.id === id; });
+    if (msg) {
+        msg.answer = answer;
+        msg.answered = true;
+        syncData();
         renderAdminSpecialist();
         updateAdminNotification('specialist');
-        syncData();
     }
 }
-
 function renderAdminUsers() {
-    var list = document.getElementById('adminUsersList');
-    if (users.length === 0) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Нет зарегистрированных пользователей.</p>';
-    } else {
-        list.innerHTML = users.map(function(u) {
-            return '<div class="admin-chat-item">' +
-                '<div class="question">' + u.name + '</div>' +
-                '<div style="font-size:13px;color:var(--text-secondary);">Nickname: ' + u.name + '</div>' +
-                '<div style="font-size:12px;color:var(--text-secondary);">Заказов: ' + (u.orders ? u.orders.length : 0) + '</div>' +
-            '</div>';
-        }).join('');
+    var container = document.getElementById('adminUsersList');
+    if (!container) return;
+    if (!users.length) {
+        container.innerHTML = '<p style="color:var(--text-secondary);">Нет зарегистрированных пользователей.</p>';
+        return;
     }
+    var html = '';
+    users.forEach(function(u) {
+        var supportCount = unansweredSupport.filter(function(m) { return m.userName === u.name && !m.answered; }).length;
+        var specialistCount = unansweredSpecialist.filter(function(m) { return m.userName === u.name && !m.answered; }).length;
+        html += '<div class="admin-chat-item" style="display:flex;justify-content:space-between;align-items:center;">' +
+            '<div><strong>' + u.name + '</strong><div style="font-size:12px;color:var(--text-secondary);">Вопросов: ' + (supportCount + specialistCount) + '</div></div>' +
+            '<button class="btn-chat" onclick="openChatWithUser(\'' + u.name + '\')">✉️</button>' +
+            '</div>';
+    });
+    container.innerHTML = html;
 }
 
 function renderAdminPayments() {
-    var list = document.getElementById('adminPaymentsList');
-    if (paymentConfirmations.length === 0) {
-        list.innerHTML = '<p style="color:var(--text-secondary);">Нет подтверждений оплаты.</p>';
-    } else {
-        list.innerHTML = paymentConfirmations.map(function(p) {
-            return '<div class="admin-chat-item" data-id="' + p.id + '">' +
-                '<div class="question">👤 ' + p.userName + ': ' + p.services + '</div>' +
-                '<div style="font-size:13px;color:var(--text-secondary);">Сумма: ' + p.amount + ' USDT</div>' +
-                '<div style="font-size:12px;color:var(--text-secondary);">Статус: ' + (p.status || 'ожидает проверки') + '</div>' +
-                '<div style="font-size:12px;color:var(--text-secondary);">' + p.timestamp + '</div>' +
-                '<button class="answer-btn" onclick="confirmPayment(' + p.id + ')">Подтвердить оплату</button>' +
-                '<button class="answer-btn" style="background:#ff4444;" onclick="cancelPayment(' + p.id + ')">Отклонить</button>' +
-            '</div>';
-        }).join('');
+    var container = document.getElementById('adminPaymentsList');
+    if (!container) return;
+    if (!paymentConfirmations.length) {
+        container.innerHTML = '<p style="color:var(--text-secondary);">Нет подтверждений оплаты.</p>';
+        return;
     }
+    var html = '';
+    paymentConfirmations.forEach(function(p) {
+        html += '<div class="admin-chat-item">' +
+            '<div>💳 ' + p.userName + ' — ' + p.amount + '</div>' +
+            '<div style="font-size:12px;color:var(--text-secondary);">' + p.timestamp + '</div>' +
+            '<button class="answer-btn" onclick="confirmPayment(' + p.id + ')">✅ Подтвердить</button>' +
+            '</div>';
+    });
+    container.innerHTML = html;
 }
 
 function confirmPayment(id) {
-    var payment = paymentConfirmations.find(function(p) { return p.id === id; });
-    if (payment) {
-        payment.status = 'подтверждена ✅';
-        syncData();
-        renderAdminPayments();
-        alert('Оплата подтверждена! Заказ передан в работу.');
-    }
-}
-
-function cancelPayment(id) {
     paymentConfirmations = paymentConfirmations.filter(function(p) { return p.id !== id; });
     syncData();
     renderAdminPayments();
-    alert('Оплата отклонена.');
-}
-
-function renderAdminServices() {
-    document.getElementById('adminServicesList').innerHTML = '<p style="color:var(--text-secondary);">Управление услугами здесь.</p>';
-}
-
-function renderAdminOrders() {
-    document.getElementById('adminOrdersList').innerHTML = '<p style="color:var(--text-secondary);">Заказы отображаются здесь.</p>';
-}
-
-// ============================================================
-// 7. НЕПОНЯТЫЕ ВОПРОСЫ
-// ============================================================
-function saveUnansweredSupport(text) {
-    var id = Date.now();
-    var userName = currentUser ? currentUser.name : 'Гость';
-    unansweredSupport.push({ 
-        id: id, 
-        question: text, 
-        userName: userName,
-        answer: '', 
-        answered: false, 
-        type: 'support',
-        timestamp: new Date().toLocaleString() 
-    });
-    syncData();
-    updateAdminNotification('support');
-    renderAdminSupport();
-}
-
-function saveUnansweredSpecialist(text) {
-    var id = Date.now();
-    var userName = currentUser ? currentUser.name : 'Гость';
-    unansweredSpecialist.push({ 
-        id: id, 
-        question: text, 
-        userName: userName,
-        answer: '', 
-        answered: false, 
-        type: 'specialist',
-        timestamp: new Date().toLocaleString() 
-    });
-    syncData();
-    updateAdminNotification('specialist');
-    renderAdminSpecialist();
 }
 
 function updateAdminNotification(type) {
-    var count = 0;
-    var notif = null;
-    if (type === 'support') {
-        count = unansweredSupport.filter(function(q) { return !q.answered; }).length;
-        notif = document.getElementById('supportNotif');
-    } else if (type === 'specialist') {
-        count = unansweredSpecialist.filter(function(q) { return !q.answered; }).length;
-        notif = document.getElementById('specialistNotif');
-    }
-    if (notif) {
-        if (count > 0) {
-            notif.style.display = 'inline';
-            notif.textContent = count;
-        } else {
-            notif.style.display = 'none';
-        }
-    }
-}
-
-// ============================================================
-// 8. РЕГИСТРАЦИЯ, ВХОД, ЛИЧНЫЙ КАБИНЕТ
-// ============================================================
-var registrationData = { name: '', password: '' };
-
-function checkUsername() {
-    var name = document.getElementById('regName').value.trim();
-    var status = document.getElementById('usernameStatus');
-    var btn = document.getElementById('regNextBtn');
-    
-    if (name.length < 2) {
-        status.textContent = 'Минимум 2 символа';
-        status.style.color = 'var(--text-secondary)';
-        btn.disabled = true;
-        return;
-    }
-    
-    var exists = users.find(function(u) { return u.name.toLowerCase() === name.toLowerCase(); });
-    if (exists) {
-        status.textContent = '❌ Этот никнейм уже занят';
-        status.style.color = '#ff4444';
-        btn.disabled = true;
+    var notifId = type === 'support' ? 'supportNotif' : 'specialistNotif';
+    var notif = document.getElementById(notifId);
+    if (!notif) return;
+    var count = type === 'support' 
+        ? unansweredSupport.filter(function(m) { return !m.answered; }).length
+        : unansweredSpecialist.filter(function(m) { return !m.answered; }).length;
+    if (count > 0) {
+        notif.style.display = 'inline';
+        notif.textContent = count;
     } else {
-        status.textContent = '✅ Никнейм свободен!';
-        status.style.color = '#4caf50';
-        btn.disabled = false;
+        notif.style.display = 'none';
     }
 }
-
-function generatePassword() {
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-    var password = '';
-    for (var i = 0; i < 12; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    document.getElementById('regPassword').value = password;
-}
-
-function showRegStep(step) {
-    document.querySelectorAll('.reg-step').forEach(function(el) {
-        el.classList.remove('active');
+function renderAdminServices() {
+    var container = document.getElementById('adminServicesList');
+    if (!container) return;
+    var services = [
+        { cat: 'Telegram-боты', items: ['Легкий (1 500–3 500₽)', 'Средний (4 000–7 500₽)', 'Сложный (8 000–12 500₽)'] },
+        { cat: 'Сайты', items: ['Легкий (1 500–3 500₽)', 'Средний (4 000–7 500₽)', 'Сложный (8 000–12 500₽)'] },
+        { cat: 'Mini Apps', items: ['Легкий (1 500–3 500₽)', 'Средний (4 000–7 500₽)', 'Сложный (8 000–12 500₽)'] },
+        { cat: 'OSINT-утилиты', items: ['Легкая (1 500–3 500₽)', 'Средняя (4 000–7 500₽)', 'Сложная (8 000–12 500₽)'] }
+    ];
+    var html = '';
+    services.forEach(function(cat) {
+        html += '<div style="margin:12px 0;"><h4 style="color:var(--text);">' + cat.cat + '</h4>';
+        cat.items.forEach(function(item) {
+            html += '<div style="padding:6px 0;font-size:14px;color:var(--text-secondary);">• ' + item + '</div>';
+        });
+        html += '</div>';
     });
-    document.getElementById('regStep' + step).classList.add('active');
+    container.innerHTML = html;
 }
 
-function regStep1Next() {
-    var name = document.getElementById('regName').value.trim();
-    if (name.length < 2) return;
-    var exists = users.find(function(u) { return u.name.toLowerCase() === name.toLowerCase(); });
-    if (exists) {
-        alert('Этот никнейм уже занят');
+function renderAdminOrders() {
+    var container = document.getElementById('adminOrdersList');
+    if (!container) return;
+    if (!orders.length) {
+        container.innerHTML = '<p style="color:var(--text-secondary);">Нет заказов.</p>';
         return;
     }
-    registrationData.name = name;
-    showRegStep(2);
+    var html = '';
+    orders.forEach(function(o) {
+        html += '<div class="admin-chat-item">' +
+            '<div>📦 ' + o.userName + '</div>' +
+            '<div style="font-size:13px;">' + o.items.join(', ') + '</div>' +
+            '<div style="font-size:12px;color:var(--text-secondary);">Сумма: ' + o.total + '₽ | ' + o.timestamp + '</div>' +
+            '<button class="answer-btn" onclick="completeOrder(' + o.id + ')">✅ Выполнено</button>' +
+            '</div>';
+    });
+    container.innerHTML = html;
 }
 
-function regStep2Next() {
-    var password = document.getElementById('regPassword').value.trim();
-    if (password.length < 6) {
-        alert('Пароль должен содержать минимум 6 символов');
-        return;
-    }
-    
-    var newUser = {
-        id: Date.now(),
-        name: registrationData.name,
-        password: password,
-        orders: [],
-        registered: new Date().toISOString()
-    };
-    
-    users.push(newUser);
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-    currentUser = newUser;
-    
-    alert('Добро пожаловать, ' + newUser.name + '!');
+function completeOrder(id) {
+    orders = orders.filter(function(o) { return o.id !== id; });
     syncData();
-    showPage('cabinet');
-    updateCabinetUI();
-    
-    document.getElementById('regName').value = '';
-    document.getElementById('regPassword').value = '';
-    document.getElementById('usernameStatus').textContent = '';
-    document.getElementById('regNextBtn').disabled = true;
-    showRegStep(1);
+    renderAdminOrders();
+}
+// ============================================================
+// 7. КОРЗИНА
+// ============================================================
+function addToCart(name, price) {
+    cart.push({ name: name, price: price });
+    updateCartUI();
 }
 
-function loginUser() {
-    var name = document.getElementById('loginName').value.trim();
-    var password = document.getElementById('loginPassword').value.trim();
-    
-    var user = users.find(function(u) { return u.name.toLowerCase() === name.toLowerCase() && u.password === password; });
-    if (user) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        currentUser = user;
-        showPage('cabinet');
-        updateCabinetUI();
-        document.getElementById('loginName').value = '';
-        document.getElementById('loginPassword').value = '';
-    } else {
-        alert('Неверный никнейм или пароль');
+function updateCartUI() {
+    document.getElementById('cartCounter').textContent = cart.length;
+    var list = document.getElementById('cartList');
+    if (!list) return;
+    if (!cart.length) {
+        list.innerHTML = '<p style="color:var(--text-secondary);">Корзина пуста</p>';
+        document.getElementById('cartTotal').textContent = '0 ₽';
+        return;
+    }
+    var html = '';
+    var total = 0;
+    cart.forEach(function(item, index) {
+        var priceNum = parseInt(item.price.replace(/\D/g,''));
+        if (!isNaN(priceNum)) total += priceNum;
+        html += '<div class="cart-item">' +
+            '<span>' + item.name + ' — ' + item.price + '</span>' +
+            '<button class="remove" onclick="removeFromCart(' + index + ')">✕</button>' +
+            '</div>';
+    });
+    list.innerHTML = html;
+    document.getElementById('cartTotal').textContent = total + ' ₽';
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+}
+
+function toggleCart() {
+    var overlay = document.getElementById('cartOverlay');
+    if (overlay) {
+        overlay.classList.toggle('show');
+        updateCartUI();
     }
 }
 
-function logoutUser() {
-    localStorage.removeItem('currentUser');
-    currentUser = null;
-    showPage('cabinet');
-    updateCabinetUI();
+function checkout() {
+    if (!cart.length) { alert('Корзина пуста'); return; }
+    if (!currentUser) { alert('Войдите в аккаунт для оформления заказа'); return; }
+    var total = 0;
+    var items = [];
+    cart.forEach(function(item) {
+        items.push(item.name);
+        var priceNum = parseInt(item.price.replace(/\D/g,''));
+        if (!isNaN(priceNum)) total += priceNum;
+    });
+    orders.push({
+        id: Date.now(),
+        userName: currentUser.name,
+        items: items,
+        total: total,
+        timestamp: new Date().toLocaleString()
+    });
+    cart = [];
+    syncData();
+    updateCartUI();
+    toggleCart();
+    alert('✅ Заказ оформлен! Специалист свяжется с вами в ближайшее время.');
 }
-
-function updateCabinetUI() {
-    if (currentUser) {
-        document.getElementById('cabinetName').textContent = currentUser.name;
-        var ordersList = document.getElementById('cabinetOrders');
-        if (currentUser.orders && currentUser.orders.length > 0) {
-            ordersList.innerHTML = currentUser.orders.map(function(o) { return '<div class="case">' + o + '</div>'; }).join('');
-        } else {
-            ordersList.innerHTML = '<p style="color:var(--text-secondary);">У вас пока нет заказов.</p>';
-        }
-        document.getElementById('cabinetContent').style.display = 'block';
-        document.getElementById('authButtons').style.display = 'none';
-    } else {
-        document.getElementById('cabinetContent').style.display = 'none';
-        document.getElementById('authButtons').style.display = 'flex';
-    }
-}
-        // ============================================================
-        // 9. КОРЗИНА + ОПЛАТА
-        // ============================================================
-        function addToCart(id) {
-            var card = document.querySelector('.service-card[data-id="' + id + '"]');
-            if (!card) return;
-            var name = card.dataset.name;
-            var price = parseFloat(card.dataset.price);
-            var existing = cart.find(function(item) { return item.id === id; });
-            if (existing) {
-                existing.qty++;
+    // ============================================================
+    // 8. ЛИЧНЫЙ КАБИНЕТ
+    // ============================================================
+    function updateCabinetUI() {
+        if (currentUser) {
+            document.getElementById('cabinetContent').style.display = 'block';
+            document.getElementById('authButtons').style.display = 'none';
+            document.getElementById('cabinetName').textContent = currentUser.name;
+            var ordersHtml = '';
+            var userOrders = orders.filter(function(o) { return o.userName === currentUser.name; });
+            if (!userOrders.length) {
+                ordersHtml = '<p style="color:var(--text-secondary);">Нет заказов</p>';
             } else {
-                cart.push({ id: id, name: name, price: price, qty: 1 });
-            }
-            updateCartUI();
-            if (navigator.vibrate) navigator.vibrate(10);
-        }
-
-        function removeFromCart(id) {
-            cart = cart.filter(function(item) { return item.id !== id; });
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            var count = cart.reduce(function(s, i) { return s + i.qty; }, 0);
-            document.getElementById('cartCounter').textContent = count;
-            var list = document.getElementById('cartList');
-            if (!cart.length) {
-                list.innerHTML = '<p style="color:var(--text-secondary);padding:12px 0;">Пусто</p>';
-            } else {
-                list.innerHTML = cart.map(function(item) {
-                    return '<div class="cart-item"><span>' + item.name + ' × ' + item.qty + ' — ' + (item.price * item.qty).toFixed(1) + ' USDT</span><button class="remove" onclick="removeFromCart(' + item.id + ')">✕</button></div>';
-                }).join('');
-            }
-            var total = cart.reduce(function(s, i) { return s + i.price * i.qty; }, 0);
-            document.getElementById('cartTotal').textContent = total.toFixed(1) + ' USDT';
-        }
-
-        function toggleCart() {
-            document.getElementById('cartOverlay').classList.toggle('show');
-        }
-
-        function checkout() {
-            if (!cart.length) { alert('Корзина пуста'); return; }
-            if (!currentUser) {
-                alert('Для оформления заказа необходимо войти в аккаунт.');
-                return;
-            }
-            
-            var total = cart.reduce(function(s, i) { return s + i.price * i.qty; }, 0);
-            var services = cart.map(function(item) { return item.name + ' × ' + item.qty; }).join(', ');
-            var cryptoAddress = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
-            
-            var paymentHTML = 
-                '<div class="payment-modal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;">' +
-                    '<div style="background:var(--bg);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;max-width:400px;width:100%;max-height:90vh;overflow-y:auto;">' +
-                        '<h3 style="margin-bottom:12px;">💳 Оплата криптой</h3>' +
-                        '<p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;">Переведите указанную сумму на кошелёк USDT (сеть BEP20 или ERC20)</p>' +
-                        '<div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;">' +
-                            '<div style="font-size:12px;color:var(--text-secondary);">Сумма к оплате</div>' +
-                            '<div style="font-size:24px;font-weight:700;color:var(--accent);">' + total.toFixed(1) + ' USDT</div>' +
-                        '</div>' +
-                        '<div style="background:var(--glass-bg);padding:12px;border-radius:var(--radius);margin-bottom:12px;word-break:break-all;">' +
-                            '<div style="font-size:12px;color:var(--text-secondary);">Кошелёк USDT</div>' +
-                            '<div style="font-size:14px;font-family:monospace;color:var(--accent);">' + cryptoAddress + '</div>' +
-                            '<button onclick="copyAddress()" style="margin-top:6px;background:var(--accent);color:var(--bg);border:none;padding:6px 16px;border-radius:var(--radius);cursor:pointer;font-weight:500;">Скопировать адрес</button>' +
-                        '</div>' +
-                        '<div style="background:var(--glass-bg);padding:8px 12px;border-radius:var(--radius);margin-bottom:12px;border-left:3px solid #ff9800;">' +
-                            '<div style="font-size:12px;color:var(--text-secondary);">Ваш заказ</div>' +
-                            '<div style="font-size:13px;color:var(--text);">' + services + '</div>' +
-                        '</div>' +
-                        '<button onclick="confirmPaymentClick()" style="width:100%;padding:12px;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);font-weight:600;cursor:pointer;margin-bottom:8px;">✅ Я оплатил</button>' +
-                        '<button onclick="closePayment()" style="width:100%;padding:10px;background:transparent;color:var(--text-secondary);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;">Отмена</button>' +
-                    '</div>' +
-                '</div>';
-            
-            document.body.insertAdjacentHTML('beforeend', paymentHTML);
-        }
-
-        function closePayment() {
-            var modal = document.querySelector('.payment-modal');
-            if (modal) modal.remove();
-        }
-
-        function copyAddress() {
-            var address = 'UQDVW_nBIOY-xTEJmeXgjNMU-TUYdpvfUiyxBk3CsAVQsq0n';
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(address).then(function() {
-                    alert('✅ Адрес скопирован!');
-                }).catch(function() {
-                    alert('Адрес: ' + address);
+                userOrders.forEach(function(o) {
+                    ordersHtml += '<div style="padding:8px 0;border-bottom:1px solid var(--glass-border);font-size:14px;">' +
+                        '📦 ' + o.items.join(', ') + ' — ' + o.total + '₽<br>' +
+                        '<span style="font-size:12px;color:var(--text-secondary);">' + o.timestamp + '</span>' +
+                        '</div>';
                 });
-            } else {
-                alert('Адрес: ' + address);
             }
-        }
-
-        function confirmPaymentClick() {
-            var total = cart.reduce(function(s, i) { return s + i.price * i.qty; }, 0);
-            var services = cart.map(function(item) { return item.name + ' × ' + item.qty; }).join(', ');
-            
-            paymentConfirmations.push({
-                id: Date.now(),
-                userName: currentUser.name,
-                services: services,
-                amount: total.toFixed(1),
-                timestamp: new Date().toLocaleString(),
-                status: 'ожидает проверки'
-            });
-            
-            var orderSummary = services + ' — ' + total.toFixed(1) + ' USDT';
-            var userIndex = users.findIndex(function(u) { return u.name === currentUser.name; });
-            if (userIndex !== -1) {
-                users[userIndex].orders.push(orderSummary);
-                currentUser.orders.push(orderSummary);
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            }
-            
-            syncData();
-            alert('✅ Спасибо! Ваш заказ принят. Ожидайте подтверждения оплаты.');
-            
-            cart = [];
-            updateCartUI();
-            toggleCart();
-            closePayment();
-        }
-
-        // ============================================================
-        // 10. УСЛУГИ И ЗАПУСК
-        // ============================================================
-        var servicesData = [
-            { id: 1, name: 'Исследование по номеру телефона', desc: 'Анализ привязок, геолокация, утечки', price: 16.7, time: '30 мин' },
-            { id: 2, name: 'Фотоаналитическое исследование', desc: 'Поиск профилей по лицу, кросс-референс', price: 33.3, time: '1 час' },
-            { id: 3, name: 'Анализ email и логинов', desc: 'Цифровой след, регистрации, компрометация', price: 11.1, time: '20 мин' },
-            { id: 4, name: 'Комплексное досье (персона)', desc: 'Регистрации, налоги, суды, имущество', price: 55.6, time: '2 часа' },
-            { id: 5, name: 'Полное профилирование личности', desc: 'Все цифровые следы, соцграф, паттерны', price: 133.3, time: '1 день' },
-            { id: 6, name: 'Структурный анализ юрлица', desc: 'Цепочка владения, бенефициары', price: 44.4, time: '2 часа' },
-            { id: 7, name: 'Оценка финансовой устойчивости', desc: 'Арбитраж, исполнительные производства, риски', price: 66.7, time: '4 часа' },
-            { id: 8, name: 'Комплексная проверка контрагента', desc: 'Аффилированность, неблагонадёжные компании', price: 166.7, time: '1 день' },
-            { id: 9, name: 'Периодический мониторинг изменений', desc: 'Смена директоров, адресов, налоговый режим', price: 277.8, time: '30 дней' },
-            { id: 10, name: 'Хеш-аналитика файла', desc: 'Цифровой отпечаток, сверка с коллекциями ПО', price: 8.9, time: '15 мин' },
-            { id: 11, name: 'Метаданные и артефакты', desc: 'GPS, временные штампы, устройства создания', price: 5.6, time: 'за файл' },
-            { id: 12, name: 'Поверхностное сканирование домена', desc: 'Поддомены, порты, технологии, IP', price: 33.3, time: '1 час' },
-            { id: 13, name: 'Полевое исследование радиосреды', desc: 'Wi-Fi и BLE-маяки по адресу, карта устройств', price: 55.6, time: 'за час выезда' }
-        ];
-
-        document.getElementById('servicesList').innerHTML = servicesData.map(function(s) {
-            return '<div class="service-card" data-id="' + s.id + '" data-name="' + s.name + '" data-price="' + s.price + '">' +
-                '<div class="info"><h3>' + s.name + '</h3><p>' + s.desc + '</p></div>' +
-                '<div><span class="price">' + s.price + ' USDT</span><span style="color:var(--text-secondary);font-size:11px;display:block;">' + s.time + '</span><button class="btn-add" onclick="addToCart(' + s.id + ')">+</button></div>' +
-                '</div>';
-        }).join('') + 
-        '<div style="margin-top:20px;padding:16px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);">' +
-            '<h4 style="font-size:15px;margin-bottom:8px;">Условия работы</h4>' +
-            '<ul style="list-style:none;padding:0;font-size:13px;color:var(--text-secondary);line-height:1.8;">' +
-                '<li>При заказе от трёх позиций — скидка 10%</li>' +
-                '<li>Подписываем соглашение о конфиденциальности перед началом</li>' +
-                '<li>Отчёт в двух форматах: PDF (аналитика) и XLSX (сырые данные)</li>' +
-                '<li>Оплата только в USDT (BEP20/ERC20)</li>' +
-            '</ul>' +
-        '</div>';
-
-        // ============================================================
-        // 11. ЗАПУСК ПРИЛОЖЕНИЯ
-        // ============================================================
-        async function startApp() {
-            console.log('🚀 Запуск приложения...');
-            await initData();
-            
-            setTimeout(function() {
-                if (!currentUser) {
-                    console.log('👤 Пользователь не найден, показываем регистрацию');
-                    showPage('register');
-                } else {
-                    console.log('👤 Пользователь найден:', currentUser.name);
-                    showPage('home');
-                }
-                
-                updateCabinetUI();
-                if (typeof renderAdminUsers === 'function') renderAdminUsers();
-                if (typeof renderAdminPayments === 'function') renderAdminPayments();
-                if (typeof renderAdminSupport === 'function') renderAdminSupport();
-                if (typeof renderAdminSpecialist === 'function') renderAdminSpecialist();
-                if (typeof updateAdminNotification === 'function') {
-                    updateAdminNotification('support');
-                    updateAdminNotification('specialist');
-                }
-            }, 200);
-            
-            console.log('✅ Приложение EXELD OSINT запущено!');
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', startApp);
+            document.getElementById('cabinetOrders').innerHTML = ordersHtml;
         } else {
-            startApp();
+            document.getElementById('cabinetContent').style.display = 'none';
+            document.getElementById('authButtons').style.display = 'flex';
         }
-    </script>
+    }
+
+    function logoutUser() {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        updateCabinetUI();
+        showPage('home');
+    }
+
+    // ============================================================
+    // 9. РЕГИСТРАЦИЯ И ВХОД
+    // ============================================================
+    function checkUsername() {
+        var name = document.getElementById('regName').value.trim();
+        var btn = document.getElementById('regNextBtn');
+        var status = document.getElementById('usernameStatus');
+        if (!name) {
+            status.textContent = 'Введите никнейм';
+            btn.disabled = true;
+            return;
+        }
+        if (users.find(function(u) { return u.name === name; })) {
+            status.textContent = '❌ Этот никнейм уже занят';
+            status.style.color = '#ff6b6b';
+            btn.disabled = true;
+        } else {
+            status.textContent = '✅ Никнейм доступен';
+            status.style.color = '#4caf50';
+            btn.disabled = false;
+        }
+    }
+
+    function regStep1Next() {
+        document.getElementById('regStep1').classList.remove('active');
+        document.getElementById('regStep2').classList.add('active');
+    }
+
+    function generatePassword() {
+        var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+        var pass = '';
+        for (var i = 0; i < 12; i++) {
+            pass += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        document.getElementById('regPassword').value = pass;
+    }
+
+    function regStep2Next() {
+        var name = document.getElementById('regName').value.trim();
+        var password = document.getElementById('regPassword').value.trim();
+        if (!password) { alert('Введите пароль'); return; }
+        users.push({ name: name, password: password });
+        currentUser = { name: name };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        syncData();
+        updateCabinetUI();
+        showPage('home');
+    }
+
+    function loginUser() {
+        var name = document.getElementById('loginName').value.trim();
+        var password = document.getElementById('loginPassword').value.trim();
+        var user = users.find(function(u) { return u.name === name && u.password === password; });
+        if (user) {
+            currentUser = { name: name };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateCabinetUI();
+            showPage('home');
+        } else {
+            alert('Неверный логин или пароль');
+        }
+    }
+
+    // ============================================================
+    // 10. ЗАПУСК
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        initData();
+        // Автоматический вход в админку по двойному клику на логотип
+        document.querySelector('.logo').addEventListener('dblclick', openAdmin);
+    });
+</script>
 </body>
 </html>
