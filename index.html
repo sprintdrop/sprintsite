@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXELD DEV</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <canvas id="starsCanvas"></canvas>
+
+    <!-- АДМИН-ПАНЕЛЬ -->
+    <div class="admin-overlay" id="adminOverlay">
+        <div class="admin-panel">
+            <button class="close-admin" onclick="closeAdmin()">✕</button>
+            <h2>Админ-панель</h2>
+            <div id="adminLogin" class="admin-login">
+                <input type="password" id="adminPassword" placeholder="Введите пароль" onkeydown="if(event.key==='Enter') adminLogin()">
+                <button onclick="adminLogin()">Войти</button>
+                <div class="error" id="adminError"></div>
+            </div>
+            <div id="adminContent" style="display:none">
+                <div class="admin-tabs">
+                    <button class="active" onclick="switchAdminTab('texts',this)">📝 Тексты</button>
+                    <button onclick="switchAdminTab('services',this)">💰 Прайс</button>
+                    <button onclick="switchAdminTab('support',this)">💬 Вопросы</button>
+                    <button onclick="switchAdminTab('users',this)">👥 Пользователи</button>
+                </div>
+                <div id="adminTexts" class="admin-tab active">
+                    <h3>Редактирование текстов</h3>
+                    <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Название</label>
+                    <input class="admin-edit-field" id="editSiteTitle">
+                    <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Герой-заголовок</label>
+                    <input class="admin-edit-field" id="editHeroTitle">
+                    <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Герой-подзаголовок</label>
+                    <input class="admin-edit-field" id="editHeroSub">
+                    <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Герой-описание</label>
+                    <input class="admin-edit-field" id="editHeroDesc">
+                    <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Текст "Обо мне"</label>
+                    <textarea class="admin-edit-field textarea" id="editAboutText"></textarea>
+                    <label style="display:block;margin:10px 0 4px;font-size:13px;color:var(--text-secondary);">Биография</label>
+                    <textarea class="admin-edit-field textarea" id="editBioText" style="min-height:200px;"></textarea>
+                    <button class="admin-save-btn" onclick="saveTexts()">💾 Сохранить</button>
+                    <button class="admin-save-btn" onclick="exportData()" style="background:#4caf50;">📤 Экспорт</button>
+                </div>
+                <div id="adminServices" class="admin-tab">
+                    <h3>Редактирование прайса</h3>
+                    <div id="adminServicesList"></div>
+                    <button class="admin-save-btn" onclick="saveServices()">💾 Сохранить</button>
+                    <button class="admin-save-btn" style="background:#4caf50;" onclick="addServiceCategory()">➕ Добавить</button>
+                </div>
+                <div id="adminSupport" class="admin-tab"><h3>Вопросы</h3><div id="adminSupportList"></div></div>
+                <div id="adminUsers" class="admin-tab"><h3>Пользователи</h3><div id="adminUsersList"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="container">
+        <div class="header">
+            <span class="logo" id="adminTrigger" title="Двойной клик для входа в админку"><span id="siteTitle">EXELD</span> <span>| DEV</span></span>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+            </div>
+        </div>
+        
+        <div class="nav">
+            <button onclick="showPage('home')">Главная</button>
+            <button onclick="showPage('bio')">Биография</button>
+            <button onclick="showPage('services')">Услуги</button>
+            <button onclick="showPage('contacts')">Контакты</button>
+            <button onclick="showPage('cabinet')">Кабинет</button>
+        </div>
+        
+        <div id="home" class="page active">
+            <div style="min-height:80vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%, rgba(255,255,255,0.03) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255,255,255,0.02) 0%, transparent 50%);animation:float 20s infinite alternate;z-index:0;"></div>
+                <div style="position:relative;z-index:1;padding:40px 20px;">
+                    <h1 style="font-size:64px;font-weight:900;letter-spacing:-2px;color:var(--text);text-shadow:0 0 60px rgba(255,255,255,0.1),0 0 120px rgba(255,255,255,0.05);margin:0 0 10px 0;line-height:1.1;" id="heroTitle">EXELD</h1>
+                    <p style="font-size:20px;font-weight:300;color:var(--text-secondary);letter-spacing:6px;text-transform:uppercase;margin-bottom:16px;" id="heroSub">Full-Stack Developer</p>
+                    <p style="font-size:18px;color:var(--text-secondary);max-width:400px;margin:0 auto 30px;line-height:1.6;" id="heroDesc">Разработка под заказ • Telegram-боты • Сайты • Mini Apps • OSINT-утилиты</p>
+                    <button onclick="showPage('services')" style="display:inline-block;background:var(--accent);color:var(--bg);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:600;border:2px solid var(--accent);cursor:pointer;transition:all 0.3s;margin:5px;z-index:10;position:relative;">Мои услуги →</button>
+                    <button onclick="showPage('contacts')" style="display:inline-block;background:transparent;color:var(--text);padding:14px 40px;border-radius:30px;font-size:16px;font-weight:400;border:2px solid var(--glass-border);cursor:pointer;transition:all 0.3s;margin:5px;z-index:10;position:relative;">Связаться</button>
+                </div>
+                <div style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);animation:bounce 2s infinite;z-index:1;">
+                    <span style="display:block;width:24px;height:40px;border:2px solid var(--text-secondary);border-radius:12px;position:relative;">
+                        <span style="display:block;width:4px;height:8px;background:var(--text-secondary);border-radius:2px;position:absolute;top:8px;left:50%;transform:translateX(-50%);animation:scrollDown 2s infinite;"></span>
+                    </span>
+                </div>
+            </div>
+            <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:30px 24px;box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);margin-bottom:30px;">
+                <h2 style="font-size:22px;font-weight:600;margin-bottom:12px;letter-spacing:-0.3px;">Обо мне</h2>
+                <div id="aboutText" style="color:var(--text-secondary);font-size:15px;line-height:1.8;"></div>
+                <button onclick="showPage('bio')" style="display:inline-block;background:#ff4444;color:#fff;font-size:14px;font-weight:600;padding:10px 28px;border-radius:30px;border:none;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,68,68,0.3);margin-top:12px;z-index:10;position:relative;">Подробнее →</button>
+            </div>
+        </div>
+
+        <div id="bio" class="page">
+            <button class="back-btn" onclick="showPage('home')">← Назад</button>
+            <div style="background:var(--glass-bg);backdrop-filter:blur(4px);border-radius:var(--radius);border:1px solid var(--glass-border);padding:30px 24px;box-shadow:var(--glass-shadow),inset 0 0 60px var(--glow);">
+                <h2 style="font-size:28px;font-weight:700;margin-bottom:4px;letter-spacing:-0.5px;color:var(--text);">EXELD</h2>
+                <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;letter-spacing:2px;text-transform:uppercase;">Full-Stack Developer</p>
+                <hr style="border:1px solid var(--glass-border);margin-bottom:20px;">
+                <div id="bioText" style="color:var(--text-secondary);font-size:15px;line-height:1.9;"></div>
+            </div>
+        </div>
+
+        <div id="services" class="page">
+            <h2>💻 Услуги</h2>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:20px;line-height:1.6;">
+                Полный спектр услуг по разработке. <strong style="color:var(--text);">100% гарантия качества</strong> на все проекты.
+            </p>
+            <div id="servicesList"></div>
+            <div style="margin-top:25px;text-align:center;">
+                <button onclick="showPage('contacts')" style="background:#ff4444;color:#fff;border:none;padding:14px 40px;border-radius:30px;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 15px rgba(255,68,68,0.3);">📩 Связаться</button>
+            </div>
+        </div>
+
+        <div id="contacts" class="page">
+            <h2>Контакты</h2>
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">Свяжитесь со мной в Telegram.</p>
+            <div style="background:var(--glass-bg);border-radius:var(--radius);padding:16px;border:1px solid var(--glass-border);display:flex;align-items:center;gap:12px;">
+                <span style="font-size:24px;">📱</span>
+                <div><div style="font-size:12px;color:var(--text-secondary);">Telegram</div><div style="font-size:16px;color:var(--text);">@sprintdrop</div></div>
+            </div>
+        </div>
+
+        <div id="cabinet" class="page">
+            <h2>Личный кабинет</h2>
+            <div id="cabinetContent" style="display:none">
+                <div class="cabinet-info"><div class="label">Nickname</div><div class="value" id="cabinetName"></div></div>
+                <button class="auth-btn primary" onclick="logoutUser()" style="margin-top:16px">Выйти</button>
+            </div>
+            <div id="authButtons" style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+                <button class="auth-btn primary" onclick="showPage('register')">Зарегистрироваться</button>
+                <button class="auth-btn secondary" onclick="showPage('login')">Войти</button>
+            </div>
+        </div>
+        
+        <div id="register" class="page">
+            <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
+            <h2>Регистрация</h2>
+            <div id="regStep1" class="reg-step active">
+                <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Nickname</label>
+                <input type="text" id="regName" placeholder="Ваш никнейм" oninput="checkUsername()">
+                <div id="usernameStatus" style="font-size:13px;margin-bottom:12px;color:var(--text-secondary);"></div>
+                <button class="auth-btn primary" id="regNextBtn" onclick="regStep1Next()" disabled>Далее →</button>
+            </div>
+            <div id="regStep2" class="reg-step">
+                <label style="display:block;margin-bottom:6px;color:var(--text-secondary);">Пароль</label>
+                <input type="text" id="regPassword" placeholder="Введите пароль">
+                <span class="generate-link" onclick="generatePassword()">Сгенерировать</span>
+                <button class="auth-btn primary" onclick="regStep2Next()">Зарегистрироваться</button>
+            </div>
+        </div>
+        
+        <div id="login" class="page">
+            <button class="back-btn" onclick="showPage('cabinet')">← Назад</button>
+            <h2>Вход</h2>
+            <input type="text" id="loginName" placeholder="Никнейм" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px;">
+            <input type="password" id="loginPassword" placeholder="Пароль" style="width:100%;padding:12px;border-radius:var(--radius);border:1px solid var(--glass-border);background:var(--glass-bg);color:var(--text);font-size:16px;margin-bottom:12px;">
+            <button class="auth-btn primary" onclick="loginUser()">Войти</button>
+        </div>
+    </div>
+
+    <!-- ЧАТ -->
+    <button class="chat-fab" id="chatFab" onclick="toggleChat()" title="Чат с поддержкой">💬</button>
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <h4>💬 Чат с поддержкой</h4>
+            <button class="close-chat" onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="msg bot">
+                <span class="sender-name bot">🤖 Exeld</span>
+                Привет! Я ИИ-помощник. Задавай любой вопрос! 🚀
+                <span class="time">00:00</span>
+            </div>
+        </div>
+        <div class="typing" id="chatTyping"><span>.</span><span>.</span><span>.</span></div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Напиши вопрос..." autofocus>
+            <button onclick="sendChatMessage()">➤</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
