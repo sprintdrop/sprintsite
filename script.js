@@ -1,5 +1,5 @@
 // ============================================================
-// ДАННЫЕ ПО УМОЛЧАНИЮ (твои тексты и прайс)
+// ЧАСТЬ 1: ДАННЫЕ ПО УМОЛЧАНИЮ
 // ============================================================
 const DEFAULT_DATA = {
     users: [],
@@ -9,12 +9,8 @@ const DEFAULT_DATA = {
         heroTitle: 'EXELD',
         heroSub: 'Full-Stack Developer',
         heroDesc: 'Разработка под заказ • Telegram-боты • Сайты • Mini Apps • OSINT-утилиты',
-        aboutText: `<p style="margin-bottom:12px;">Я — независимый разработчик, специализирующийся на создании цифровых продуктов под ключ. Работаю с Telegram-ботами, сайтами, мини-приложениями и OSINT-инструментами. Начинал как самоучка, быстро вник в коммерческую разработку и уже закрыл 4 успешных проекта.</p>
-<p style="margin-bottom:12px;">Мой подход — никакой воды, только конкретика. Говорю честно, если что-то не могу сделать, и всегда довожу начатое до конца. Работаю на результат, чтобы клиент получал именно то, что заказал, без сюрпризов и переделок.</p>`,
-        bioText: `<p style="margin-bottom:16px;">Мой путь в разработку начался 2 недели назад, когда я решил перейти от теории к реальным проектам. За это короткое время я успел закрыть 4 проекта под ключ — от обсуждения технического задания до сдачи готового продукта.</p>
-<p style="margin-bottom:16px;">Специализируюсь на четырех направлениях: Telegram-боты любого уровня сложности, сайты всех видов (от лендингов до веб-сервисов), мини-приложения внутри Telegram и OSINT-утилиты для терминала.</p>
-<p style="margin-bottom:16px;">Несмотря на небольшой коммерческий опыт, я быстро учусь, разбираюсь в новых технологиях и всегда на связи с заказчиком. Каждый проект проходит полный цикл: анализ задачи, разработка, тестирование и передача с инструкцией по использованию.</p>
-<p style="margin-bottom:16px;">В планах — расти дальше, брать более сложные заказы и выстраивать долгосрочные отношения с клиентами.</p>`
+        aboutText: `<p style="margin-bottom:12px;">Я — независимый разработчик, специализирующийся на создании цифровых продуктов под ключ. Работаю с Telegram-ботами, сайтами, мини-приложениями и OSINT-инструментами. Начинал как самоучка, быстро вник в коммерческую разработку и уже закрыл 4 успешных проекта.</p><p style="margin-bottom:12px;">Мой подход — никакой воды, только конкретика. Говорю честно, если что-то не могу сделать, и всегда довожу начатое до конца. Работаю на результат, чтобы клиент получал именно то, что заказал, без сюрпризов и переделок.</p>`,
+        bioText: `<p style="margin-bottom:16px;">Мой путь в разработку начался 2 недели назад, когда я решил перейти от теории к реальным проектам. За это короткое время я успел закрыть 4 проекта под ключ — от обсуждения технического задания до сдачи готового продукта.</p><p style="margin-bottom:16px;">Специализируюсь на четырех направлениях: Telegram-боты любого уровня сложности, сайты всех видов (от лендингов до веб-сервисов), мини-приложения внутри Telegram и OSINT-утилиты для терминала.</p><p style="margin-bottom:16px;">Несмотря на небольшой коммерческий опыт, я быстро учусь, разбираюсь в новых технологиях и всегда на связи с заказчиком. Каждый проект проходит полный цикл: анализ задачи, разработка, тестирование и передача с инструкцией по использованию.</p><p style="margin-bottom:16px;">В планах — расти дальше, брать более сложные заказы и выстраивать долгосрочные отношения с клиентами.</p>`
     },
     services: [
         { category: '🤖 Telegram-боты', items: [
@@ -33,19 +29,15 @@ const DEFAULT_DATA = {
             { name: 'Сложное', desc: 'Сложная логика, анимации, работа с внешними API, авторизация.', price: '14000 ₽' }
         ]}
     ]
-};
-
+}
 // ============================================================
-// ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+// ЧАСТЬ 2: ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И ЗАГРУЗКА ДАННЫХ
 // ============================================================
 let appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
 let users = [];
 let questions = [];
 let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
-// ============================================================
-// ЗАГРУЗКА И СОХРАНЕНИЕ ДАННЫХ
-// ============================================================
 async function loadData() {
     try {
         const response = await fetch('data.json?t=' + Date.now());
@@ -115,9 +107,8 @@ function renderServices() {
     });
     container.innerHTML = html;
 }
-
 // ============================================================
-// АДМИН-ПАНЕЛЬ
+// ЧАСТЬ 3: АДМИН-ПАНЕЛЬ
 // ============================================================
 const ADMIN_PASSWORD = 'admin123';
 
@@ -160,6 +151,7 @@ function switchAdminTab(tab, btn) {
     if (tab === 'users') renderAdminUsers();
 }
 
+// ---- ВКЛАДКА "ТЕКСТЫ" ----
 function loadAdminTexts() {
     const t = appData.siteTexts || {};
     document.getElementById('editSiteTitle').value = t.siteTitle || 'EXELD';
@@ -189,10 +181,13 @@ function exportData() {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'data.json';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     alert('📤 Файл data.json скачан! Загрузи его в репозиторий.');
 }
 
+// ---- ВКЛАДКА "ПРАЙС" ----
 function renderAdminServices() {
     const container = document.getElementById('adminServicesList');
     if (!container) return;
@@ -255,6 +250,7 @@ function saveServices() {
     alert('✅ Прайс сохранён!');
 }
 
+// ---- ВКЛАДКИ "ВОПРОСЫ" И "ПОЛЬЗОВАТЕЛИ" ----
 function renderAdminSupport() {
     const container = document.getElementById('adminSupportList');
     if (!container) return;
@@ -299,9 +295,8 @@ function renderAdminUsers() {
     });
     container.innerHTML = html;
 }
-
 // ============================================================
-// ЗВЁЗДЫ
+// ЧАСТЬ 4: ЗВЁЗДЫ, ТЕМА И НАВИГАЦИЯ
 // ============================================================
 const canvas = document.getElementById('starsCanvas');
 const ctx = canvas.getContext('2d');
@@ -340,9 +335,7 @@ drawStars();
 
 function updateStarColor(color) { starColor = color; }
 
-// ============================================================
-// ТЕМА
-// ============================================================
+// ---- ТЕМА (СВЕТЛАЯ/ТЁМНАЯ) ----
 let currentTheme = 'dark';
 const themeToggle = document.getElementById('themeToggle');
 
@@ -361,18 +354,15 @@ function toggleTheme() {
 }
 updateStarColor('#fff');
 
-// ============================================================
-// НАВИГАЦИЯ
-// ============================================================
+// ---- НАВИГАЦИЯ МЕЖДУ СТРАНИЦАМИ ----
 function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const page = document.getElementById(id);
     if (page) page.classList.add('active');
     if (id === 'cabinet') updateCabinetUI();
 }
-
 // ============================================================
-// ЧАТ
+// ЧАСТЬ 5: ЧАТ И ИИ-ПОМОЩНИК
 // ============================================================
 function toggleChat() {
     const win = document.getElementById('chatWindow');
@@ -405,6 +395,160 @@ function addChatMessage(text, sender, senderName) {
     div.appendChild(document.createTextNode(text));
     const now = new Date();
     const time = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'time';
+    timeSpan.textContent = time;
+    div.appendChild(timeSpan);
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('chatInput');
+    const typing = document.getElementById('chatTyping');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+    addChatMessage(text, 'user', 'Вы');
+    input.value = '';
+    input.disabled = true;
+    typing.classList.add('active');
+    saveQuestion(text);
+    setTimeout(() => {
+        typing.classList.remove('active');
+        const answer = getAIAnswer(text);
+        addChatMessage(answer, 'bot', '🤖 Exeld');
+        input.disabled = false;
+        input.focus();
+    }, 500 + Math.random() * 800);
+}
+
+function saveQuestion(text) {
+    questions.push({
+        id: Date.now(),
+        question: text,
+        userName: currentUser ? currentUser.name : 'Гость',
+        timestamp: new Date().toLocaleString(),
+        answer: ''
+    });
+    saveData();
+    if (typeof renderAdminSupport === 'function') renderAdminSupport();
+}
+
+// ---- ИИ-ПОМОЩНИК (БАЗА ОТВЕТОВ) ----
+function getAIAnswer(text) {
+    const lower = text.toLowerCase();
+    
+    if (lower.match(/привет|здравствуй|ку|hello|hi|хай|салам/)) {
+        return 'Привет! 👋 Я Exeld, Full-Stack разработчик. Рад знакомству! Чем могу помочь? Рассказывай, что нужно разработать — Telegram-бота, сайт, Mini App или OSINT-утилиту?';
+    }
+    if (lower.match(/цена|сколько|стоимость|прайс|рублей|₽|дорого|дешево|бюджет/)) {
+        return '💰 Цены:\n\n🤖 Telegram-боты: Лёгкий 550-2500₽, Средний 3500-8000₽, Сложный 10000-23000₽\n🌐 Сайты: Лёгкий 2000-4000₽, Средний 6000-10000₽, Сложный 12000-20000₽\n📱 Mini Apps: Лёгкий 3000₽, Средний 7000₽, Сложный 14000₽';
+    }
+    if (lower.match(/срок|время|быстро|долго|выполнение|когда|дней|недель/)) {
+        return '⏱️ Сроки:\n• Лёгкие — 2-5 дней\n• Средние — 1-2 недели\n• Сложные — 2-4 недели\n\nТочные сроки обсуждаем индивидуально.';
+    }
+    if (lower.match(/оплат|крипт|usdt|деньг|платить|карт|перевод/)) {
+        return '💳 Оплата в рублях (перевод на карту) или USDT (BEP20/ERC20).\nЦена фиксированная — без скрытых платежей.';
+    }
+    if (lower.match(/full-stack|фулстек|технолог|язык|фреймворк|стек/)) {
+        return '🖥️ Мой стек:\n• Backend: Python, Flask, Django, Aiogram\n• Frontend: React, HTML, CSS, JS\n• Базы: PostgreSQL, SQLite, MongoDB\n• Другое: Docker, Git, REST API, TON';
+    }
+    if (lower.match(/контакт|связаться|телеграм|telegram|@|связь/)) {
+        return '📱 Связь: Telegram @sprintdrop\nEmail: exeld@proton.me\nGitHub: github.com/sprintdrop';
+    }
+    if (lower.match(/гарант|качеств|надёжн|довери/)) {
+        return '🛡️ 100% гарантия на все проекты. Бесплатная поддержка 1 месяц после сдачи. Работаю по договору.';
+    }
+    if (lower.match(/шутк|смеш|хаха|lol|прикол|анекдот/)) {
+        const jokes = [
+            '🤣 Программист приходит в магазин.\n— У вас есть хлеб?\n— Нет.\n— А молоко?\n— Нет.\n— Зачем тогда открыли?\n— Хороший вопрос! Запишем в бэклог.',
+            '😄 Разработчик ночью: — Приснилось, забыл поставить ;\nЖена: — Успокойся, это сон.\n— А вдруг нет?!',
+            '😂 Сколько программистов нужно для лампочки? Ни одного — это аппаратная проблема!'
+        ];
+        return jokes[Math.floor(Math.random() * jokes.length)];
+    }
+    if (lower.match(/кто ты|ты кто|представься|расскажи о себе|бот/)) {
+        return '👋 Я Exeld — Full-Stack разработчик.\nСпециализируюсь на Telegram-ботах, сайтах, Mini Apps и OSINT-утилитах.\nВ коммерческой разработке 2 недели, сдал 4 проекта под ключ.\nЧем могу помочь?';
+    }
+    if (lower.match(/спасибо|thx|thanks|благодарю/)) {
+        return '😊 Пожалуйста! Всегда рад помочь! Если что — обращайся. Удачи! 🍀';
+    }
+    if (lower.match(/пока|до свидания|bye|goodbye|прощай|увидимся/)) {
+        return '👋 До свидания! Хорошего дня! Возвращайся! 🚀';
+    }
+    if (lower.match(/телеграм бот|телеграм-бот|telegram бот|сделать бота/)) {
+        return '🤖 Разрабатываю Telegram-ботов любой сложности.\nЛёгкий (550-2500₽) — базовые команды\nСредний (3500-8000₽) — клавиатуры, базы данных\nСложный (10000-23000₽) — платежи, API, админ-панель';
+    }
+    if (lower.match(/mini app|мини прилож|webapp/)) {
+        return '📱 Разрабатываю Mini Apps для Telegram.\nЛёгкий (3000₽) — базовый функционал\nСредний (7000₽) — с API, TON\nСложный (14000₽) — полноценное приложение';
+    }
+    if (lower.match(/сайт|лендинг|интернет-магазин|корпоративн/)) {
+        return '🌐 Создаю сайты под ключ.\nЛёгкий (2000-4000₽) — сайт-визитка\nСредний (6000-10000₽) — корпоративный с админ-панелью\nСложный (12000-20000₽) — интернет-магазин, CRM';
+    }
+    if (lower.match(/osint|утилит|терминал|скрипт|парсинг|сбор данных/)) {
+        return '🕵️ Создаю OSINT-утилиты для терминала.\nЦены обсуждаем индивидуально в зависимости от сложности.';
+    }
+    if (lower.match(/как работа|процесс|этап|алгоритм/)) {
+        return '📋 Как я работаю:\n1️⃣ Обсуждаем задачу\n2️⃣ Называю фиксированную цену и срок\n3️⃣ Разрабатываю прототип\n4️⃣ Тестирую\n5️⃣ Сдаю проект с инструкцией';
+    }
+    if (lower.match(/помощ|что можешь|что умеешь|возможност/)) {
+        return '🚀 Я могу помочь с разработкой:\n• Telegram-ботов\n• Сайтов\n• Mini Apps\n• OSINT-утилит\n\nПросто расскажите, что нужно!';
+    }
+    return '🤔 Хороший вопрос! Давайте разберемся.\n\nЕсли вы спрашиваете про разработку — я могу сделать Telegram-бота, сайт, Mini App или OSINT-утилиту. Напишите подробнее, что именно нужно.\n\nКонтакты: @sprintdrop (Telegram) — всегда на связи! 💬';
+}
+// ============================================================
+// ЧАСТЬ 6: КАБИНЕТ (РЕГИСТРАЦИЯ, ВХОД, ВЫХОД)
+// ============================================================
+function updateCabinetUI() {
+    if (currentUser) {
+        document.getElementById('cabinetContent').style.display = 'block';
+        document.getElementById('authButtons').style.display = 'none';
+        document.getElementById('cabinetName').textContent = currentUser.name;
+    } else {
+        document.getElementById('cabinetContent').style.display = 'none';
+        document.getElementById('authButtons').style.display = 'flex';
+    }
+}
+
+function logoutUser() {
+    currentUser = null;
+    localStorage.removeItem('currentUser');
+    updateCabinetUI();
+    showPage('home');
+}
+
+function checkUsername() {
+    const name = document.getElementById('regName').value.trim();
+    const btn = document.getElementById('regNextBtn');
+    const status = document.getElementById('usernameStatus');
+    if (!name) {
+        status.textContent = 'Введите никнейм';
+        status.style.color = 'var(--text-secondary)';
+        btn.disabled = true;
+        return;
+    }
+    if (users.find(u => u.name === name)) {
+        status.textContent = '❌ Этот никнейм уже занят';
+        status.style.color = '#ff6b6b';
+        btn.disabled = true;
+    } else {
+        status.textContent = '✅ Никнейм доступен';
+        status.style.color = '#4caf50';
+        btn.disabled = false;
+    }
+}
+
+function regStep1Next() {
+    document.getElementById('regStep1').classList.remove('active');
+    document.getElementById('regStep2').classList.add('active');
+}
+
+function generatePassword() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    let pass = '';
+    for (let i = 0; i < 12; i++) {
+        pass += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     document.getElementById('regPassword').value = pass;
 }
@@ -437,50 +581,3 @@ function loginUser() {
         alert('Неверный логин или пароль');
     }
 }
-
-// ============================================================
-// ЗАПУСК
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-    const logo = document.getElementById('adminTrigger');
-    if (logo) {
-        logo.addEventListener('dblclick', function(e) {
-            e.preventDefault();
-            openAdmin();
-        });
-    }
-    
-    const chatInput = document.getElementById('chatInput');
-    if (chatInput) {
-        chatInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                sendChatMessage();
-            }
-        });
-    }
-    
-    const adminPass = document.getElementById('adminPassword');
-    if (adminPass) {
-        adminPass.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                adminLogin();
-            }
-        });
-    }
-    
-    document.addEventListener('click', function(e) {
-        const win = document.getElementById('chatWindow');
-        const fab = document.getElementById('chatFab');
-        if (win && win.classList.contains('open')) {
-            if (!win.contains(e.target) && !fab.contains(e.target)) {
-                win.classList.remove('open');
-                if (fab) fab.textContent = '💬';
-            }
-        }
-    });
-    
-    loadData();
-});
-    
